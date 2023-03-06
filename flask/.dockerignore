@@ -4,3 +4,6 @@
 
 # Files
 .env
+
+# Only for Debugging, should not be included for deployment
+run.py
