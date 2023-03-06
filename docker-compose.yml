@@ -4,7 +4,7 @@ version: "3.7"
 
 services:
 
-    flask:
+    portal:
         build: ./portal
         container_name: portal
 
