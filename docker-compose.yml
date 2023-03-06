@@ -5,14 +5,14 @@ version: "3.7"
 services:
 
     flask:
-        build: ./flask
-        container_name: flask
+        build: ./portal
+        container_name: portal
 
         restart: always
 
         # Environment can be used to store secrets and API keys
         env_file:
-            - flask/.env
+            - portal/.env
 
         # Port 8000 is only used by nginx as a reverse proxy
         # this should not be accessible outside of localhost
