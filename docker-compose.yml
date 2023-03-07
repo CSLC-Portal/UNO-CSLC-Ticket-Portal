@@ -1,0 +1,31 @@
+version: "3.7"
+
+# NOTE: Run `docker-compose up --build` to rebuild and relaunch containers
+
+services:
+
+    portal:
+        build: ./portal
+        container_name: portal
+
+        restart: always
+
+        # Environment can be used to store secrets and API keys
+        env_file:
+            - portal/.env
+
+        # Port 8000 is only used by nginx as a reverse proxy
+        # this should not be accessible outside of localhost
+        expose:
+            - 8000
+
+    nginx:
+        build: ./nginx
+        container_name: nginx
+
+        restart: always
+
+        # Map both HTTP and HTTPS from host to container
+        ports:
+            - 80:80
+            - 443:443
