@@ -10,3 +10,6 @@ PERMANENT_SESSION_LIFETIME = datetime.timedelta(minutes=30)
 
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
+
+# Default data base is sqlite, this is overriden in production
+SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'

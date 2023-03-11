@@ -1,5 +1,7 @@
-from app import app
+from flask import Blueprint
 
-@app.route('/')
+views = Blueprint('views', __name__)
+
+@views.route('/')
 def index():
     return 'Future site of the CSLC Tutoring Portal!'

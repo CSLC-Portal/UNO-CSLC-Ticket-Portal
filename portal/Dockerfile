@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 #       Need to bind server to all IPs (0.0.0.0) so other containers can connect
 #       Module for the program is called 'app' and variable is called 'app'
 #
-ENTRYPOINT ["gunicorn", "-w", "3", "-b", "0.0.0.0:8000", "app:app"]
+ENTRYPOINT ["gunicorn", "-w", "3", "-b", "0.0.0.0:8000", "app:create_app()"]
