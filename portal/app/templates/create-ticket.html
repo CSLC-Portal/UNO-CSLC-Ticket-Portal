@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Create Ticket{% endblock %}
+{% block content %}
+<h1>Create Ticket Form</h1>
+<br>
+
+<form action="/open-tickets" method="POST">
+    <div class="form-group">
+      <label for="emailAddressInput">Email</label>
+      <input type="email" class="form-control" id="emailAddressInput" placeholder="name@example.com" name="emailAdressField">
+    </div>
+    <div class="form-group">
+        <label for="firstNameInput">First Name</label>
+        <input type="text" class="form-control" id="firstNameInput" placeholder="First Name" name="firstNameField">
+    </div>
+    <div class="form-group">
+        <label for="lastNameInput">Last Name</label>
+        <input type="text" class="form-control" id="lastNameInput" placeholder="Last Name" name="lastNameField">
+    </div>
+
+    <div class="form-group">
+      <label for="courseInput">Course</label>
+      <select class="form-control" id="courseInput" name="courseField">
+        <option>Course 1</option>
+        <option>Course 2</option>
+        <option>Course 3</option>
+        <option>Course 4</option>
+        <option>Course 5</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+        <label for="sectionInput">Section</label>
+        <select class="form-control" id="sectionInput" name="sectionField">
+          <option>Section 1</option>
+          <option>Section 2</option>
+          <option>Section 3</option>
+          <option>Section 4</option>
+          <option>Section 5</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="assignmentNameInput">Assignment Name</label>
+        <input type="text" class="form-control" id="assignmentNameInput" placeholder="eg. 'Assignment 1 - String input'" name="assignmentNameField">
+    </div>
+
+    <div class="form-group">
+      <label for="specificQuestionInput">Specific Question</label>
+      <textarea class="form-control" id="specificQuestionInput" rows="3" placeholder="eg. Idk how to ______ , I am having issues with ____" name="specificQuestionField"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="problemTypeInput">Problem Type</label>
+        <select class="form-control" id="problemTypeInput" name="problemTypeField">
+          <option>Problem Type 1</option>
+          <option>Problem Type 2</option>
+          <option>Problem Type 3</option>
+          <option>Problem Type 4</option>
+          <option>Problem Type 5</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+{% endblock %}
