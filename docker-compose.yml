@@ -4,15 +4,36 @@ version: "3.7"
 
 services:
 
-    portal:
-        build: ./portal
-        container_name: portal
+    mysql:
+        build: ./mysql
+        container_name: mysql
 
         restart: always
 
-        # Environment can be used to store secrets and API keys
         env_file:
-            - portal/.env
+            - ./.env
+
+        environment:
+            - MYSQL_DATABASE=portal-data
+            - MYSQL_ROOT_PASSWORD=pass
+
+        expose:
+            - 3306
+
+    portal:
+        build: ./portal
+        container_name: portal
+        depends_on:
+            - mysql
+
+        restart: always
+
+        env_file:
+            - ./.env
+
+        environment:
+            # Override any other settings to use the MySQL database
+            - FLASK_SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:pass@mysql:3306/portal-data
 
         # Port 8000 is only used by nginx as a reverse proxy
         # this should not be accessible outside of localhost
