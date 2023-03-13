@@ -1,15 +1,17 @@
-from app import app
+from flask import Blueprint
+
+views = Blueprint('views', __name__)
 from flask import render_template, request
 
-@app.route('/')
+@views.route('/')
 def index():
     return 'Future site of the CSLC Tutoring Portal!'
 
-@app.route('/create-ticket')
+@views.route('/create-ticket')
 def create_ticket():
     return render_template('create-ticket.html')
 
-@app.route('/open-tickets', methods=["POST"])
+@views.route('/open-tickets', methods=["POST"])
 def open_tickets():
     email = request.form.get("emailAdressField")
     firstName = request.form.get("firstNameField")
