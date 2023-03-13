@@ -4,6 +4,8 @@ version: "3.7"
 
 services:
 
+    # Disable the 'mysql' service if using alternative database management system.
+    # Make sure you change the FLASK_SQLALCHEMY_DATABASE_URI to match the active database
     mysql:
         build: ./mysql
         container_name: mysql
@@ -23,6 +25,10 @@ services:
     portal:
         build: ./portal
         container_name: portal
+
+        # This starts the service after mysql service, however database
+        # may still not be initialized, so need a connect-retry loop to ensure
+        # that the connection was successful.
         depends_on:
             - mysql
 

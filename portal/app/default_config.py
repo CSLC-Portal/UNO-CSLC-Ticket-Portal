@@ -2,6 +2,10 @@
 import datetime
 import os
 
+# NOTE: This file contains default configurations for flask, it does not need to be changed.
+#       if you wish to override any of these settings set the corresponding environment variables
+#       (prefixed with 'FLASK_').
+
 # Encrypt cookies, generate a random cryotographically-secure string
 SECRET_KEY = os.urandom(512)
 
