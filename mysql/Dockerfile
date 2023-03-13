@@ -1,3 +1,3 @@
 FROM mysql
 
-# TODO: Optionally add in a custom MySQL configuration file to override defaults
+COPY mysql.cnf /etc/mysql/conf.d
