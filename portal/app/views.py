@@ -1,7 +1,16 @@
 from flask import Blueprint
+from . import model as m
+import datetime
+from app import db
 
 views = Blueprint('views', __name__)
 from flask import render_template, request
+
+def now():
+    #gets the current time in UTC
+    UTC = datetime.timezone.utc
+    now = datetime.datetime.now(UTC)
+    return now
 
 @views.route('/')
 def index():
@@ -22,5 +31,24 @@ def open_tickets():
     specificQuestion = request.form.get("specificQuestionField")
     problemType = request.form.get("problemTypeField")
     print("Following ticket information has been created:\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n" % (lastName, firstName, email, course, section, assignmentName, specificQuestion, problemType))
+
+    #create ticket with info sent back
+    if request.method == "POST":
+        ticket = m.Ticket(
+            email,
+            firstName,
+            lastName,
+            course,
+            section,
+            assignmentName,
+            specificQuestion,
+            problemType,
+            now()
+            )
+        #insert into 'Tickets' table
+        db.session.add(ticket)
+        db.session.commit()
+
     return render_template('open-tickets.html', email=email, firstName=firstName, lastName=lastName, course=course,
                            section=section, assignmentName=assignmentName, specificQuestion=specificQuestion, problemType=problemType)
+
