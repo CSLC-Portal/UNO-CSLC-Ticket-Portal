@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_session import Session
 
 from . import default_config
 
@@ -15,12 +16,11 @@ def create_app():
     app = Flask(__name__)
 
     setup_env(app)
-
-    # We need to import blueprints and register them
-    from .views import views
-    app.register_blueprint(views)
-
+    register_blueprints(app)
     create_db(app)
+
+    # Create server-side session for sensitive information
+    Session(app)
 
     return app
 
@@ -30,6 +30,15 @@ def setup_env(app : Flask):
 
     # Override defaults with any configuration settings from the environment
     app.config.from_prefixed_env()
+
+def register_blueprints(app : Flask):
+
+    # We need to import blueprints to register them
+    from .blueprints.views import views
+    from .blueprints.auth import auth
+
+    app.register_blueprint(views)
+    app.register_blueprint(auth)
 
 def create_db(app : Flask):
     db.init_app(app)

@@ -1,10 +1,10 @@
 from flask import Blueprint
-from . import model as m
+from .. import model as m
 import datetime
 from app import db
+from flask import render_template, session, request, redirect, url_for
 
 views = Blueprint('views', __name__)
-from flask import render_template, request
 
 def now():
     #gets the current time in UTC
@@ -12,9 +12,12 @@ def now():
     now = datetime.datetime.now(UTC)
     return now
 
-@views.route('/')
+@views.route("/")
 def index():
-    return 'Future site of the CSLC Tutoring Portal!'
+    if not session.get("user"):
+        return redirect(url_for("auth.login"))
+
+    return render_template('index.html', user=session["user"])
 
 @views.route('/create-ticket')
 def create_ticket():

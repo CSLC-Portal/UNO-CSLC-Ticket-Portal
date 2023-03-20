@@ -1,5 +1,6 @@
 # Custom
 **/.vscode/
+flask_session/
 *.db
 
 # Byte-compiled / optimized / DLL files

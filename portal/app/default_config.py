@@ -22,3 +22,7 @@ SQLALCHEMY_ENGINE_OPTIONS = { "pool_recycle": 3600 }
 
 # Default data base is sqlite, this is overriden in production
 SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
+
+# Flask-Session default options
+# Specifies the token cache should be stored in server-side session
+SESSION_TYPE = "filesystem"
