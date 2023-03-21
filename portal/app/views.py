@@ -14,7 +14,8 @@ def now():
 
 @views.route('/')
 def index():
-    return 'Future site of the CSLC Tutoring Portal!'
+    #return 'Future site of the CSLC Tutoring Portal!'
+    return render_template('home.html')
 
 @views.route('/create-ticket')
 def create_ticket():
@@ -52,3 +53,14 @@ def open_tickets():
     return render_template('open-tickets.html', email=email, firstName=firstName, lastName=lastName, course=course,
                            section=section, assignmentName=assignmentName, specificQuestion=specificQuestion, problemType=problemType)
 
+@views.route('/admin-login')
+def admin_login():
+    return render_template('admin-login.html')
+
+@views.route('/tutor-login')
+def tutor_login():
+    return render_template('tutor-login.html')
+
+@views.route('/student-login')
+def student_login():
+    return "Functionality to be implemented using Microsoft Authentication. This is just a placeholder button."
