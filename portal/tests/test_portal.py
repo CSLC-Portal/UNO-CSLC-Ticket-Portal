@@ -5,7 +5,7 @@ from flask.testing import FlaskClient
 
 def test_index(client : FlaskClient):
     response = client.get('/')
-    assert response.data == b'Future site of the CSLC Tutoring Portal!'
+    assert b'<h1>Welcome to the Computer Science Learning Center</h1>' in response.data
 
 def test_create_ticket(client : FlaskClient):
     response = client.get('/create-ticket')
