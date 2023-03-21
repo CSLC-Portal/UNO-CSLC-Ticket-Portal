@@ -29,7 +29,7 @@ def authorized():
         session["user"] = result.get("id_token_claims")
         _save_cache(cache)
 
-    except ValueError: # Usually caused by CSRF, Simply ignore them
+    except ValueError:  # Usually caused by CSRF, Simply ignore them
         pass
 
     return redirect(url_for("views.index"))
@@ -53,9 +53,9 @@ def _save_cache(cache):
 def _build_msal_app(cache=None):
     return msal.ConfidentialClientApplication(
         CLIENT_ID,
-        authority = AUTHORITY,
-        client_credential = CLIENT_SECRET,
-        token_cache = cache)
+        authority=AUTHORITY,
+        client_credential=CLIENT_SECRET,
+        token_cache=cache)
 
 def _build_auth_code_flow(scopes=None):
     return _build_msal_app().initiate_auth_code_flow(

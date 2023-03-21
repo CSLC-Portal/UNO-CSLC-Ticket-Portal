@@ -1,9 +1,8 @@
-from flask import render_template, request
+from flask import render_template, session, request, redirect, url_for
 from flask import Blueprint
 from .. import model as m
 import datetime
 from app import db
-from flask import render_template, session, request, redirect, url_for
 
 views = Blueprint('views', __name__)
 

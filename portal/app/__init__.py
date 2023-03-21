@@ -31,7 +31,7 @@ def setup_env(app: Flask):
     # Override defaults with any configuration settings from the environment
     app.config.from_prefixed_env()
 
-def register_blueprints(app : Flask):
+def register_blueprints(app: Flask):
 
     # We need to import blueprints to register them
     from .blueprints.views import views
@@ -40,7 +40,7 @@ def register_blueprints(app : Flask):
     app.register_blueprint(views)
     app.register_blueprint(auth)
 
-def create_db(app : Flask):
+def create_db(app: Flask):
     db.init_app(app)
 
     # NOTE: Import model scripts here...
