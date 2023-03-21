@@ -24,7 +24,7 @@ def create_app():
 
     return app
 
-def setup_env(app : Flask):
+def setup_env(app: Flask):
     # Default config is always set to ensure app runs correctly
     app.config.from_object(default_config)
 
@@ -43,7 +43,8 @@ def register_blueprints(app : Flask):
 def create_db(app : Flask):
     db.init_app(app)
 
-    # TODO: Import model scripts here...
+    # NOTE: Import model scripts here...
+    from . import model
 
     # NOTE: From the MySQL docker image documentation:
     #
@@ -74,5 +75,5 @@ def create_db(app : Flask):
             sleep(cooldown)
             continue
 
-    print(f'Could not connect to or find database server, ensure it is running!', file=stderr)
+    print('Could not connect to or find database server, ensure it is running!', file=stderr)
     sys.exit(-1)

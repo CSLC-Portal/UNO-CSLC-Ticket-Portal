@@ -1,3 +1,4 @@
+from flask import render_template, request
 from flask import Blueprint
 from .. import model as m
 import datetime
@@ -7,7 +8,7 @@ from flask import render_template, session, request, redirect, url_for
 views = Blueprint('views', __name__)
 
 def now():
-    #gets the current time in UTC
+    # gets the current time in UTC
     UTC = datetime.timezone.utc
     now = datetime.datetime.now(UTC)
     return now
@@ -30,12 +31,12 @@ def open_tickets():
     lastName = request.form.get("lastNameField")
     course = request.form.get("courseField")
     section = request.form.get("sectionField")
-    assignmentName = request.form.get("assignmentNameField")
-    specificQuestion = request.form.get("specificQuestionField")
-    problemType = request.form.get("problemTypeField")
-    print("Following ticket information has been created:\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n %s\n" % (lastName, firstName, email, course, section, assignmentName, specificQuestion, problemType))
+    assignment = request.form.get("assignmentNameField")
+    question = request.form.get("specificQuestionField")
+    problem = request.form.get("problemTypeField")
+    print(f"Following ticket information has been created:\n{lastName}\n{firstName}\n{email}\n{course}\n{section}\n{assignment}\n{question}\n{problem}")
 
-    #create ticket with info sent back
+    # create ticket with info sent back
     if request.method == "POST":
         ticket = m.Ticket(
             email,
@@ -43,15 +44,14 @@ def open_tickets():
             lastName,
             course,
             section,
-            assignmentName,
-            specificQuestion,
-            problemType,
-            now()
-            )
-        #insert into 'Tickets' table
+            assignment,
+            question,
+            problem,
+            now())
+
+        # insert into 'Tickets' table
         db.session.add(ticket)
         db.session.commit()
 
     return render_template('open-tickets.html', email=email, firstName=firstName, lastName=lastName, course=course,
-                           section=section, assignmentName=assignmentName, specificQuestion=specificQuestion, problemType=problemType)
-
+                           section=section, assignmentName=assignment, specificQuestion=question, problemType=problem)

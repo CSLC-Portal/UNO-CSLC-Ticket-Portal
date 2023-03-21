@@ -6,10 +6,10 @@ import msal
 
 auth = Blueprint('auth', __name__)
 
-AUTHORITY = os.getenv("AAD_AUTHORITY")
-CLIENT_ID = os.getenv("AAD_CLIENT_ID")
-CLIENT_SECRET = os.getenv("AAD_CLIENT_SECRET")
-REDIRECT_PATH = os.getenv("AAD_REDIRECT_PATH")
+AUTHORITY = os.getenv('AAD_AUTHORITY', 'https://login.microsoftonline.com/common')
+CLIENT_ID = os.getenv('AAD_CLIENT_ID', 'NO-ID')
+CLIENT_SECRET = os.getenv('AAD_CLIENT_SECRET', 'NO_SECRET')
+REDIRECT_PATH = os.getenv('AAD_REDIRECT_PATH', '/getAToken')
 
 @auth.route("/login")
 def login():
