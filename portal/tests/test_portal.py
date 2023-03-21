@@ -29,5 +29,5 @@ def test_open_tickets(client : FlaskClient, app : Flask):
     with app.app_context():
         assert b'John' in response.data
         assert Ticket.query.count() == 1
-        assert Ticket.query.first().student_email == 'test@test.email'
+        assert Ticket.query.first().student_email == 'tests@test.email'
 
