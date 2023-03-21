@@ -35,7 +35,7 @@ def create_db(app : Flask):
     db.init_app(app)
 
     # TODO: Import model scripts here...
-
+    from . import model
     # NOTE: From the MySQL docker image documentation:
     #
     #   "If there is no database initialized when the container starts, then a default database will be created.
