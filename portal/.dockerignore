@@ -1,6 +1,7 @@
 # Directories
 **/.venv/
 **/__pycache__/
+**/tests
 
 # Files
 .env

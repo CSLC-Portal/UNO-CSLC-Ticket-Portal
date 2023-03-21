@@ -29,7 +29,3 @@ class Ticket(db.Model):
         self.specific_question = quesIn
         self.problem_type = prblmIn
         self.time_created = timeIn
-
-
-
-
