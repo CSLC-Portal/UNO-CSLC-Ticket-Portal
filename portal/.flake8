@@ -1,0 +1,6 @@
+[flake8]
+exclude = __pycache__,templates,static
+max-complexity = 10
+max-line-length = 160
+ignore = H903, E266, D203, H306
+indent-size=4
