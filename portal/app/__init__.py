@@ -1,7 +1,5 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_session import Session
-
+from .extensions import db, sess
 from . import default_config
 
 from time import sleep
@@ -9,19 +7,16 @@ from sys import stderr
 import sys
 import os
 
-db = SQLAlchemy()
-
 # NOTE: DO NOT change the name of 'create_app()', it is used by gunicorn and flask
 def create_app():
     app = Flask(__name__)
 
     setup_env(app)
+    db.init_app(app)
+    sess.init_app(app)
+
+    create_db_models(app)
     register_blueprints(app)
-    create_db(app)
-
-    # Create server-side session for sensitive information
-    Session(app)
-
     return app
 
 def setup_env(app: Flask):
@@ -40,9 +35,7 @@ def register_blueprints(app: Flask):
     app.register_blueprint(views)
     app.register_blueprint(auth)
 
-def create_db(app: Flask):
-    db.init_app(app)
-
+def create_db_models(app: Flask):
     # NOTE: Import model scripts here...
     from . import model
 

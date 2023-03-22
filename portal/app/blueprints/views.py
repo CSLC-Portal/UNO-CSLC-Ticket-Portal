@@ -2,7 +2,7 @@ from flask import render_template, session, request, redirect, url_for
 from flask import Blueprint
 from .. import model as m
 import datetime
-from app import db
+from app.extensions import db
 
 views = Blueprint('views', __name__)
 
