@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-    <h1>Future Site of CSLC Tutoring Portal</h1>
-    <h2>Welcome {{ user.get("name") }}!</h2>
+{% extends "base.html" %}
+{% block title %}Future Site of CSLC Tutoring Portal{% endblock %}
+{% block content %}
 
-    <a href="/logout">Logout</a>
-</body>
-</html>
+<h2>Welcome {{ user.get("name") }}!</h2>
+<a href="/logout">Logout</a>
+
+{% endblock %}
 

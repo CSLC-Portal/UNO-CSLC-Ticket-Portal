@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-    <h1>Future Site of CSLC Ticket Portal</h1>
-    <h2>Login</h2>
+{% extends "base.html" %}
+{% block title %}Future Site of CSLC Tutoring Portal{% endblock %}
+{% block content %}
 
-    <a href='{{ auth_url }}'>Sign In</a>
-</body>
-</html>
+<h2>Login</h2>
+<a href='{{ auth_url }}'>Sign In</a>
 
+{% endblock %}

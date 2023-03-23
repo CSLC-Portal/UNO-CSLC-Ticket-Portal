@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
-    <h2>Login Failure</h2>
-    <dl>
-      <dt>{{ result.get("error") }}</dt>
-      <dd>{{ result.get("error_description") }}</dd>
-    </dl>
-    <hr>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Login Failure{% endblock %}
+{% block content %}
 
+<h2>Login Failure</h2>
+<dl>
+    <dt>{{ result.get("error") }}</dt>
+    <dd>{{ result.get("error_description") }}</dd>
+</dl>
+
+{% endblock %}
