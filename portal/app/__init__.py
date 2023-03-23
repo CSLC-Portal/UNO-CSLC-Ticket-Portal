@@ -1,6 +1,5 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
+from .extensions import db, sess
 from . import default_config
 
 from time import sleep
@@ -8,20 +7,16 @@ from sys import stderr
 import sys
 import os
 
-db = SQLAlchemy()
-
 # NOTE: DO NOT change the name of 'create_app()', it is used by gunicorn and flask
 def create_app():
     app = Flask(__name__)
 
     setup_env(app)
+    db.init_app(app)
+    sess.init_app(app)
 
-    # We need to import blueprints and register them
-    from .views import views
-    app.register_blueprint(views)
-
-    create_db(app)
-
+    create_db_models(app)
+    register_blueprints(app)
     return app
 
 def setup_env(app: Flask):
@@ -31,9 +26,16 @@ def setup_env(app: Flask):
     # Override defaults with any configuration settings from the environment
     app.config.from_prefixed_env()
 
-def create_db(app: Flask):
-    db.init_app(app)
+def register_blueprints(app: Flask):
 
+    # We need to import blueprints to register them
+    from .blueprints.views import views
+    from .blueprints.auth import auth
+
+    app.register_blueprint(views)
+    app.register_blueprint(auth)
+
+def create_db_models(app: Flask):
     # NOTE: Import model scripts here...
     from . import model
 

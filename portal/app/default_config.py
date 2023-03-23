@@ -1,4 +1,5 @@
 
+from .extensions import db
 import datetime
 import os
 
@@ -18,7 +19,14 @@ SESSION_COOKIE_HTTPONLY = True
 # Flask-SQLAlchemy default options
 # Some database management systems break connection after some time of inactivity (e.g. MySQL)
 # Refresh the connection frequently to circumvent this.
-SQLALCHEMY_ENGINE_OPTIONS = { "pool_recycle": 3600 }
+SQLALCHEMY_ENGINE_OPTIONS = { 'pool_recycle': 3600 }
 
 # Default data base is sqlite, this is overriden in production
 SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
+
+# Flask-Session default options
+# Specifies the token cache should be stored in server-side session
+SESSION_TYPE = 'sqlalchemy'
+
+# We set the db for Flask-Session here, before the tables are created
+SESSION_SQLALCHEMY = db

@@ -3,9 +3,13 @@ from flask import Flask
 from app.model import Ticket
 from flask.testing import FlaskClient
 
+import pytest
+
 def test_index(client : FlaskClient):
     response = client.get('/')
-    assert b'<h1>Welcome to the Computer Science Learning Center</h1>' in response.data
+
+    # Without authentication, expect a redirect to the login page
+    assert '302' in response.status
 
 def test_create_ticket(client : FlaskClient):
     response = client.get('/create-ticket')
@@ -31,3 +35,18 @@ def test_open_tickets(client : FlaskClient, app : Flask):
         assert Ticket.query.count() == 1
         assert Ticket.query.first().student_email == 'test@test.email'
 
+def test_login(client : FlaskClient):
+    response = client.get('/login')
+    assert b'<h2>Login</h2>' in response.data
+
+@pytest.mark.skip(reason='Need mockup response for microsoft auth')
+def test_index_auth(client : FlaskClient):
+    pass
+
+@pytest.mark.skip(reason='Need mockup response for microsoft auth')
+def test_login_auth(client : FlaskClient):
+    pass
+
+@pytest.mark.skip(reason='Need mockup response for microsoft auth')
+def test_logout_auth(client : FlaskClient):
+    pass

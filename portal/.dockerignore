@@ -1,6 +1,7 @@
 # Directories
 **/.venv/
 **/__pycache__/
+**/flask_session/
 **/tests
 
 # Files

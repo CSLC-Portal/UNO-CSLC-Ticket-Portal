@@ -1,8 +1,8 @@
-from flask import render_template, request
+from flask import render_template, session, request, redirect, url_for
 from flask import Blueprint
-from . import model as m
+from .. import model as m
 import datetime
-from app import db
+from app.extensions import db
 
 views = Blueprint('views', __name__)
 
@@ -12,9 +12,12 @@ def now():
     now = datetime.datetime.now(UTC)
     return now
 
-@views.route('/')
+@views.route("/")
 def index():
-    return render_template('home.html')
+    if not session.get("user"):
+        return redirect(url_for("auth.login"))
+
+    return render_template('index.html', user=session["user"])
 
 @views.route('/create-ticket')
 def create_ticket():
@@ -51,15 +54,3 @@ def open_tickets():
 
     return render_template('open-tickets.html', email=email, firstName=firstName, lastName=lastName, course=course,
                            section=section, assignmentName=assignment, specificQuestion=question, problemType=problem)
-
-@views.route('/admin-login')
-def admin_login():
-    return render_template('admin-login.html')
-
-@views.route('/tutor-login')
-def tutor_login():
-    return render_template('tutor-login.html')
-
-@views.route('/student-login')
-def student_login():
-    return "Functionality to be implemented using Microsoft Authentication. This is just a placeholder button."
