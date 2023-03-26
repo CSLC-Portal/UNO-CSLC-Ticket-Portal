@@ -7,7 +7,6 @@ The portal is a public-facing website that allows students to submit a request f
 The recent loss of a previous tutoring portal is a major motivation for the development of this project. In addition, the transition to online classes and online tutoring has driven inspiration for some new features as well, such as marking tickets as online/on-campus depending on whether the student has been helped remotely or in person and auto-calculating the time spent on helping a student (which was previously manually provided by a tutor). These features will help in providing useful statistics about the kind of help students are requesting from the tutoring center and how often.
 
 ## Release Notes
----
 
 The application is currently a work in progress. The following is a list of currently existing features in the application:
 
@@ -23,7 +22,6 @@ Currently, the following branches each contain some features of interest that ar
  - `CI-CD-integration`: Mostly for repository management, working on automated deployment.
 
 ## Configuration
----
 
 ### Flask
 The flask app (located in `portal/`) has a `default_config.py` script providing some default configuration for the project. *This does not need to be changed to configure the project*. If you would like to set additional options or override existing ones, then create a `.env` file in the `portal/` directory which sets the options to the desired values (prefixed with `FLASK_`).
@@ -70,7 +68,6 @@ AAD_REDIRECT_PATH=/getAToken
 This process is covered in more detail in [this quickstart guide](https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app) by Microsoft.
 
 ## Deployment Strategies
----
 The project uses docker and docker-compose to orchestrate and manage different subsystems, i.e. databases, reverse proxies, and a web server.
 
 Subservices will exist inside isolated docker containers and will communicate with each other (using docker’s bridge network drivers) to send data back and forth. The Nginx web server container will forward network requests to the portal flask app container which will in turn access the database container to pull and update data.
