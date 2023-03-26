@@ -20,6 +20,7 @@ This code is currently not yet consistent with milestone 2 on the project plan d
 Currently, the following branches each contain some features of interest that are being developed:
  - `sso-auth`: Microsoft authentication via the azure app directory.
  - `CI-CD-integration`: Mostly for repository management, working on automated deployment.
+ - `old-CSLC`: Redesigning the web pages of the old CSLC (We will tweak and improve these for the final product).
 
 ## Configuration
 
