@@ -20,6 +20,12 @@ def app():
     # Cannot be reused, we'll need to automatically delete this folder from disk once tests are done
     os.environ['FLASK_SESSION_TYPE'] = 'filesystem'
 
+    # Set the required azure app directory authentication env variables
+    os.environ['AAD_AUTHORITY'] = 'https://login.microsoftonline.com/common'
+    os.environ['AAD_CLIENT_ID'] = 'DummyAppID'
+    os.environ['AAD_CLIENT_SECRET'] = 'FakeClientSecret'
+    os.environ['AAD_REDIRECT_PATH'] = '/getAToken'
+
     app = create_app()
 
     # We yield the app in case we later need to tear-down after each test
