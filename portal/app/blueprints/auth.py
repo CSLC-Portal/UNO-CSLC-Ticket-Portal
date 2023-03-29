@@ -7,9 +7,13 @@ import msal
 auth = Blueprint('auth', __name__)
 
 AUTHORITY = os.getenv('AAD_AUTHORITY', 'https://login.microsoftonline.com/common')
-CLIENT_ID = os.getenv('AAD_CLIENT_ID', 'NO-ID')
-CLIENT_SECRET = os.getenv('AAD_CLIENT_SECRET', 'NO_SECRET')
-REDIRECT_PATH = os.getenv('AAD_REDIRECT_PATH', '/getAToken')
+CLIENT_ID = os.getenv('AAD_CLIENT_ID')
+CLIENT_SECRET = os.getenv('AAD_CLIENT_SECRET')
+REDIRECT_PATH = os.getenv('AAD_REDIRECT_PATH')
+
+assert CLIENT_ID, 'No client ID specified for authentication. Set AAD_CLIENT_ID env variable!'
+assert CLIENT_SECRET, 'No client secret specified for authentication. Set AAD_CLIENT_SECRET env variable!'
+assert REDIRECT_PATH, 'No redirect path specified for authentication. Set AAD_REDIRECT_PATH env variable!'
 
 @auth.route("/login")
 def login():
@@ -18,10 +22,15 @@ def login():
 
 @auth.route(REDIRECT_PATH)
 def authorized():
+    """
+    Called when a user has authenticated with their microsoft account.
+    We save their user info as a server side session. Any routes that
+    require authentication can check if this user exists.
+    """
     try:
         cache = _load_cache()
-        result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
-            session.get("flow", {}), request.args)
+        msal_app = _build_msal_app(cache=cache)
+        result = msal_app.acquire_token_by_auth_code_flow(session.get("flow", {}), request.args)
 
         if "error" in result:
             return render_template("auth_error.html", result=result)
