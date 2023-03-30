@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime
+from sqlalchemy import Column, String, Integer, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from .extensions import db
 
@@ -28,3 +28,29 @@ class Ticket(db.Model):
         self.specific_question = quesIn
         self.problem_type = prblmIn
         self.time_created = timeIn
+
+class User(db.Model):
+    __tablename__ = 'Users'
+
+    id = Column(Integer, primary_key=True, doc='Autonumber primary key')
+    oid = Column(String(50), doc='ID token returned for the requestor')
+    permission_level = Column(Integer(), nullable=False, doc='Specifies permission level of user. e.g. 0=lowest, 3=superuser')
+    user_email = Column(String(25), nullable=False, doc='Email of user')
+    user_fname = Column(String(25), doc='Users first name')
+    user_lname = Column(String(25), doc='Users last name')
+    tutor_is_active = Column(Boolean, doc='T/F if the tutor is currently employed')
+    tutor_is_working = Column(Boolean, doc='T/F if the tutor is currently working')
+    #below are items that will eventually need to be defined as relationships to other tables that aren't yet created
+    #tickets
+    #assisted_tickets
+    #courses
+
+    def __init__(self, oidIn, permLevelIn, emailIn, fnameIn, lnameIn, isActiveIn, isWorkingIn):
+        self.oid = oidIn
+        self.permission_level = permLevelIn
+        self.user_email = emailIn
+        self.user_fname = fnameIn
+        self.user_lname = lnameIn
+        self.tutor_is_active = isActiveIn
+        self.tutor_is_working = isWorkingIn
+
