@@ -40,10 +40,10 @@ class User(db.Model):
     user_lname = Column(String(25), doc='Users last name')
     tutor_is_active = Column(Boolean, doc='T/F if the tutor is currently employed')
     tutor_is_working = Column(Boolean, doc='T/F if the tutor is currently working')
-    #below are items that will eventually need to be defined as relationships to other tables that aren't yet created
-    #tickets
-    #assisted_tickets
-    #courses
+    # below are items that will eventually need to be defined as relationships to other tables that aren't yet created
+    # tickets
+    # assisted_tickets
+    # courses
 
     def __init__(self, oidIn, permLevelIn, emailIn, fnameIn, lnameIn, isActiveIn, isWorkingIn):
         self.oid = oidIn
@@ -53,4 +53,3 @@ class User(db.Model):
         self.user_lname = lnameIn
         self.tutor_is_active = isActiveIn
         self.tutor_is_working = isWorkingIn
-
