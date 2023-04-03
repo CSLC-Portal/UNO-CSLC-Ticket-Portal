@@ -1,5 +1,12 @@
+from sys import stderr
 from flask import Blueprint
 from flask import render_template, session, request, redirect, url_for
+from flask_login import login_user, login_required, logout_user
+from sqlalchemy.orm import Query
+from sqlalchemy.orm.exc import MultipleResultsFound
+
+from ..model import User
+from ..extensions import db, login_manager
 
 import os
 import msal
@@ -35,7 +42,8 @@ def authorized():
         if "error" in result:
             return render_template("auth_error.html", result=result)
 
-        session["user"] = result.get("id_token_claims")
+        claims = result.get("id_token_claims")
+        login_user(_user_from_claims(claims))
         _save_cache(cache)
 
     except ValueError:  # Usually caused by CSRF, Simply ignore them
@@ -44,9 +52,45 @@ def authorized():
     return redirect(url_for("views.index"))
 
 @auth.route("/logout")
+@login_required
 def logout():
-    session.clear()  # Wipe out user and its token cache from session
+    logout_user()
     return redirect(f'{AUTHORITY}/oauth2/v2.0/logout?post_logout_redirect_uri={url_for("views.index", _external=True)}')
+
+@login_manager.user_loader
+def user_loader(id: str):
+    # TODO: flask-login provides the primary key of the user object
+    #       which is currently just an auto increment integer.
+    #       However, we may consider using the OID as a key instead
+    #       in which case this function should just call _user_from_claims
+    #
+    return User.query.get(int(id))
+
+def _user_from_claims(token_claims: str):
+    """
+    Load or create a user object from the database given auth token claims.
+    Returns the User object or None if more than one user with the same OID is found.
+    """
+    oid = token_claims.get('oid')
+
+    try:
+        user: Query = User.query.filter_by(oid=oid).one_or_none()
+
+    except MultipleResultsFound:
+        print(f'Found more than one user for oid: \'{oid}\'', file=stderr)
+        return
+
+    # User does not exist in database, create new entry
+    if user is None:
+        print(f'Creating new entry in database for user {oid}...')
+        name = token_claims.get('name')
+        preferred_name = token_claims.get('preferred_username')
+        user = User(oid, 0, preferred_name, name, name, False, False)
+
+        db.session.add(user)
+        db.session.commit()
+
+    return user
 
 def _load_cache():
     cache = msal.SerializableTokenCache()

@@ -5,17 +5,39 @@ from flask.testing import FlaskClient
 
 import pytest
 
-def test_index(client : FlaskClient):
+def test_index_unauth(client : FlaskClient):
     response = client.get('/')
 
     # Without authentication, expect a redirect to the login page
     assert '302' in response.status
 
-def test_create_ticket(client : FlaskClient):
+def test_create_ticket_unauth(client : FlaskClient):
+    response = client.get('/create-ticket')
+
+    # Without authentication, expect an authentication error
+    assert '401' in response.status
+
+def test_open_tickets(client : FlaskClient, app : Flask):
+    response = client.post('/open-tickets', data={})
+
+    # Without authentication, expect an authentication error
+    assert '401' in response.status
+
+def test_login(client : FlaskClient):
+    response = client.get('/login')
+    assert b'<h2>Login</h2>' in response.data
+
+@pytest.mark.skip(reason='Need mockup response for microsoft auth')
+def test_index_with_auth(client : FlaskClient):
+    pass
+
+@pytest.mark.skip(reason='Need mockup response for microsoft auth')
+def test_create_ticket_with_auth(client : FlaskClient):
     response = client.get('/create-ticket')
     assert b'<h1>Create Ticket Form</h1>' in response.data
 
-def test_open_tickets(client : FlaskClient, app : Flask):
+@pytest.mark.skip(reason='Need mockup response for microsoft auth')
+def test_open_tickets_with_auth(client : FlaskClient, app : Flask):
 
     test_form_data = {
         'emailAdressField':'test@test.email',
@@ -34,10 +56,6 @@ def test_open_tickets(client : FlaskClient, app : Flask):
         assert b'John' in response.data
         assert Ticket.query.count() == 1
         assert Ticket.query.first().student_email == 'test@test.email'
-
-def test_login(client : FlaskClient):
-    response = client.get('/login')
-    assert b'<h2>Login</h2>' in response.data
 
 @pytest.mark.skip(reason='Need mockup response for microsoft auth')
 def test_index_auth(client : FlaskClient):
