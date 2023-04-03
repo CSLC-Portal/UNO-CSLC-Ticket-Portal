@@ -54,3 +54,7 @@ def open_tickets():
 
     return render_template('open-tickets.html', email=email, firstName=firstName, lastName=lastName, course=course,
                            section=section, assignmentName=assignment, specificQuestion=question, problemType=problem)
+
+@views.route('/view-tickets')
+def view_tickets():
+    return render_template('view_tickets.html')
