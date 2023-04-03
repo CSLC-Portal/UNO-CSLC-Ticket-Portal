@@ -5,19 +5,19 @@ from flask.testing import FlaskClient
 
 import pytest
 
-def test_index_unauth(client : FlaskClient):
+def test_index_no_auth(client : FlaskClient):
     response = client.get('/')
 
     # Without authentication, expect a redirect to the login page
     assert '302' in response.status
 
-def test_create_ticket_unauth(client : FlaskClient):
+def test_create_ticket_no_auth(client : FlaskClient):
     response = client.get('/create-ticket')
 
     # Without authentication, expect an authentication error
     assert '401' in response.status
 
-def test_open_tickets(client : FlaskClient, app : Flask):
+def test_open_tickets_no_auth(client : FlaskClient, app : Flask):
     response = client.post('/open-tickets', data={})
 
     # Without authentication, expect an authentication error
