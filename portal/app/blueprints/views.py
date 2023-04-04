@@ -66,6 +66,7 @@ def view_tickets():
     db.session.add(ticket3)
     db.session.commit()
 
+    #get all tickets
     
 
     return render_template('view_tickets.html')

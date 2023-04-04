@@ -22,8 +22,7 @@ class Ticket(db.Model):
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key')
     student_email = Column(String(25), nullable=False, doc='Email of student making ticket')
-    student_fname = Column(String(25), doc='First name of student makign ticket')
-    student_lname = Column(String(25), doc='Last name of student making ticket')
+    student_name = Column(String(25), doc='name of student making ticket')
     course = Column(String(25), doc='Course ticket issue is related to')
     section = Column(String(25), doc='Course section ticket issue is relating to')
     assignment_name = Column(String(25), doc='Assignment student needs help with')
@@ -37,10 +36,9 @@ class Ticket(db.Model):
     #tutor_id = Column() This will be a foreign key to tutors table
 
 
-    def __init__(self, sEmailIn, sFnameIn, sLnameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, timeIn):
+    def __init__(self, sEmailIn, sNameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, timeIn):
         self.student_email = sEmailIn
-        self.student_fname = sFnameIn
-        self.student_lname = sLnameIn
+        self.student_name = sNameIn
         self.course = crsIn
         self.section = secIn
         self.assignment_name = assgnIn
@@ -55,8 +53,7 @@ class User(db.Model):
     oid = Column(String(50), doc='ID token returned for the requestor')
     permission_level = Column(Integer(), nullable=False, doc='Specifies permission level of user. e.g. 0=lowest, 3=superuser')
     user_email = Column(String(25), nullable=False, doc='Email of user')
-    user_fname = Column(String(25), doc='Users first name')
-    user_lname = Column(String(25), doc='Users last name')
+    user_name =  Column(String(25), doc='Users name')
     tutor_is_active = Column(Boolean, doc='T/F if the tutor is currently employed')
     tutor_is_working = Column(Boolean, doc='T/F if the tutor is currently working')
     # below are items that will eventually need to be defined as relationships to other tables that aren't yet created
@@ -64,12 +61,11 @@ class User(db.Model):
     # assisted_tickets
     # courses
 
-    def __init__(self, oidIn, permLevelIn, emailIn, fnameIn, lnameIn, isActiveIn, isWorkingIn):
+    def __init__(self, oidIn, permLevelIn, emailIn, nameIn, isActiveIn, isWorkingIn):
         self.oid = oidIn
         self.permission_level = permLevelIn
         self.user_email = emailIn
-        self.user_fname = fnameIn
-        self.user_lname = lnameIn
+        self.user_name = nameIn
         self.tutor_is_active = isActiveIn
         self.tutor_is_working = isWorkingIn
 
