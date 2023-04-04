@@ -12,8 +12,8 @@ class Status (enum.Enum):
     Claimed = 2
     Closed = 3
 
-class OnlineInPerson(enum.Enum):
-    #used to set online or in person mdoe of card
+class Mode(enum.Enum):
+    #used to set online or in person learning mode of card
     Online = 1
     InPerson = 2
 
@@ -32,11 +32,11 @@ class Ticket(db.Model):
     status = Column(Enum(Status), doc='Status of the ticket. 1=open, 2=claimed, 3=closed')
     time_closed = Column(DateTime(True), doc='Time the tutor marked ticket as closed')
     session_duration = Column(Integer, doc='Amount of time the tutor spent on the ticket/student')
-    online_in_person = Column(Enum(OnlineInPerson()), doc='if ticket was made for online/in-person help')
+    mode = Column(Enum(Mode), doc='if ticket was made for online/in-person help')
     #tutor_id = Column() This will be a foreign key to tutors table
 
 
-    def __init__(self, sEmailIn, sNameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, timeIn):
+    def __init__(self, sEmailIn, sNameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, timeIn, statusIn, modeIn):
         self.student_email = sEmailIn
         self.student_name = sNameIn
         self.course = crsIn
@@ -45,6 +45,8 @@ class Ticket(db.Model):
         self.specific_question = quesIn
         self.problem_type = prblmIn
         self.time_created = timeIn
+        self.status = statusIn
+        self.mode = modeIn
 
 class User(db.Model):
     __tablename__ = 'Users'

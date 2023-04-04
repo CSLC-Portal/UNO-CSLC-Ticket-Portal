@@ -4,20 +4,26 @@
 
 <h1>View Tickets Page</h1><br>
 
-<div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-    <div class="card-header">Header</div>
+{% for ticket in tickets %}
+    {% if ticket.status == m.Status.Open %}
+    <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+    {% elif ticket.status == m.Status.Claimed %}
+    <div class="card text-white bg-warning mb-3" style="max-width: 18rem;"></div>
+    {% elif ticket.status == m.Status.Closed %}
+    <div class="card text-white bg-success mb-3" style="max-width: 18rem;"></div>
+    {% endif %}
+    <div class="card-header">{{ ticket.student_name }} <br> {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}</div>
     <div class="card-body">
-      <h5 class="card-title">Primary card title</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <h5 class="card-title">{{ ticket.course }}</h5>
+      <h6 class="card-title">Assignment: {{ ticket.assignment_name }}</h6>
+      <p class="card-text">{{ ticket.specific_question }}</p>
     </div>
-  </div>
-  <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-    <div class="card-header">Header</div>
-    <div class="card-body">
-      <h5 class="card-title">Secondary card title</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
+</div>
+
+{% endfor %}
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
   <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
     <div class="card-header">Header</div>
     <div class="card-body">
@@ -39,25 +45,5 @@
       <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
     </div>
   </div>
-  <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
-    <div class="card-header">Header</div>
-    <div class="card-body">
-      <h5 class="card-title">Info card title</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
-  <div class="card bg-light mb-3" style="max-width: 18rem;">
-    <div class="card-header">Header</div>
-    <div class="card-body">
-      <h5 class="card-title">Light card title</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
-  <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
-    <div class="card-header">Header</div>
-    <div class="card-body">
-      <h5 class="card-title">Dark card title</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
+
 {% endblock %}
