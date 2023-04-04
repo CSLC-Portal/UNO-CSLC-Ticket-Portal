@@ -33,6 +33,7 @@ class Ticket(db.Model):
     time_closed = Column(DateTime(True), doc='Time the tutor marked ticket as closed')
     session_duration = Column(Integer, doc='Amount of time the tutor spent on the ticket/student')
     mode = Column(Enum(Mode), doc='if ticket was made for online/in-person help')
+    tutor_notes = Column(String(255), doc='space for tutors to write notes about student/ticket')
     #tutor_id = Column() This will be a foreign key to tutors table
 
 
