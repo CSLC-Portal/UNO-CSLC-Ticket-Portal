@@ -1,9 +1,11 @@
-from app import create_app
+from app import create_app, extensions
 from flask import Flask
 
 import pytest
 import os
 import shutil
+
+from . import MockConfidentialClientApplication
 
 @pytest.fixture
 def app():
@@ -20,6 +22,15 @@ def app():
     # Cannot be reused, we'll need to automatically delete this folder from disk once tests are done
     os.environ['FLASK_SESSION_TYPE'] = 'filesystem'
 
+    # Set the required azure app directory authentication env variables
+    os.environ['AAD_AUTHORITY'] = 'https://login.microsoftonline.com/common'
+    os.environ['AAD_CLIENT_ID'] = 'DummyAppID'
+    os.environ['AAD_CLIENT_SECRET'] = 'FakeClientSecret'
+    os.environ['AAD_REDIRECT_PATH'] = '/getAToken'
+
+    # NOTE: For mocking purposes we don't use MSAL's actual confidential client application
+    extensions.auth_app_type = MockConfidentialClientApplication
+
     app = create_app()
 
     # We yield the app in case we later need to tear-down after each test
@@ -30,6 +41,33 @@ def client(app : Flask):
     """Provides a test flask client for sending http requests to the application."""
 
     return app.test_client()
+
+@pytest.fixture
+def create_auth_client(client: Flask):
+    """Provides an factory function for creating an authenticated client."""
+
+    # This factory function sets some parameters we can choose in the test
+    def _factory(name = None, email = None, oid = None):
+        if name is not None:
+            MockConfidentialClientApplication.MOCK_NAME = name
+
+        if email is not None:
+            MockConfidentialClientApplication.MOCK_EMAIL = email
+
+        if oid is not None:
+            MockConfidentialClientApplication.MOCK_OID = oid
+
+        client.get(os.getenv('AAD_REDIRECT_PATH'))
+
+        return client
+
+    return _factory
+
+@pytest.fixture
+def auth_client(create_auth_client):
+    """Provides a default authenticated client."""
+
+    return create_auth_client()
 
 @pytest.fixture(scope="session", autouse=True)
 def cleanup(request):

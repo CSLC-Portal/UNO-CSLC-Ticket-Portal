@@ -1,5 +1,5 @@
 from flask import Flask
-from .extensions import db, sess
+from .extensions import db, sess, login_manager
 from . import default_config
 
 from time import sleep
@@ -14,6 +14,7 @@ def create_app():
     setup_env(app)
     db.init_app(app)
     sess.init_app(app)
+    login_manager.init_app(app)
 
     create_db_models(app)
     register_blueprints(app)
