@@ -1,12 +1,12 @@
 from sys import stderr
 from flask import Blueprint
 from flask import render_template, session, request, redirect, url_for
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import Query
 from sqlalchemy.orm.exc import MultipleResultsFound
 
 from ..model import User
-from ..extensions import db, login_manager
+from ..extensions import db, login_manager, auth_app_type
 
 import os
 import msal
@@ -24,6 +24,9 @@ assert REDIRECT_PATH, 'No redirect path specified for authentication. Set AAD_RE
 
 @auth.route("/login")
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('views.index'))
+
     session["flow"] = _build_auth_code_flow()
     return render_template("login.html", auth_url=session["flow"]["auth_uri"])
 
@@ -36,7 +39,7 @@ def authorized():
     """
     try:
         cache = _load_cache()
-        msal_app = _build_msal_app(cache=cache)
+        msal_app = _build_auth_app(cache=cache)
         result = msal_app.acquire_token_by_auth_code_flow(session.get("flow", {}), request.args)
 
         if "error" in result:
@@ -103,14 +106,8 @@ def _save_cache(cache):
     if cache.has_state_changed:
         session["token_cache"] = cache.serialize()
 
-def _build_msal_app(cache=None):
-    return msal.ConfidentialClientApplication(
-        CLIENT_ID,
-        authority=AUTHORITY,
-        client_credential=CLIENT_SECRET,
-        token_cache=cache)
+def _build_auth_app(cache=None):
+    return auth_app_type(CLIENT_ID, authority=AUTHORITY, client_credential=CLIENT_SECRET, token_cache=cache)
 
 def _build_auth_code_flow(scopes=None):
-    return _build_msal_app().initiate_auth_code_flow(
-        scopes or [],
-        redirect_uri=url_for("auth.authorized", _external=True))
+    return _build_auth_app().initiate_auth_code_flow(scopes or [], redirect_uri=url_for("auth.authorized", _external=True))
