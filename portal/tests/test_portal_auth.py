@@ -37,13 +37,6 @@ def test_open_tickets_with_auth(auth_client: FlaskClient, app: Flask):
         assert Ticket.query.count() == 1
         assert Ticket.query.first().student_email == 'test@test.email'
 
-def test_login_with_auth(auth_client: FlaskClient):
-    response = auth_client.get('/login')
-
-    # We should be redirected to index page
-    assert '302' in response.status
-    assert b'/' in response.data
-
 def test_logout_auth(auth_client: FlaskClient):
     response = auth_client.get('/logout')
 

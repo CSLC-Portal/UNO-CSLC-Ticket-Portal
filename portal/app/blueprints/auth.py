@@ -22,13 +22,10 @@ assert CLIENT_ID, 'No client ID specified for authentication. Set AAD_CLIENT_ID 
 assert CLIENT_SECRET, 'No client secret specified for authentication. Set AAD_CLIENT_SECRET env variable!'
 assert REDIRECT_PATH, 'No redirect path specified for authentication. Set AAD_REDIRECT_PATH env variable!'
 
-@auth.route("/login")
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('views.index'))
-
+@auth.route("/")
+def index():
     session["flow"] = _build_auth_code_flow()
-    return render_template("login.html", auth_url=session["flow"]["auth_uri"])
+    return render_template('index.html', user=current_user, auth_url=session["flow"]["auth_uri"])
 
 @auth.route(REDIRECT_PATH)
 def authorized():
@@ -52,13 +49,13 @@ def authorized():
     except ValueError:  # Usually caused by CSRF, Simply ignore them
         pass
 
-    return redirect(url_for("views.index"))
+    return redirect(url_for("auth.index"))
 
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(f'{AUTHORITY}/oauth2/v2.0/logout?post_logout_redirect_uri={url_for("views.index", _external=True)}')
+    return redirect(f'{AUTHORITY}/oauth2/v2.0/logout?post_logout_redirect_uri={url_for("auth.index", _external=True)}')
 
 @login_manager.user_loader
 def user_loader(id: str):

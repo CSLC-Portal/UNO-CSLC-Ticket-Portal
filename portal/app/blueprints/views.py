@@ -13,17 +13,6 @@ def now():
     now = datetime.datetime.now(UTC)
     return now
 
-@views.route("/")
-def index():
-    # TODO: In the future this page will likely be merged with the login page.
-    #       So we will need to check if the user is logged in within the HTML
-    #       jinja template.
-    #
-    if not current_user.is_authenticated:
-        return redirect(url_for("auth.login"))
-
-    return render_template('index.html', user=current_user)
-
 @views.route('/create-ticket')
 @login_required
 def create_ticket():

@@ -2,8 +2,13 @@
 {% block title %}Future Site of CSLC Tutoring Portal{% endblock %}
 {% block content %}
 
-<h2>Welcome {{ user.user_fname }}!</h2>
-<a href="/logout">Logout</a>
+{% if not user.is_authenticated %}
+    <h2>Login</h2>
+    <a href='{{ auth_url }}'>Sign In</a>
+{% else %}
+    <h2>Welcome {{ user.user_fname }}!</h2>
+    <a href="/logout">Logout</a>
+{% endif %}
 
 {% endblock %}
 
