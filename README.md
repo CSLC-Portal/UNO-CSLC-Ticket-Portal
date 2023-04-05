@@ -15,12 +15,11 @@ The application is currently a work in progress. The following is a list of curr
 
 Still working on:
 
-This code is currently not yet consistent with milestone 2 on the project plan document. We still require fully working Microsoft authentication (which is currently only available on the `sso-auth` branch and only through `localhost`).
-
-Currently, the following branches each contain some features of interest that are being developed:
- - `sso-auth`: Microsoft authentication via the azure app directory.
- - `CI-CD-integration`: Mostly for repository management, working on automated deployment.
- - `old-CSLC`: Redesigning the web pages of the old CSLC (We will tweak and improve these for the final product).
+ - Front-end for home, view-tickets, and create-ticket pages
+ - Backend for view-tickets
+ - Testing microsoft authentication for remote server (with HTTPS connection)
+ - Creating automated unit tests for selenium
+ - Automatic deployment to Azure Dynamic Web Apps
 
 ## Configuration
 
