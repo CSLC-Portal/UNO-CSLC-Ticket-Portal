@@ -1,5 +1,6 @@
-from flask import render_template, session, request, redirect, url_for
 from flask import Blueprint
+from flask import render_template, request, redirect, url_for
+from flask_login import login_required, current_user
 from .. import model as m
 import datetime
 from app.extensions import db
@@ -12,18 +13,13 @@ def now():
     now = datetime.datetime.now(UTC)
     return now
 
-@views.route("/")
-def index():
-    if not session.get("user"):
-        return redirect(url_for("auth.login"))
-
-    return render_template('index.html', user=session["user"])
-
 @views.route('/create-ticket')
+@login_required
 def create_ticket():
     return render_template('create-ticket.html')
 
 @views.route('/open-tickets', methods=["POST"])
+@login_required
 def open_tickets():
     email = request.form.get("emailAdressField")
     firstName = request.form.get("firstNameField")
