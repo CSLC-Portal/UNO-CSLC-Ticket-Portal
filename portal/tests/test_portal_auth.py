@@ -3,8 +3,6 @@ from flask import Flask
 from app.model import Ticket
 from flask.testing import FlaskClient
 
-import pytest
-
 def test_index_with_auth(create_auth_client):
     client = create_auth_client(name='John Smith')
 

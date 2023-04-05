@@ -5,7 +5,7 @@ import pytest
 import os
 import shutil
 
-from .mock_objects import MockConfidentialClientApplication
+from . import MockConfidentialClientApplication
 
 @pytest.fixture
 def app():
