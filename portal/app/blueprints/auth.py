@@ -57,6 +57,11 @@ def logout():
     logout_user()
     return redirect(f'{AUTHORITY}/oauth2/v2.0/logout?post_logout_redirect_uri={url_for("auth.index", _external=True)}')
 
+@login_manager.unauthorized_handler
+def unauthorized():
+    session["flow"] = _build_auth_code_flow()
+    return redirect(session["flow"]["auth_uri"])
+
 @login_manager.user_loader
 def user_loader(id: str):
     # TODO: flask-login provides the primary key of the user object
