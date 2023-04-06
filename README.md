@@ -10,17 +10,18 @@ The recent loss of a previous tutoring portal is a major motivation for the deve
 
 The application is currently a work in progress. The following is a list of currently existing features in the application:
 
- - Temporary form for submitting a ticket as a guest.
+ - Temporary form for submitting a ticket.
  - Temporary 'view-tickets' page that shows submitted tickets.
+ - Home page that asks to login or shows username when logged in.
+ - Login management; only authenticated users can view certain pages.
+   - Unauthenticated users will be redirected to microsoft OAuth sign-in.
 
 Still working on:
 
-This code is currently not yet consistent with milestone 2 on the project plan document. We still require fully working Microsoft authentication (which is currently only available on the `sso-auth` branch and only through `localhost`).
-
-Currently, the following branches each contain some features of interest that are being developed:
- - `sso-auth`: Microsoft authentication via the azure app directory.
- - `CI-CD-integration`: Mostly for repository management, working on automated deployment.
- - `old-CSLC`: Redesigning the web pages of the old CSLC (We will tweak and improve these for the final product).
+ - Front-end for home, view-tickets, and create-ticket pages
+ - Testing microsoft authentication for remote server (with HTTPS connection)
+ - Creating automated unit tests for selenium
+ - Automatic deployment to Azure Dynamic Web Apps
 
 ## Configuration
 
