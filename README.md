@@ -16,6 +16,11 @@ The application is currently a work in progress. The following is a list of curr
  - Login management; only authenticated users can view certain pages.
    - Unauthenticated users will be redirected to microsoft OAuth sign-in.
 
+Previews:
+
+![Home Page Mock-up](https://github.com/claytonmsafranek/UNO-CSLC-Ticket-Portal/blob/update-readme-m3/portal/app/static/cslc_home_mock.jpeg)
+![View Tickets Mock-up](https://github.com/claytonmsafranek/UNO-CSLC-Ticket-Portal/blob/update-readme-m3/portal/app/static/cslc_view-tickets_mock.png)
+
 Still working on:
 
  - Front-end for home, view-tickets, and create-ticket pages
