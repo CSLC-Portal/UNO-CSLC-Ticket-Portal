@@ -10,13 +10,15 @@ The recent loss of a previous tutoring portal is a major motivation for the deve
 
 The application is currently a work in progress. The following is a list of currently existing features in the application:
 
- - Temporary form for submitting a ticket as a guest.
+ - Temporary form for submitting a ticket.
  - Temporary 'view-tickets' page that shows submitted tickets.
+ - Home page that asks to login or shows username when logged in.
+ - Login management; only authenticated users can view certain pages.
+   - Unauthenticated users will be redirected to microsoft OAuth sign-in.
 
 Still working on:
 
  - Front-end for home, view-tickets, and create-ticket pages
- - Backend for view-tickets
  - Testing microsoft authentication for remote server (with HTTPS connection)
  - Creating automated unit tests for selenium
  - Automatic deployment to Azure Dynamic Web Apps
