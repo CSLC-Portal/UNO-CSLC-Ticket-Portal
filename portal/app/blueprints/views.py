@@ -29,7 +29,8 @@ def open_tickets():
     assignment = request.form.get("assignmentNameField")
     question = request.form.get("specificQuestionField")
     problem = request.form.get("problemTypeField")
-    print(f"Following ticket information has been created:\n{lastName}\n{firstName}\n{email}\n{course}\n{section}\n{assignment}\n{question}\n{problem}")
+    mode = request.form['modeOfTicket']
+    print(f"Following ticket information has been created:\n{lastName}\n{firstName}\n{email}\n{course}\n{section}\n{assignment}\n{question}\n{problem}\n{mode}")
 
     # create ticket with info sent back
     if request.method == "POST":
@@ -42,14 +43,15 @@ def open_tickets():
             question,
             problem,
             now(),
-            m.Mode.Online)
+            mode)
+            #m.Mode.Online)
 
         # insert into 'Tickets' table
         db.session.add(ticket)
         db.session.commit()
 
     return render_template('open-tickets.html', email=email, firstName=firstName, lastName=lastName, course=course,
-                           section=section, assignmentName=assignment, specificQuestion=question, problemType=problem)
+                           section=section, assignmentName=assignment, specificQuestion=question, problemType=problem, mode=mode)
 
 @views.route('/view-tickets')
 @login_required
