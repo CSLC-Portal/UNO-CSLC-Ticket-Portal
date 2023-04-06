@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Open Tickets{% endblock %}
+{% block content %}
+
+<h1>View Tickets Page</h1><br>
+
+{% for ticket in tickets %}
+    {% if ticket.status == m.Status.Open %}
+    <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+    {% elif ticket.status == m.Status.Claimed %}
+    <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
+    {% elif ticket.status == m.Status.Closed %}
+    <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+    {% endif %}
+    <div class="card-header">{{ ticket.student_name }} <br> {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}</div>
+    <div class="card-body">
+      <h5 class="card-title">{{ ticket.course }}</h5>
+      <h6 class="card-title">Assignment: {{ ticket.assignment_name }}</h6>
+      <p class="card-text">{{ ticket.specific_question }}</p>
+      <h5 class="card-title">{{ ticket.status }}</h5>
+    </div>
+    </div>
+
+{% endfor %}
+
+
+{% endblock %}

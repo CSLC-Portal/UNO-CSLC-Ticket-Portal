@@ -36,13 +36,13 @@ def open_tickets():
         ticket = m.Ticket(
             email,
             firstName,
-            lastName,
             course,
             section,
             assignment,
             question,
             problem,
-            now())
+            now(),
+            m.Mode.Online)
 
         # insert into 'Tickets' table
         db.session.add(ticket)
@@ -50,3 +50,12 @@ def open_tickets():
 
     return render_template('open-tickets.html', email=email, firstName=firstName, lastName=lastName, course=course,
                            section=section, assignmentName=assignment, specificQuestion=question, problemType=problem)
+
+@views.route('/view-tickets')
+@login_required
+def view_tickets():
+    # get all tickets
+    tickets = m.Ticket.query.all()
+    print("TICKETS+++++++++++++ " + str(tickets))
+
+    return render_template('view_tickets.html', tickets=tickets, m=m)

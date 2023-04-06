@@ -90,7 +90,7 @@ def _user_from_claims(token_claims: str):
         print(f'Creating new entry in database for user {oid}...')
         name = token_claims.get('name')
         preferred_name = token_claims.get('preferred_username')
-        user = User(oid, 0, preferred_name, name, name, False, False)
+        user = User(oid, 0, preferred_name, name, False, False)
 
         db.session.add(user)
         db.session.commit()
