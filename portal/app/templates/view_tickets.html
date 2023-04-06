@@ -6,7 +6,7 @@
 
 {% for ticket in tickets %}
     {% if ticket.status == m.Status.Open %}
-    <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
     {% elif ticket.status == m.Status.Claimed %}
     <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
     {% elif ticket.status == m.Status.Closed %}
@@ -18,6 +18,13 @@
       <h6 class="card-title">Assignment: {{ ticket.assignment_name }}</h6>
       <p class="card-text">{{ ticket.specific_question }}</p>
       <h5 class="card-title">{{ ticket.status }}</h5>
+      {% if ticket.status == m.Status.Open %}
+      <button type="button" class="btn btn-danger">Claim</button>
+      {% elif ticket.status == m.Status.Claimed %}
+      <button type="button" class="btn btn-success">Close</button>
+      {% elif ticket.status == m.Status.Closed %}
+      <button type="button" class="btn btn-warning">Re-Open</button>
+      {% endif %}
     </div>
     </div>
 
