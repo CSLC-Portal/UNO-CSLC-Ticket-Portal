@@ -15,7 +15,7 @@ jobs:
       id-token: write
     steps:
         - name: Install dependencies
-            run: |
+        run: |
             pip install sphinx
             pip install sphinx-rtd-theme
 
