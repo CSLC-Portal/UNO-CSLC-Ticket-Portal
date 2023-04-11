@@ -15,10 +15,10 @@ jobs:
       id-token: write
     steps:
         - name: Install dependencies
-                working-directory: portal
+        working-directory: portal
                 run: |
                 pip install sphinx
                 pip install sphinx-rtd-theme
-        
+
         - id: deployment
         uses: sphinx-notes/pages@v3
