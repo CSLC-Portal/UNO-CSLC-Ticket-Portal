@@ -56,8 +56,46 @@ def open_tickets():
 @views.route('/view-tickets')
 @login_required
 def view_tickets():
+    """
+    This funciton handels the HTTP route /view-tickets, which is a page for tutors to view all tickets
+    Tickets from all statuses will be returned including recently closed ones.
+    Admin will be able to choose how long closed tickets should remain in the view-tickets view.
+    """
     # get all tickets
     tickets = m.Ticket.query.all()
-    print("TICKETS+++++++++++++ " + str(tickets))
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
 
-    return render_template('view_tickets.html', tickets=tickets, m=m)
+@views.route('/update-ticket/<id>', methods=["GET", "POST"])
+@login_required
+def update_ticket(id):
+    """
+    This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
+    :param int id: The id of the ticket that needs its status changed as a result of a claim, close, or reopen button press
+    :return: Render template to the original view-ticket.html page.
+    """
+    tickets = m.Ticket.query.all()
+    tutor = current_user
+
+    print("RECIEVED TICKET ID: " + str(id))
+    print("VALUE OF ACTION: " + str(request.form.get("action")))
+    # retrieve ticket by primary key using get()
+    current_ticket = m.Ticket.query.get(id)
+
+    if request.form.get("action") == "Claim":
+        # edit status of ticket to Claimed, and assign tutor
+        current_ticket.tutor_id = tutor.id
+        current_ticket.status = m.Status.Claimed
+        db.session.commit()
+
+        print("TUTOR ID THAT CLAIMED TICKET: " + str(current_ticket.tutor_id))
+    elif request.form.get("action") == "Close":
+        # edit status of ticket to CLOSED,
+        # TODO: calculate session duration and assign to ticket.session_duration
+        current_ticket.status = m.Status.Closed
+        db.session.commit()
+    elif request.form.get("action") == "ReOpen":
+        # edit status of ticket back to OPEN
+        current_ticket.status = m.Status.Open
+        db.session.commit()
+
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)

@@ -30,12 +30,13 @@ class Ticket(db.Model):
     specific_question = Column(String(25), doc='Student question about the assignment')
     problem_type = Column(String(25), doc='Type of problem student is having')
     time_created = Column(DateTime(True), nullable=False, doc='Time ticket was created')
+    time_claimed = Column(DateTime(True), nullable=False, doc='Time ticket was claimed by tutor')
     status = Column(Enum(Status), doc='Status of the ticket. 1=open, 2=claimed, 3=closed', default=Status.Open)
     time_closed = Column(DateTime(True), doc='Time the tutor marked ticket as closed')
     session_duration = Column(Integer, doc='Amount of time the tutor spent on the ticket/student')
     mode = Column(Enum(Mode), doc='if ticket was made for online/in-person help')
     tutor_notes = Column(String(255), doc='space for tutors to write notes about student/ticket')
-    # tutor_id = Column() This will be a foreign key to tutors table
+    tutor_id = Column(String(50), db.ForeignKey('Users.id'), doc='Foreign key to tutor id who claimed this ticket')
 
     def __init__(self, sEmailIn, sNameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, timeIn, modeIn):
         self.student_email = sEmailIn
