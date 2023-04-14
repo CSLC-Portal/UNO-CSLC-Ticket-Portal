@@ -44,7 +44,6 @@ def open_tickets():
             problem,
             now(),
             mode)
-            #m.Mode.Online)
 
         # insert into 'Tickets' table
         db.session.add(ticket)
