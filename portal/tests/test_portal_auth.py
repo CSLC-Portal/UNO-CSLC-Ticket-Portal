@@ -101,9 +101,10 @@ def test_claim_open_ticket(auth_client: FlaskClient, app: Flask):
 
     # claim open ticket
     claimData = {
+        'ticketID': '1',
         'action': 'Claim'
     }
-    response2 = auth_client.post('/update-ticket/1', data=claimData)
+    response2 = auth_client.post('/update-ticket', data=claimData)
 
     # make sure that test ticket status = claimed
     with app.app_context():
@@ -137,9 +138,10 @@ def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
 
     # claim open ticket
     claimData = {
+        'ticketID': '1',
         'action': 'Claim'
     }
-    response2 = auth_client.post('/update-ticket/1', data=claimData)
+    response2 = auth_client.post('/update-ticket', data=claimData)
 
     # make sure that test ticket status = claimed
     with app.app_context():
@@ -153,9 +155,10 @@ def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
 
     # close claimed ticket
     closeData = {
+        'ticketID': '1',
         'action': 'Close'
     }
-    repsonse3 = auth_client.post('/update-ticket/1', data=closeData)
+    repsonse3 = auth_client.post('/update-ticket', data=closeData)
 
     # make sure that the test ticket status = closed
     with app.app_context():
@@ -189,9 +192,10 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
 
     # claim open ticket
     claimData = {
+        'ticketID': '1',
         'action': 'Claim'
     }
-    response2 = auth_client.post('/update-ticket/1', data=claimData)
+    response2 = auth_client.post('/update-ticket', data=claimData)
 
     # make sure that test ticket status = claimed
     with app.app_context():
@@ -205,9 +209,10 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
 
     # close claimed ticket
     closeData = {
+        'ticketID': '1',
         'action': 'Close'
     }
-    repsonse3 = auth_client.post('/update-ticket/1', data=closeData)
+    repsonse3 = auth_client.post('/update-ticket', data=closeData)
 
     # make sure that the test ticket status = closed
     with app.app_context():
@@ -221,9 +226,10 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
 
     # reopen closed ticket
     reopenData = {
+        'ticketID': '1',
         'action': 'ReOpen'
     }
-    response4 = auth_client.post('/update-ticket/1', data=reopenData)
+    response4 = auth_client.post('/update-ticket', data=reopenData)
 
     # make sure that the test ticket status is back to open
     with app.app_context():

@@ -17,7 +17,8 @@
       <h6 class="card-title">Assignment: {{ ticket.assignment_name }}</h6>
       <p class="card-text">{{ ticket.specific_question }}</p>
       <h5 class="card-title">{{ ticket.status }}</h5>
-      <form action="{{ url_for('views.update_ticket', id = ticket.id) }}", method="POST">
+      <form action="{{ url_for('views.update_ticket') }}", method="POST">
+        <input type="hidden" name="ticketID" value="{{ ticket.id }}">
         {% if ticket.status == m.Status.Open %}
         <button type="submit" class="btn btn-primary" name="action" value="Claim">Claim</button>
         {% elif ticket.status == m.Status.Claimed %}

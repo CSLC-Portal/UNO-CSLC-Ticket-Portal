@@ -65,21 +65,21 @@ def view_tickets():
     tickets = m.Ticket.query.all()
     return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
 
-@views.route('/update-ticket/<id>', methods=["GET", "POST"])
+@views.route('/update-ticket', methods=["GET", "POST"])
 @login_required
-def update_ticket(id):
+def update_ticket():
     """
     This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
-    :param int id: The id of the ticket that needs its status changed as a result of a claim, close, or reopen button press
     :return: Render template to the original view-ticket.html page.
     """
     tickets = m.Ticket.query.all()
     tutor = current_user
+    ticketID = request.form.get("ticketID")
 
-    print("RECIEVED TICKET ID: " + str(id))
+    print("RECIEVED TICKET ID: " + str(ticketID))
     print("VALUE OF ACTION: " + str(request.form.get("action")))
     # retrieve ticket by primary key using get()
-    current_ticket = m.Ticket.query.get(id)
+    current_ticket = m.Ticket.query.get(ticketID)
 
     if request.form.get("action") == "Claim":
         # edit status of ticket to Claimed, and assign tutor
