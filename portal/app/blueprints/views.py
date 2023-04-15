@@ -2,16 +2,14 @@ from flask import Blueprint
 from flask import render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from .. import model as m
-import datetime
+from datetime import datetime, timedelta
 from app.extensions import db
 
 views = Blueprint('views', __name__)
 
 def now():
-    # gets the current time in UTC
-    UTC = datetime.timezone.utc
-    now = datetime.datetime.now(UTC)
-    return now
+    # gets the current time, function for consistency
+    return datetime.now()
 
 @views.route('/create-ticket')
 @login_required
@@ -64,6 +62,38 @@ def view_tickets():
     tickets = m.Ticket.query.all()
     return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
 
+def calc_session_duration(start_time, end_time, current_session_duration):
+    # validate times are set
+    if not start_time or not end_time or not isinstance(start_time, datetime) or not isinstance(end_time, datetime):
+        print("START TIME IN: " + str(start_time))
+        print("END TIME IN: " + str(end_time))
+        print("CURRENT TIME IN: " + str(current_session_duration))
+        #raise ValueError("Invalid start_time or end_time")
+    # start of the day is currently 9:00 AM
+    start_of_day = datetime.strptime(start_time.strftime('%m-%d-%Y') + " 09:00:00", '%m-%d-%Y %H:%M:%S')
+    # end of the day is currently 5:00 PM
+    end_of_day = datetime.strptime(end_time.strftime('%m-%d-%Y') + " 17:00:00", '%m-%d-%Y %H:%M:%S')
+    time_worked = timedelta()
+
+    if start_time < start_of_day:
+        start_time = start_of_day
+
+    if end_time > end_of_day:
+        end_time = end_of_day
+
+    while start_time < end_time:
+        if start_time.weekday() < 5:
+            if start_time.hour >= 9 and start_time.hour < 17:
+                time_worked += timedelta(minutes=1)
+
+        start_time += timedelta(minutes=1)
+
+    # add current work done on ticket if there is any
+    if current_session_duration != None:
+        return time_worked + current_session_duration
+    else:
+        return time_worked
+
 @views.route('/update-ticket', methods=["GET", "POST"])
 @login_required
 def update_ticket():
@@ -81,16 +111,23 @@ def update_ticket():
     current_ticket = m.Ticket.query.get(ticketID)
 
     if request.form.get("action") == "Claim":
-        # edit status of ticket to Claimed, and assign tutor
+        # edit status of ticket to Claimed, assign tutor, set time claimed
         current_ticket.tutor_id = tutor.id
         current_ticket.status = m.Status.Claimed
+        current_ticket.time_claimed = now()
+        print("TIME TICKET CLAIMED: " + str(now()))
         db.session.commit()
 
         print("TUTOR ID THAT CLAIMED TICKET: " + str(current_ticket.tutor_id))
     elif request.form.get("action") == "Close":
-        # edit status of ticket to CLOSED,
-        # TODO: calculate session duration and assign to ticket.session_duration
+        # edit status of ticket to CLOSED and set time closed on ticket
         current_ticket.status = m.Status.Closed
+        current_ticket.time_closed = now()
+        print("TIME TICKET CLOSED: " + str(now()))
+        # calculate session duration from time claimed to time closed
+        duration = calc_session_duration(current_ticket.time_claimed, current_ticket.time_closed, current_ticket.session_duration)
+        #current_ticket.session_duration = duration
+        print("TICKET DURATION: " + str(duration))
         db.session.commit()
     elif request.form.get("action") == "ReOpen":
         # edit status of ticket back to OPEN
@@ -98,3 +135,8 @@ def update_ticket():
         db.session.commit()
 
     return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
+
+
+
+
+
