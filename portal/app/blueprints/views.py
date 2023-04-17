@@ -2,7 +2,8 @@ from flask import Blueprint
 from flask import render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from .. import model as m
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time, date
+from time import strftime
 from app.extensions import db
 
 views = Blueprint('views', __name__)
@@ -63,36 +64,27 @@ def view_tickets():
     return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
 
 def calc_session_duration(start_time, end_time, current_session_duration):
-    # validate times are set
-    if not start_time or not end_time or not isinstance(start_time, datetime) or not isinstance(end_time, datetime):
-        print("START TIME IN: " + str(start_time))
-        print("END TIME IN: " + str(end_time))
-        print("CURRENT TIME IN: " + str(current_session_duration))
-        #raise ValueError("Invalid start_time or end_time")
-    # start of the day is currently 9:00 AM
-    start_of_day = datetime.strptime(start_time.strftime('%m-%d-%Y') + " 09:00:00", '%m-%d-%Y %H:%M:%S')
-    # end of the day is currently 5:00 PM
-    end_of_day = datetime.strptime(end_time.strftime('%m-%d-%Y') + " 17:00:00", '%m-%d-%Y %H:%M:%S')
-    time_worked = timedelta()
+    print("START TIME IN: " + str(start_time))
+    print("END TIME IN: " + str(end_time))
+    print("CURRENT TIME IN: " + str(current_session_duration))
 
-    if start_time < start_of_day:
-        start_time = start_of_day
+    diff = end_time - start_time
 
-    if end_time > end_of_day:
-        end_time = end_of_day
-
-    while start_time < end_time:
-        if start_time.weekday() < 5:
-            if start_time.hour >= 9 and start_time.hour < 17:
-                time_worked += timedelta(minutes=1)
-
-        start_time += timedelta(minutes=1)
-
-    # add current work done on ticket if there is any
+    # check if there is already time logged on the ticket, if so add that too
     if current_session_duration != None:
-        return time_worked + current_session_duration
-    else:
-        return time_worked
+        # python datetime and timedelta conversions
+        tmp = current_session_duration
+        tmpDate = datetime.combine(datetime.now(), current_session_duration)
+        diff = diff + timedelta(hours=tmp.hour, minutes=tmp.minute, seconds=tmp.second, microseconds=tmp.microsecond)
+
+    # convert timedelta() object back into datetime.datetime object to set into db
+    epoch = datetime(1970, 1, 1, 0, 0, 0)
+    result = epoch + diff
+
+    # chop off epoch year, month, and date. Just want HH:MM:SS (time) worked on ticket - date doesn't matter
+    return result.time()
+
+
 
 @views.route('/update-ticket', methods=["GET", "POST"])
 @login_required
@@ -126,8 +118,9 @@ def update_ticket():
         print("TIME TICKET CLOSED: " + str(now()))
         # calculate session duration from time claimed to time closed
         duration = calc_session_duration(current_ticket.time_claimed, current_ticket.time_closed, current_ticket.session_duration)
-        #current_ticket.session_duration = duration
-        print("TICKET DURATION: " + str(duration))
+        print("DURATION: " + str(duration))
+        # TODO: get the duration calculation accounting for business days/hours too
+        current_ticket.session_duration = duration
         db.session.commit()
     elif request.form.get("action") == "ReOpen":
         # edit status of ticket back to OPEN

@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, String, Integer, DateTime, Date, Enum, Boolean
+from sqlalchemy import Column, String, Integer, DateTime, Date, Enum, Boolean, Time
 from sqlalchemy.ext.declarative import declarative_base
 from .extensions import db
 from flask_login import UserMixin
@@ -33,7 +33,7 @@ class Ticket(db.Model):
     time_claimed = Column(DateTime(True), doc='Time ticket was claimed by tutor')
     status = Column(Enum(Status), doc='Status of the ticket. 1=open, 2=claimed, 3=closed', default=Status.Open)
     time_closed = Column(DateTime(True), doc='Time the tutor marked ticket as closed')
-    session_duration = Column(Integer, doc='Amount of time the tutor spent on the ticket/student')
+    session_duration = Column(Time(True), doc='Amount of time the tutor spent on the ticket/student')
     mode = Column(Enum(Mode), doc='if ticket was made for online/in-person help')
     tutor_notes = Column(String(255), doc='space for tutors to write notes about student/ticket')
     tutor_id = Column(String(50), db.ForeignKey('Users.id'), doc='Foreign key to tutor id who claimed this ticket')
