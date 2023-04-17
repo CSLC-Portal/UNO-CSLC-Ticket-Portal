@@ -2,6 +2,7 @@
 **/.vscode/
 flask_session/
 *.db
+**/.DS_Store
 
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
@@ -72,9 +73,6 @@ instance/
 
 # Scrapy stuff:
 .scrapy
-
-# Sphinx documentation
-docs/_build/
 
 # PyBuilder
 .pybuilder/
