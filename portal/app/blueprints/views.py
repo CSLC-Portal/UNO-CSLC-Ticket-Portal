@@ -94,10 +94,9 @@ def calc_session_duration(start_time, end_time, current_session_duration):
     diff = end_time - start_time
 
     # check if there is already time logged on the ticket, if so add that too
-    if current_session_duration != None:
+    if current_session_duration is not None:
         # python datetime and timedelta conversions
         tmp = current_session_duration
-        tmpDate = datetime.combine(datetime.now(), current_session_duration)
         diff = diff + timedelta(hours=tmp.hour, minutes=tmp.minute, seconds=tmp.second, microseconds=tmp.microsecond)
 
     # convert timedelta() object back into datetime.datetime object to set into db
@@ -106,8 +105,6 @@ def calc_session_duration(start_time, end_time, current_session_duration):
 
     # chop off epoch year, month, and date. Just want HH:MM:SS (time) worked on ticket - date doesn't matter
     return result.time()
-
-
 
 @views.route('/update-ticket', methods=["GET", "POST"])
 @login_required
@@ -151,8 +148,3 @@ def update_ticket():
         db.session.commit()
 
     return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
-
-
-
-
-
