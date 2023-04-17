@@ -5,11 +5,11 @@
 <h1>View Tickets Page</h1><br>
 
 {% for ticket in tickets %}
-    {% if ticket.status == m.Status.Open %}
+    {% if ticket.status == Status.Open %}
     <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
-    {% elif ticket.status == m.Status.Claimed %}
+    {% elif ticket.status == Status.Claimed %}
     <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
-    {% elif ticket.status == m.Status.Closed %}
+    {% elif ticket.status == Status.Closed %}
     <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
     {% endif %}
     <div class="card-header">{{ ticket.student_name }} <br> {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}</div>

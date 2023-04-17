@@ -12,12 +12,12 @@ def test_index_with_auth(create_auth_client):
 
     assert b'John Smith' in response.data
 
-def test_create_ticket_with_auth(auth_client: FlaskClient):
+def test_create_ticket_get_with_auth(auth_client: FlaskClient):
     response = auth_client.get('/create-ticket')
 
     assert b'<h1>Create Ticket Form</h1>' in response.data
 
-def test_open_tickets_with_auth(auth_client: FlaskClient, app: Flask):
+def test_create_ticket_post_with_auth(auth_client: FlaskClient, app: Flask):
 
     test_form_data = {
         'emailAdressField':'test@test.email',
@@ -30,12 +30,15 @@ def test_open_tickets_with_auth(auth_client: FlaskClient, app: Flask):
         'problemTypeField':'type1'
     }
 
-    response = auth_client.post('/open-tickets', data=test_form_data)
+    response = auth_client.post('/create-ticket', data=test_form_data)
 
     with app.app_context():
-        assert b'John' in response.data
         assert Ticket.query.count() == 1
         assert Ticket.query.first().student_email == 'test@test.email'
+
+    # Expect redirect back to index
+    assert '302' in response.status
+    assert b'href="/"' in response.data
 
 def test_logout_auth(auth_client: FlaskClient):
     response = auth_client.get('/logout')
