@@ -2,7 +2,8 @@ from flask import Blueprint
 from flask import render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from .. import model as m
-import datetime
+from datetime import datetime, timedelta, time, date
+from time import strftime
 from app.extensions import db
 
 views = Blueprint('views', __name__)
@@ -12,9 +13,7 @@ def now():
     Gets the current time in UTC.
     :return: Current time in Coordinated Universal Time (UTC)
     """
-    UTC = datetime.timezone.utc
-    now = datetime.datetime.now(UTC)
-    return now
+    return datetime.now()
 
 @views.route('/create-ticket')
 @login_required
@@ -48,7 +47,8 @@ def open_tickets():
     assignment = request.form.get("assignmentNameField")
     question = request.form.get("specificQuestionField")
     problem = request.form.get("problemTypeField")
-    print(f"Following ticket information has been created:\n{lastName}\n{firstName}\n{email}\n{course}\n{section}\n{assignment}\n{question}\n{problem}")
+    mode = request.form['modeOfTicket']
+    print(f"Following ticket information has been created:\n{lastName}\n{firstName}\n{email}\n{course}\n{section}\n{assignment}\n{question}\n{problem}\n{mode}")
 
     # create ticket with info sent back
     if request.method == "POST":
@@ -61,14 +61,14 @@ def open_tickets():
             question,
             problem,
             now(),
-            m.Mode.Online)
+            mode)
 
         # insert into 'Tickets' table
         db.session.add(ticket)
         db.session.commit()
 
     return render_template('open-tickets.html', email=email, firstName=firstName, lastName=lastName, course=course,
-                           section=section, assignmentName=assignment, specificQuestion=question, problemType=problem)
+                           section=section, assignmentName=assignment, specificQuestion=question, problemType=problem, mode=mode)
 
 @views.route('/view-tickets')
 @login_required
@@ -84,6 +84,67 @@ def view_tickets():
     """
     # get all tickets
     tickets = m.Ticket.query.all()
-    print("TICKETS+++++++++++++ " + str(tickets))
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
 
-    return render_template('view_tickets.html', tickets=tickets, m=m)
+def calc_session_duration(start_time, end_time, current_session_duration):
+    print("START TIME IN: " + str(start_time))
+    print("END TIME IN: " + str(end_time))
+    print("CURRENT TIME IN: " + str(current_session_duration))
+
+    diff = end_time - start_time
+
+    # check if there is already time logged on the ticket, if so add that too
+    if current_session_duration is not None:
+        # python datetime and timedelta conversions
+        tmp = current_session_duration
+        diff = diff + timedelta(hours=tmp.hour, minutes=tmp.minute, seconds=tmp.second, microseconds=tmp.microsecond)
+
+    # convert timedelta() object back into datetime.datetime object to set into db
+    epoch = datetime(1970, 1, 1, 0, 0, 0)
+    result = epoch + diff
+
+    # chop off epoch year, month, and date. Just want HH:MM:SS (time) worked on ticket - date doesn't matter
+    return result.time()
+
+@views.route('/update-ticket', methods=["GET", "POST"])
+@login_required
+def update_ticket():
+    """
+    This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
+    :return: Render template to the original view-ticket.html page.
+    """
+    tickets = m.Ticket.query.all()
+    tutor = current_user
+    ticketID = request.form.get("ticketID")
+
+    print("RECIEVED TICKET ID: " + str(ticketID))
+    print("VALUE OF ACTION: " + str(request.form.get("action")))
+    # retrieve ticket by primary key using get()
+    current_ticket = m.Ticket.query.get(ticketID)
+
+    if request.form.get("action") == "Claim":
+        # edit status of ticket to Claimed, assign tutor, set time claimed
+        current_ticket.tutor_id = tutor.id
+        current_ticket.status = m.Status.Claimed
+        current_ticket.time_claimed = now()
+        print("TIME TICKET CLAIMED: " + str(now()))
+        db.session.commit()
+
+        print("TUTOR ID THAT CLAIMED TICKET: " + str(current_ticket.tutor_id))
+    elif request.form.get("action") == "Close":
+        # edit status of ticket to CLOSED and set time closed on ticket
+        current_ticket.status = m.Status.Closed
+        current_ticket.time_closed = now()
+        print("TIME TICKET CLOSED: " + str(now()))
+        # calculate session duration from time claimed to time closed
+        duration = calc_session_duration(current_ticket.time_claimed, current_ticket.time_closed, current_ticket.session_duration)
+        print("DURATION: " + str(duration))
+        # TODO: get the duration calculation accounting for business days/hours too
+        current_ticket.session_duration = duration
+        db.session.commit()
+    elif request.form.get("action") == "ReOpen":
+        # edit status of ticket back to OPEN
+        current_ticket.status = m.Status.Open
+        db.session.commit()
+
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
