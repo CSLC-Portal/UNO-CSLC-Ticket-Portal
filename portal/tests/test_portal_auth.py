@@ -20,23 +20,47 @@ def test_create_ticket_get_with_auth(auth_client: FlaskClient):
 def test_create_ticket_post_with_auth(auth_client: FlaskClient, app: Flask):
 
     test_form_data = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'course1',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1'
     }
 
     response = auth_client.post('/create-ticket', data=test_form_data)
 
     with app.app_context():
         assert Ticket.query.count() == 1
-        assert Ticket.query.first().student_email == 'test@test.email'
+
+        ticket: Ticket = Ticket.query.first()
+        assert ticket.student_email == 'test@test.email'
+        assert ticket.student_name == 'John Doe'
+        assert ticket.course == 'course1'
+        assert ticket.section == 'section1'
+        assert ticket.assignment_name == 'assignment1'
+        assert ticket.specific_question == 'This is my question?'
+        assert ticket.problem_type == 'type1'
 
     # Expect redirect back to index
+    assert '302' in response.status
+    assert b'href="/"' in response.data
+
+def test_create_ticket_invalid_data(auth_client: FlaskClient, app: Flask):
+    response = auth_client.post('/create-ticket', data={})
+
+    with app.app_context():
+        assert Ticket.query.count() == 0
+
+    with auth_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'Could not submit ticket, invalid data'
+
     assert '302' in response.status
     assert b'href="/"' in response.data
 
