@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <!-- Header content -->
     <div class="logo-section">
         <img src="{{ url_for('static', filename='uno-icon-color.png') }}" alt="University of Nebraska at Omaha Logo" class="uno-logo" />
         <div class="vl"></div>
@@ -22,13 +23,14 @@
         {% else %}
             <a class="Login" href="/logout">Logout</a>
         {% endif %}
+        <!-- this is where other links will go -->
         <!--
         <a class="Status">Hello [User]</a>
         <a class="Login">Login</a>
         -->
     </div>
 
-    <h1>CSLC Portal</h1>
+    <!-- Content that is page specific -->
     {% block content %}
     {% endblock %}
 

@@ -2,6 +2,7 @@
 {% block title %}Future Site of CSLC Tutoring Portal{% endblock %}
 {% block content %}
 
+{#
 {% if not user.is_authenticated %}
     <h2>Login</h2>
     <a href='{{ auth_url }}'>Sign In</a>
@@ -11,6 +12,87 @@
     <a href="/logout">Logout</a>
     -->
 {% endif %}
+#}
+    <h1 class="heading-text">WELCOME TO THE UNO CSLC</h1>
+    <h1 class="heading-text2">PKI 391 | [zoom link]</h1>
+    <hr class="solid" />
 
+    <div class="hoursOfOperation">
+      <div class="hoursHeading">HOURS</div>
+    </div>
+
+    <table>
+        <tr>
+            <th>
+                MONDAY
+            </th>
+            <th class="center">
+                TUESDAY
+            </th>
+            <th class="center">
+                WEDNESDAY
+            </th>
+            <th class="center">
+                THURSDAY
+            </th>
+            <th class="center">
+                FRIDAY
+            </th>
+            <th>
+                SATURDAY
+            </th>
+        </tr>
+        <tr>
+            <td>
+                00:00 - 00:00
+            </td>
+            <td class="center">
+                00:00 - 00:00
+            </td>
+            <td class="center">
+                00:00 - 00:00
+            </td>
+            <td class="center">
+                00:00 - 00:00
+            </td>
+            <td class="center">
+                00:00 - 00:00
+            </td>
+            <td>
+                00:00 - 00:00
+            </td>
+        </tr>
+    </table>
+
+    <div class="center-this">
+        <button class="create-ticket-button" onclick="window.location.href='/create-ticket'">
+            Open Ticket
+        </button>
+    </div>
+
+      <hr class="solid" />
+      <div class="coureAvailability">
+        <div class="courseHeading">COURSE AVAILABILITY</div>
+      </div>
+
+      <div class="collection">
+        <div class="column">
+          <h2 class="courses">Course</h2>
+          <p>COURSE NUMBER</p>
+          <p>COURSE NUMBER</p>
+          <p>COURSE NUMBER</p>
+          <p>COURSE NUMBER</p>
+          <p>COURSE NUMBER</p>
+        </div>
+        <div class="column">
+          <h2 class="courses">Tutors Available</h2>
+          <p>00</p>
+          <p>00</p>
+          <p>00</p>
+          <p>00</p>
+          <p>00</p>
+        </div>
+      </div>
+    </div>
 {% endblock %}
 
