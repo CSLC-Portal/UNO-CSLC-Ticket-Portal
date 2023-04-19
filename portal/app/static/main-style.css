@@ -1,14 +1,12 @@
 .logo-section {
-    position: sticky;
     right: 0px;
-    height: 50px;
+    height: 100px;
     width: 100%;
     padding-top: 10px;
-    padding-bottom: 100px;
     text-align: center;
     background-color: black;
     list-style-type: none;
-    min-width: 700px;
+    min-width: 360px;
 }
 
 .nav-section {
@@ -17,7 +15,66 @@
     height: 50px;
     background-color: #292929;
     text-align: right;
+    min-width: 360px;
 }
+
+.uno-logo {
+    position: relative;
+    height: 70px;
+    width: 70px;
+    right: 20px;
+}
+
+@media all and (min-width: 800px) {
+    .logo-text {
+        font-size: 35px;
+        color: white;
+        position: relative;
+        left: 20px;
+    }
+
+    table.hours {
+        font-size: 16px;
+    }
+
+    button.create-ticket-button {
+        background-color: #c5c4c4;
+        border: none;
+        border-radius: 4px;
+        width: 230px;
+        height: 50px;
+        font-size: 18px;
+        color: black;
+        text-align: center;
+        text-decoration: none;
+    }
+}
+
+@media all and (max-width: 800px) {
+    .logo-text {
+        font-size: 4vw;
+        color: white;
+        position: relative;
+        left: 20px;
+    }
+
+    table.hours {
+        font-size: 2vw;
+    }
+
+    button.create-ticket-button {
+        background-color: #c5c4c4;
+        border: none;
+        border-radius: 4px;
+        width: 90%;
+        height: 50px;
+        font-size: 4vw;
+        color: black;
+        text-align: center;
+        text-decoration: none;
+    }
+}
+
 
 .Login {
     color: white;
@@ -27,7 +84,7 @@
     text-decoration: none;
 }
 
-.heading-text {
+h1 {
     margin-top: 60px;
     text-align: center;
     color: red;
@@ -35,7 +92,7 @@
     font-size: 25px;
 }
 
-.heading-text2 {
+h2 {
     margin-top: 20px;
     text-align: center;
     color: grey;
@@ -44,38 +101,14 @@
 
 .solid {
     border-top: 1px solid #bbb;
-    width: 800px;
+    width: 70%;
     text-align: center;
-    left: 340px;
-    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .buttons {
     text-align: center;
-}
-
-.uno-logo {
-    display: inline;
-    height: 70px;
-    width: 70px;
-    right: 10px;
-    margin-bottom: 35px;
-    position: relative;
-}
-
-.vl {
-    display: inline;
-    border-left: 1px solid white;
-    position: static;
-    font-size: 50px;
-}
-
-.heading-text1 {
-    display: inline;
-    font-size: 35px;
-    color: white;
-    position: relative;
-    left: 20px;
 }
 
 .Status {
@@ -85,6 +118,7 @@
     margin-right: 500px;
     text-decoration: none;
 }
+
 .Admin {
     color: white;
     margin-left: 950px;
@@ -92,49 +126,13 @@
     position: absolute;
     text-decoration: none;
 }
+
 .Tutor {
     color: white;
     margin-top: 9px;
     position: absolute;
     margin-left: 1100px;
     text-decoration: none;
-}
-
-.hoursHeading {
-    font-weight: bold;
-    margin-top: 40px;
-    text-align: center;
-    color: red;
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-.courseHeading {
-    font-weight: bold;
-    margin-top: 40px;
-    text-align: center;
-    color: red;
-    font-size: 25px;
-}
-
-.courses {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.column {
-    float: left;
-    width: 40%;
-    text-align: left;
-}
-
-.collection {
-    margin-left: 30%;
-    margin-top: 30px;
-}
-
-.Day {
-    right: 300px;
 }
 
 table {
@@ -145,17 +143,31 @@ table {
     margin-right: auto;
     table-layout: fixed;
     width: 80%;
-    min-width: 700px;
+    min-width: 360px;
     text-align: center;
-}
-
-tr, td, th {
     padding-left: 10px;
     padding-right: 10px;
 }
 
+table.logo {
+    border-collapse: collapse;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    table-layout: auto;
+    width: auto;
+    min-width: 360px;
+    text-align: left;
+    vertical-align: middle;
+}
+
 th {
     font-weight: bold;
+}
+
+tr.middle {
+    border-top: 1px solid #c5c4c4;
+    border-bottom: 1px solid #c5c4c4;
 }
 
 td.center, th.center {
@@ -163,19 +175,14 @@ td.center, th.center {
     border-right: 1px solid #c5c4c4;
 }
 
-button.create-ticket-button {
-    background-color: #c5c4c4;
-    border: none;
-    border-radius: 4px;
-    margin: 0 auto;
-    width: 230px;
-    height: 50px;
-    font-size: 18px;
-    color: black;
-    text-align: center;
-    text-decoration: none;
+td.right-end, th.right-end {
+    border-left: 1px solid #c5c4c4;
+    vertical-align: middle;
 }
 
-div.center-this {
-    width: 100%;
-}
+footer {
+    height: 50px;
+    background-color: #292929;
+    text-align: right;
+    min-width: 360px;
+ }

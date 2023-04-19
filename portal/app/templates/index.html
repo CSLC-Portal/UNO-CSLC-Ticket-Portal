@@ -1,27 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Future Site of CSLC Tutoring Portal{% endblock %}
-{% block content %}
 
-{#
-{% if not user.is_authenticated %}
-    <h2>Login</h2>
-    <a href='{{ auth_url }}'>Sign In</a>
-{% else %}
-    <h2>Welcome {{ user.user_name }}!</h2>
-    <!--
-    <a href="/logout">Logout</a>
-    -->
-{% endif %}
-#}
-    <h1 class="heading-text">WELCOME TO THE UNO CSLC</h1>
-    <h1 class="heading-text2">PKI 391 | [zoom link]</h1>
+{% block content %}
+    <h1>WELCOME TO THE UNO CSLC</h1>
+    <h2>PKI 391 | [zoom link]</h2>
+    <br>
     <hr class="solid" />
 
-    <div class="hoursOfOperation">
-      <div class="hoursHeading">HOURS</div>
-    </div>
+    <h1 style="font-size: 20px">HOURS</h1>
 
-    <table>
+    <table class="hours">
         <tr>
             <th>
                 MONDAY
@@ -62,37 +50,43 @@
                 00:00 - 00:00
             </td>
         </tr>
+        <!-- table row for create ticket button -->
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2" style="padding-top:30px;">
+                <button class="create-ticket-button" onclick="window.location.href='/create-ticket'">
+                    Open Ticket
+                </button>
+            </td>
+            <td colspan="2"></td>
+        </tr>
     </table>
 
-    <div class="center-this">
-        <button class="create-ticket-button" onclick="window.location.href='/create-ticket'">
-            Open Ticket
-        </button>
-    </div>
+    <hr class="solid" />
+    <h1>COURSE AVAILABILITY</h1>
 
-      <hr class="solid" />
-      <div class="coureAvailability">
-        <div class="courseHeading">COURSE AVAILABILITY</div>
-      </div>
-
-      <div class="collection">
-        <div class="column">
-          <h2 class="courses">Course</h2>
-          <p>COURSE NUMBER</p>
-          <p>COURSE NUMBER</p>
-          <p>COURSE NUMBER</p>
-          <p>COURSE NUMBER</p>
-          <p>COURSE NUMBER</p>
-        </div>
-        <div class="column">
-          <h2 class="courses">Tutors Available</h2>
-          <p>00</p>
-          <p>00</p>
-          <p>00</p>
-          <p>00</p>
-          <p>00</p>
-        </div>
-      </div>
-    </div>
+    <!-- Filled in programatically -->
+    <table>
+        <tr>
+            <th><h2>Course</h2></th>
+            <th><h2>Tutors</h2></th>
+        </tr>
+        <tr class="middle">
+            <td>IST0000</td>
+            <td>00</td>
+        </tr>
+        <tr class="middle">
+            <td>IST0000</td>
+            <td>00</td>
+        </tr>
+        <tr class="middle">
+            <td>IST0000</td>
+            <td>00</td>
+        </tr>
+        <tr>
+            <td>IST0000</td>
+            <td>00</td>
+        </tr>
+    </table>
 {% endblock %}
 

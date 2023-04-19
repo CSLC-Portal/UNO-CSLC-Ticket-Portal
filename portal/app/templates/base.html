@@ -12,9 +12,16 @@
 <body>
     <!-- Header content -->
     <div class="logo-section">
-        <img src="{{ url_for('static', filename='uno-icon-color.png') }}" alt="University of Nebraska at Omaha Logo" class="uno-logo" />
-        <div class="vl"></div>
-        <div class="heading-text1">Computer Science Learning Center</div>
+        <table class="logo">
+            <tr>
+                <td class="logo">
+                    <img src="{{ url_for('static', filename='uno-icon-color.png') }}" alt="University of Nebraska at Omaha Logo" class="uno-logo" />
+                </td>
+                <td class="right-end">
+                    <div class="logo-text">Computer Science Learning Center</div>
+                </td>
+            </tr>
+        </table>
     </div>
     <div class="nav-section">
         {% if not user.is_authenticated %}
@@ -33,6 +40,10 @@
     <!-- Content that is page specific -->
     {% block content %}
     {% endblock %}
+
+    <!-- Footer -->
+    <footer>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
