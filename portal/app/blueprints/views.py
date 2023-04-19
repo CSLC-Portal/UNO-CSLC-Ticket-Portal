@@ -148,3 +148,9 @@ def update_ticket():
         db.session.commit()
 
     return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
+
+@views.route('/edit-ticket', methods=["GET", "POST"])
+@login_required
+def edit_ticket():
+    return "TEST"
+
