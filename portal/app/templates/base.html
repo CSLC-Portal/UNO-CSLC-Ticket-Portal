@@ -25,16 +25,11 @@
     </div>
     <div class="nav-section">
         {% if not user.is_authenticated %}
-            <!--<h2>Login</h2>-->
             <a class="Login" href='{{ auth_url }}'>Sign In</a>
         {% else %}
             <a class="Login" href="/logout">Logout</a>
         {% endif %}
         <!-- this is where other links will go -->
-        <!--
-        <a class="Status">Hello [User]</a>
-        <a class="Login">Login</a>
-        -->
     </div>
 
     <!-- Content that is page specific -->
