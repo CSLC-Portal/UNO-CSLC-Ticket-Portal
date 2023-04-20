@@ -84,7 +84,11 @@ def view_tickets():
     """
     # get all tickets
     tickets = m.Ticket.query.all()
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
+
+    # get all tutors
+    tutors = m.User.query.filter_by(permission_level = 0)
+
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors)
 
 def calc_session_duration(start_time, end_time, current_session_duration):
     print("START TIME IN: " + str(start_time))
