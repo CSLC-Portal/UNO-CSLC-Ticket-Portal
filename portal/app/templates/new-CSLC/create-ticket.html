@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>CSLC HOME</title>
+        <title>Create Ticket</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="styles2.css" />
@@ -19,33 +19,51 @@
         </div>
         <div class="nav-section">
             <a class="Status">Hello [User]</a>
+            <a class="Home" href="home.html">Home</a>
+            <a class="Admin" href="admin.html">Admin</a>
+            <a class="Tutor" href="tutor-landing.html">Tutor</a>
             <a class="Login">Login</a>
         </div>
         <h1 class="heading-text">Create a Ticket</h1>
 
         <form action="home.html">
-            <div class="form-group">
-                <label for="exampleInputEmail1">Student Name</label>
+            <div class="form-group" id="forms">
+                <label
+                    for="exampleInputEmail1"
+                    class="InputFields"
+                    style="position: relative; top: 12px"
+                    >Student Name:</label
+                >
+                <input
+                    type="text"
+                    class="form-control"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    placeholder="Firstname Lastname"
+                />
+            </div>
+            <div class="form-group" id="forms">
+                <label
+                    for="exampleInputEmail1"
+                    class="InputFields"
+                    style="position: relative; top: 12px"
+                    >Student Email:</label
+                >
                 <input
                     type="email"
                     class="form-control"
                     id="exampleInputEmail1"
                     aria-describedby="emailHelp"
-                    placeholder="Enter Name"
+                    placeholder="name@example.com"
                 />
             </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Student Email</label>
-                <input
-                    type="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="Enter email"
-                />
-            </div>
-            <div class="form-group">
-                <label for="exampleFormControlSelect1">Class Name</label>
+            <div class="form-group" id="forms">
+                <label
+                    for="exampleFormControlSelect1"
+                    class="InputFields"
+                    style="position: relative; top: 12px"
+                    >Class Name:</label
+                >
                 <select class="form-control" id="exampleFormControlSelect1">
                     <option>CIST 1400</option>
                     <option>CIST 1500</option>
@@ -54,18 +72,40 @@
                     <option>CIST 1800</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Teacher</label>
+            <div class="form-group" id="forms">
+                <label
+                    for="exampleFormControlSelect1"
+                    class="InputFields"
+                    style="position: relative; top: 12px"
+                    >Section #:</label
+                >
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>850</option>
+                    <option>851</option>
+                </select>
+            </div>
+            <div class="form-group" id="forms">
+                <label
+                    for="exampleInputEmail1"
+                    class="InputFields"
+                    style="position: relative; top: 12px"
+                    >Teacher:</label
+                >
                 <input
-                    type="email"
+                    type="text"
                     class="form-control"
                     id="exampleInputEmail1"
                     aria-describedby="emailHelp"
-                    placeholder="Enter Teacher Name"
+                    placeholder="Teacher Name"
                 />
             </div>
-            <div class="form-group">
-                <label for="exampleFormControlSelect1">Problem Type</label>
+            <div class="form-group" id="forms">
+                <label
+                    for="exampleFormControlSelect1"
+                    class="InputFields"
+                    style="position: relative; top: 12px"
+                    >Problem Type:</label
+                >
                 <select class="form-control" id="exampleFormControlSelect1">
                     <option>Problem A</option>
                     <option>Problem B</option>
@@ -74,16 +114,28 @@
                     <option>Problem E</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="exampleFormControlFile1">Problem Description</label>
+            <div class="form-group" id="forms">
+                <label
+                    for="exampleInputEmail1"
+                    class="InputFields"
+                    style="position: relative; top: 12px"
+                    >Specific Problem:</label
+                >
                 <input
-                    class="form-control"
                     type="text"
-                    placeholder="Description"
+                    class="form-control"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    placeholder="Enter problem Description"
                 />
             </div>
-            <div class="form-group">
-                <label for="exampleFormControlSelect1">Online/In-Person</label>
+            <div class="form-group" id="forms">
+                <label
+                    for="exampleFormControlSelect1"
+                    class="InputFields"
+                    style="position: relative; top: 12px"
+                    >Online/In-Person:
+                </label>
                 <select class="form-control" id="exampleFormControlSelect1">
                     <option>Online</option>
                     <option>In-Person</option>
@@ -92,9 +144,9 @@
             <button
                 type="submit"
                 class="btn btn-primary"
-                style="margin-top: 15px"
+                style="margin-top: 15px; margin-left: 700px"
             >
-                Submit
+                Create Ticket
             </button>
         </form>
     </body>

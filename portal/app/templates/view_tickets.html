@@ -3,10 +3,9 @@
 {% block content %}
 
 <h1>View Tickets Page</h1><br>
-
 {% for ticket in tickets %}
     {% if ticket.status == Status.Open %}
-    <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
     {% elif ticket.status == Status.Claimed %}
     <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
     {% elif ticket.status == Status.Closed %}
@@ -18,10 +17,22 @@
       <h6 class="card-title">Assignment: {{ ticket.assignment_name }}</h6>
       <p class="card-text">{{ ticket.specific_question }}</p>
       <h5 class="card-title">{{ ticket.status }}</h5>
+      <form action="{{ url_for('views.update_ticket') }}", method="POST">
+        <input type="hidden" name="ticketID" value="{{ ticket.id }}">
+        {% if ticket.status == Status.Open %}
+        <button type="submit" class="btn btn-primary" name="action" value="Claim">Claim</button>
+        {% elif ticket.status == Status.Claimed %}
+        <button type="submit" class="btn btn-primary" name="action" value="Close">Close</button>
+        {% elif ticket.status == Status.Closed %}
+        <button type="submit" class="btn btn-primary" name="action" value="ReOpen">ReOpen</button>
+        {% endif %}
+      </form>
     </div>
     </div>
-
 {% endfor %}
+
+
+
 
 
 {% endblock %}
