@@ -98,11 +98,18 @@
 
               <strong>Primary Tutor</strong>
               <select class="form-control" id="primaryTutorInput" name="primaryTutorInput">
-                <option value="" disabled selected>{{ ticket.tutor_id }}</option>
+                <option value="" disabled selected>{{ ticket.user.user_name }}</option>
                 {% for tutor in tutors %}
                     <option>{{ tutor.user_name }}</option>
                 {% endfor %}
               </select>
+
+              <strong>Tutor Notes</strong>
+              <textarea class="form-control" id="tutorNotes" rows="3" name="tutorNotes"></textarea><br>
+
+              <input type="checkbox" id="successfulSession" name="successfulSession" value="success">
+              <label for="successfulSession"><strong>Was Successful</strong></label>
+
 
           </div>
           <div class="modal-footer">

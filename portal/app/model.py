@@ -59,8 +59,8 @@ class User(db.Model, UserMixin):
     user_name = Column(String(25), doc='Users name')
     tutor_is_active = Column(Boolean, doc='T/F if the tutor is currently employed')
     tutor_is_working = Column(Boolean, doc='T/F if the tutor is currently working')
+    tickets = db.relationship('Ticket', backref='user')
     # TODO: below are items that will eventually need to be defined as relationships to other tables that aren't yet created
-    #  - tickets
     #  - assisted_tickets
     #  - courses
 
@@ -73,4 +73,4 @@ class User(db.Model, UserMixin):
         self.tutor_is_working = isWorkingIn
 
     def __repr__(self):
-        return f'{self.user_fname} ({self.user_email})'
+        return f'{self.user_name} ({self.user_email})'

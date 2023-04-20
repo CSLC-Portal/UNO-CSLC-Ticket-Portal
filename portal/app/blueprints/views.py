@@ -85,15 +85,12 @@ def view_tickets():
     # get all tickets
     tickets = m.Ticket.query.all()
 
-    # get all tutors
-    tutors = m.User.query.filter_by(permission_level = 0)
-
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors)
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
 
 def calc_session_duration(start_time, end_time, current_session_duration):
-    print("START TIME IN: " + str(start_time))
-    print("END TIME IN: " + str(end_time))
-    print("CURRENT TIME IN: " + str(current_session_duration))
+    # print("START TIME IN: " + str(start_time))
+    # print("END TIME IN: " + str(end_time))
+    # print("CURRENT TIME IN: " + str(current_session_duration))
 
     diff = end_time - start_time
 
@@ -129,6 +126,8 @@ def update_ticket():
     if request.form.get("action") == "Claim":
         # edit status of ticket to Claimed, assign tutor, set time claimed
         current_ticket.tutor_id = tutor.id
+        current_ticket.user = tutor
+        print("TUTOR OBJECT THAT CLAIMED: " + str(current_ticket.user))
         current_ticket.status = m.Status.Claimed
         current_ticket.time_claimed = now()
         print("TIME TICKET CLAIMED: " + str(now()))
@@ -157,4 +156,3 @@ def update_ticket():
 @login_required
 def edit_ticket():
     return "TEST"
-
