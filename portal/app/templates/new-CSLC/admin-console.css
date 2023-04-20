@@ -110,16 +110,25 @@
     margin-left: 50px;
     text-decoration: none;
 }
+
+.Home {
+    position: absolute;
+    margin-top: 9px;
+    color: white;
+    margin-left: 200px;
+    text-decoration: none;
+}
+
 .Admin {
     color: white;
     margin-left: 950px;
-    margin-top: 9px;
+    margin-top: 5px;
     position: absolute;
     text-decoration: none;
 }
 .Tutor {
     color: white;
-    margin-top: 9px;
+    margin-top: 5px;
     position: absolute;
     margin-left: 1100px;
     text-decoration: none;
@@ -175,4 +184,39 @@
 
 .Day {
     right: 300px;
+}
+
+#exampleInputEmail1 {
+    position: relative;
+    top: 18px;
+    margin-left: 0px;
+    width: 600px;
+    margin-bottom: 25px;
+}
+
+#exampleFormControlSelect1 {
+    position: relative;
+    top: 18px;
+    margin-left: 0px;
+    width: 600px;
+    margin-bottom: 25px;
+}
+
+#forms {
+    margin-left: 200px;
+}
+
+.InputFields {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+body {
+    padding-bottom: 16px;
+}
+
+.btn-secondary {
+    background-color: #292929 !important;
+    border: none !important;
+    outline: none !important;
 }
