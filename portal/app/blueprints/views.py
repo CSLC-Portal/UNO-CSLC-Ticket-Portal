@@ -117,6 +117,9 @@ def update_ticket():
     This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
     :return: Render template to the original view-ticket.html page.
     """
+    # get the tutors to display for edit ticket modal if the user presses it
+    tutors = m.User.query.filter(m.User.permission_level >= 1)
+
     tickets = m.Ticket.query.all()
     tutor = current_user
     ticketID = request.form.get("ticketID")
@@ -153,15 +156,18 @@ def update_ticket():
         current_ticket.status = m.Status.Open
         db.session.commit()
 
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors)
 
 @views.route('/edit-ticket', methods=["GET", "POST"])
 @login_required
 def edit_ticket():
 
     # get ticket id back + current ticket
-    # ticketID = request.form.get("ticketIDModal")
-    # current_ticket = m.Ticket.query.get(ticketID)
+    ticketID = request.form.get("ticketIDModal")
+    current_ticket = m.Ticket.query.get(ticketID)
+
+    # get the tutors to display for edit ticket modal if the user presses it
+    tutors = m.User.query.filter(m.User.permission_level >= 1)
 
     # get info back from popup modal form
     if request.method == "POST":
@@ -174,6 +180,8 @@ def edit_ticket():
         tutorNotes = request.form.get("tutorNotes")
         wasSuccessful = request.form.get("successfulSession")
         print("Following info coming back from edit-ticket: ")
+
+        print("current ticket ID: " + str(ticketID))
         print("course: " + str(course))
         print("section: " + str(section))
         print("assignment: " + str(assignment))
@@ -183,6 +191,46 @@ def edit_ticket():
         print("tutorNotes: " + str(tutorNotes))
         print("wasSuccessful: " + str(wasSuccessful))
 
+        # check for change in values from edit
+        if course is not None:
+            # new info for course came back, update it for current ticket
+            current_ticket.course = course
+            db.session.commit()
+        if section is not None:
+            # new info for section came back, update it for current ticket
+            current_ticket.section = section
+            db.session.commit()
+        if assignment != current_ticket.assignment_name:
+            # new info for assignment came back, update it for current ticket
+            current_ticket.assignment_name = assignment
+            db.session.commit()
+        if question != current_ticket.specific_question:
+            # new info for question came back, update it for current ticket
+            current_ticket.specific_question = question
+            db.session.commit()
+        if problem is not None:
+            # new info for problem came back, update it for current ticket
+            current_ticket.problem_type = problem
+            db.session.commit()
+        if primaryTutor is not None:
+            # new info for primary tutor came back, update it for current ticket
+
+            # newTutor = m.User.query.filter(m.User.user_name == primaryTutor).first()
+            print("Chaning primary tutor to: " + str(primaryTutor))
+            current_ticket.tutor_id = primaryTutor
+            db.session.commit()
+        if tutorNotes is not None:
+            # new info for tutor notes came back, update it for current ticket
+            current_ticket.tutor_notes = tutorNotes
+            db.session.commit()
+        if wasSuccessful is not None:
+            # new info for tutor notes came back, update it for current ticket
+            current_ticket.successful_session = True
+            db.session.commit()
+        else:
+            current_ticket.successful_session = False
+            db.session.commit()
+
     # query all tickets after possible updates and send back to view tickets page
     tickets = m.Ticket.query.all()
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors)
