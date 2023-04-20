@@ -14,31 +14,10 @@ def test_index_with_auth(create_auth_client):
 
     assert b'John Smith' in response.data
 
-def test_create_ticket_with_auth(auth_client: FlaskClient):
+def test_create_ticket_get_with_auth(auth_client: FlaskClient):
     response = auth_client.get('/create-ticket')
 
     assert b'<h1>Create Ticket Form</h1>' in response.data
-
-def test_open_tickets_with_auth(auth_client: FlaskClient, app: Flask):
-
-    test_form_data = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'course1',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
-    }
-
-    response = auth_client.post('/open-tickets', data=test_form_data)
-
-    with app.app_context():
-        assert b'John' in response.data
-        assert Ticket.query.count() == 1
-        assert Ticket.query.first().student_email == 'test@test.email'
 
 def test_logout_auth(auth_client: FlaskClient):
     response = auth_client.get('/logout')
@@ -47,56 +26,22 @@ def test_logout_auth(auth_client: FlaskClient):
     assert '302' in response.status
     assert b'logout' in response.data
 
-def test_add_tickets(auth_client: FlaskClient, app: Flask):
-    UTC = datetime.timezone.utc
-    now = datetime.datetime.now(UTC)
-
-    ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
-    }
-    ticket2 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'Clayton',
-        'lastNameField':'Safranek',
-        'courseField':'underwater basket weaving',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'What is your question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'Online'
-    }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
-    response2 = auth_client.post('/open-tickets', data=ticket2)
-
-    with app.app_context():
-        assert Ticket.query.count() == 2
-
 def test_claim_open_ticket(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created
     with app.app_context():
-        assert '200' in response1.status
         assert Ticket.query.count() == 1
 
     # claim open ticket
@@ -119,21 +64,19 @@ def test_claim_open_ticket(auth_client: FlaskClient, app: Flask):
 def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created
     with app.app_context():
-        assert '200' in response1.status
         assert Ticket.query.count() == 1
 
     # claim open ticket
@@ -173,21 +116,19 @@ def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
 def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created
     with app.app_context():
-        assert '200' in response1.status
         assert Ticket.query.count() == 1
 
     # claim open ticket

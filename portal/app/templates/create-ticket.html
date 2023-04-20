@@ -4,23 +4,19 @@
 <h1>Create Ticket Form</h1>
 <br>
 
-<form action="/open-tickets" method="POST">
+<form action="/create-ticket" method="POST">
     <div class="form-group">
-      <label for="emailAddressInput">Email</label>
-      <input type="email" class="form-control" id="emailAddressInput" placeholder="name@example.com" name="emailAdressField">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email" required>
     </div>
     <div class="form-group">
-        <label for="firstNameInput">First Name</label>
-        <input type="text" class="form-control" id="firstNameInput" placeholder="First Name" name="firstNameField">
-    </div>
-    <div class="form-group">
-        <label for="lastNameInput">Last Name</label>
-        <input type="text" class="form-control" id="lastNameInput" placeholder="Last Name" name="lastNameField">
+        <label for="fullname">Full Name</label>
+        <input type="text" class="form-control" id="fullname" placeholder="Full Name" name="fullname" required>
     </div>
 
     <div class="form-group">
-      <label for="courseInput">Course</label>
-      <select class="form-control" id="courseInput" name="courseField">
+      <label for="course">Course</label>
+      <select class="form-control" id="course" name="course">
         <option>Course 1</option>
         <option>Course 2</option>
         <option>Course 3</option>
@@ -30,8 +26,8 @@
     </div>
 
     <div class="form-group">
-        <label for="sectionInput">Section</label>
-        <select class="form-control" id="sectionInput" name="sectionField">
+        <label for="section">Section</label>
+        <select class="form-control" id="section" name="section">
           <option>Section 1</option>
           <option>Section 2</option>
           <option>Section 3</option>
@@ -41,18 +37,18 @@
     </div>
 
     <div class="form-group">
-        <label for="assignmentNameInput">Assignment Name</label>
-        <input type="text" class="form-control" id="assignmentNameInput" placeholder="eg. 'Assignment 1 - String input'" name="assignmentNameField">
+        <label for="assignment">Assignment Name</label>
+        <input type="text" class="form-control" id="assignment" placeholder="eg. 'Assignment 1 - String input'" name="assignment" required>
     </div>
 
     <div class="form-group">
-      <label for="specificQuestionInput">Specific Question</label>
-      <textarea class="form-control" id="specificQuestionInput" rows="3" placeholder="eg. Idk how to ______ , I am having issues with ____" name="specificQuestionField"></textarea>
+      <label for="question">Specific Question</label>
+      <textarea class="form-control" id="question" rows="3" placeholder="eg. Idk how to ______ , I am having issues with ____" name="question" required></textarea>
     </div>
 
     <div class="form-group">
-        <label for="problemTypeInput">Problem Type</label>
-        <select class="form-control" id="problemTypeInput" name="problemTypeField">
+        <label for="problem">Problem Type</label>
+        <select class="form-control" id="problem" name="problem">
           <option>Problem Type 1</option>
           <option>Problem Type 2</option>
           <option>Problem Type 3</option>
@@ -63,11 +59,11 @@
 
     <p>Please select in person or online mode of help</p>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="inPersonRadio" name="modeOfTicket" class="custom-control-input" value="InPerson">
+        <input type="radio" id="inPersonRadio" name="mode" class="custom-control-input" value="{{ Mode.InPerson.value }}" required>
         <label class="custom-control-label" for="inPersonRadio">In Person</label>
       </div>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="onlineRadio" name="modeOfTicket" class="custom-control-input" value="Online">
+        <input type="radio" id="onlineRadio" name="mode" class="custom-control-input" value="{{ Mode.Online.value }}" required>
         <label class="custom-control-label" for="onlineRadio">Online</label>
     </div><br><br>
 

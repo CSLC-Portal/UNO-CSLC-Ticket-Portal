@@ -1,74 +1,74 @@
 from flask import Blueprint
-from flask import render_template, request, redirect, url_for
-from flask_login import login_required, current_user
-from .. import model as m
-from datetime import datetime, timedelta, time, date
-from time import strftime
+from flask import request
+from flask import flash
+from flask import url_for
+from flask import redirect
+from flask import render_template
+
+from flask_login import login_required
+from flask_login import current_user
+from sqlalchemy.exc import IntegrityError
+
+from ..model import Ticket
+from ..model import Mode
+from ..model import Status
+
+from datetime import datetime
+from datetime import timedelta
+
 from app.extensions import db
+from werkzeug.datastructures import ImmutableMultiDict
+
+import sys
 
 views = Blueprint('views', __name__)
 
-def now():
-    """
-    Gets the current time in UTC.
-    :return: Current time in Coordinated Universal Time (UTC)
-    """
-    return datetime.now()
-
-@views.route('/create-ticket')
+@views.route('/create-ticket', methods=['POST', 'GET'])
 @login_required
 def create_ticket():
     """
-    Serves the HTTP route /create-ticket. Utilizes the flask funciton 'render_template' to render
+    Serves the HTTP route /create-ticket. Shows a ticket create form on GET request.
+    Submits a ticket on POST request with a form containing the following fields:
+        - email: Email address of user
+        - fullname: Full name of user
+        - course: Course relevant to the ticket submission
+        - section: Section of course relevant to the ticket submission
+        - assignment: Name of assignment relevant to the ticket submission
+        - question: Detailed questions relevant to the ticket submission
+        - problem: Type of problem needed help with
+        - mode: Whether the student is online or in-person
+
+    Then redirects back to the home page.
+
+    Utilizes the flask funciton 'render_template' to render
     the passed in create-ticket.html template which is the form that students use to create/submit tickets.
 
     Student login is required to access this page.
     """
-    return render_template('create-ticket.html')
+    if request.method == 'GET':
+        # Render create-ticket template if GET request or if there was an error in submission data
+        return render_template('create-ticket.html', Mode=Mode)
 
-@views.route('/open-tickets', methods=["POST"])
-@login_required
-def open_tickets():
-    """
-    Serves the HTTP route /open-tickets. This is a debugging page for the developers to verify that the
-    ticket that they just created is being successfuly inserted into the database with the proper information
-    being sent back to the backend processing service.
+    ticket = _attempt_create_ticket(request.form)
 
-    Utilizes the flask funciton 'render_template' to render the passed in open-tickets.html template which is
-    used to display form data that is sent from the create-ticket.html form.
+    if ticket:
+        try:
+            db.session.add(ticket)
+            db.session.commit()
 
-    Student login is required to access this page.
-    """
-    email = request.form.get("emailAdressField")
-    firstName = request.form.get("firstNameField")
-    lastName = request.form.get("lastNameField")
-    course = request.form.get("courseField")
-    section = request.form.get("sectionField")
-    assignment = request.form.get("assignmentNameField")
-    question = request.form.get("specificQuestionField")
-    problem = request.form.get("problemTypeField")
-    mode = request.form['modeOfTicket']
-    print(f"Following ticket information has been created:\n{lastName}\n{firstName}\n{email}\n{course}\n{section}\n{assignment}\n{question}\n{problem}\n{mode}")
+        except IntegrityError:
+            db.session.rollback()
+            flash('Could not submit ticket, invalid data', category='error')
 
-    # create ticket with info sent back
-    if request.method == "POST":
-        ticket = m.Ticket(
-            email,
-            firstName,
-            course,
-            section,
-            assignment,
-            question,
-            problem,
-            now(),
-            mode)
+        except Exception as e:
+            flash('Could not submit ticket, unknown reason', category='error')
+            print(f'Failed to create ticket: {e}', file=sys.stderr)
 
-        # insert into 'Tickets' table
-        db.session.add(ticket)
-        db.session.commit()
+        else:
+            flash('Ticket created successfully!', category='success')
+            return redirect(url_for('auth.index'))
 
-    return render_template('open-tickets.html', email=email, firstName=firstName, lastName=lastName, course=course,
-                           section=section, assignmentName=assignment, specificQuestion=question, problemType=problem, mode=mode)
+    return redirect(url_for('views.create_ticket'))
 
 @views.route('/view-tickets')
 @login_required
@@ -82,11 +82,110 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    # get all tickets
-    tickets = m.Ticket.query.all()
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
+    tickets = Ticket.query.all()
 
-def calc_session_duration(start_time, end_time, current_session_duration):
+    return render_template('view_tickets.html', tickets=tickets, Status=Status, user=current_user)
+
+@views.route('/update-ticket', methods=["GET", "POST"])
+@login_required
+def update_ticket():
+    """
+    This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
+    :return: Render template to the original view-ticket.html page.
+    """
+    tickets = Ticket.query.all()
+    tutor = current_user
+    ticketID = request.form.get("ticketID")
+
+    print("RECIEVED TICKET ID: " + str(ticketID))
+    print("VALUE OF ACTION: " + str(request.form.get("action")))
+    # retrieve ticket by primary key using get()
+    current_ticket = Ticket.query.get(ticketID)
+
+    if request.form.get("action") == "Claim":
+        # edit status of ticket to Claimed, assign tutor, set time claimed
+        current_ticket.tutor_id = tutor.id
+        current_ticket.status = Status.Claimed
+        current_ticket.time_claimed = _now()
+        print("TIME TICKET CLAIMED: " + str(_now()))
+        db.session.commit()
+
+        print("TUTOR ID THAT CLAIMED TICKET: " + str(current_ticket.tutor_id))
+    elif request.form.get("action") == "Close":
+        # edit status of ticket to CLOSED and set time closed on ticket
+        current_ticket.status = Status.Closed
+        current_ticket.time_closed = _now()
+        print("TIME TICKET CLOSED: " + str(_now()))
+        # calculate session duration from time claimed to time closed
+        duration = _calc_session_duration(current_ticket.time_claimed, current_ticket.time_closed, current_ticket.session_duration)
+        print("DURATION: " + str(duration))
+        # TODO: get the duration calculation accounting for business days/hours too
+        current_ticket.session_duration = duration
+        db.session.commit()
+    elif request.form.get("action") == "ReOpen":
+        # edit status of ticket back to OPEN
+        current_ticket.status = Status.Open
+        db.session.commit()
+
+    return render_template('view_tickets.html', tickets=tickets, Status=Status, user=current_user)
+
+# TODO: Use flask-wtf for form handling and validation
+def _attempt_create_ticket(form: ImmutableMultiDict):
+    """
+    Given an HTML form as an ImmutableMultiDict, extracts, strips, and verifies the following values :
+        - email: must be non-empty
+        - fullname: must be non-empty
+        - assignment: must be non-empty
+        - question: must be non-empty
+        - mode: must be valid model.Mode
+
+        returns a Ticket object if values are valid, None otherwise.
+    """
+    email = _strip_or_none(form.get("email"))
+    name = _strip_or_none(form.get("fullname"))
+    course = _strip_or_none(form.get("course"))
+    section = _strip_or_none(form.get("section"))
+    assignment = _strip_or_none(form.get("assignment"))
+    question = _strip_or_none(form.get("question"))
+    problem = _strip_or_none(form.get("problem"))
+
+    if _str_empty(email):
+        flash('Could not submit ticket, email must not be empty!', category='error')
+
+    elif _str_empty(name):
+        flash('Could not submit ticket, name must not be empty!', category='error')
+
+    elif _str_empty(assignment):
+        flash('Could not submit ticket, assignment name must not be empty!', category='error')
+
+    elif _str_empty(question):
+        flash('Could not submit ticket, question must not be empty!', category='error')
+
+    # TODO: Check if course is a valid from a list of options
+    # TODO: Check if section is valid from a list of options
+    # TODO: Check if problem type is valid from a list of options
+
+    else:
+        mode_val = _strip_or_none(form.get("mode"))
+        mode = None
+
+        try:
+            if mode_val:
+                mode = Mode(int(mode_val))
+
+        except ValueError:
+            flash('Could not submit ticket, must select a valid mode!', category='error')
+
+        else:
+            return Ticket(email, name, course, section, assignment, question, problem, mode)
+
+def _strip_or_none(s: str):
+    return s.strip() if s is not None else None
+
+def _str_empty(s: str):
+    return s is not None and not s
+
+def _calc_session_duration(start_time, end_time, current_session_duration):
     print("START TIME IN: " + str(start_time))
     print("END TIME IN: " + str(end_time))
     print("CURRENT TIME IN: " + str(current_session_duration))
@@ -106,45 +205,9 @@ def calc_session_duration(start_time, end_time, current_session_duration):
     # chop off epoch year, month, and date. Just want HH:MM:SS (time) worked on ticket - date doesn't matter
     return result.time()
 
-@views.route('/update-ticket', methods=["GET", "POST"])
-@login_required
-def update_ticket():
+def _now():
     """
-    This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
-    :return: Render template to the original view-ticket.html page.
+    Gets the current time in UTC.
+    :return: Current time in Coordinated Universal Time (UTC)
     """
-    tickets = m.Ticket.query.all()
-    tutor = current_user
-    ticketID = request.form.get("ticketID")
-
-    print("RECIEVED TICKET ID: " + str(ticketID))
-    print("VALUE OF ACTION: " + str(request.form.get("action")))
-    # retrieve ticket by primary key using get()
-    current_ticket = m.Ticket.query.get(ticketID)
-
-    if request.form.get("action") == "Claim":
-        # edit status of ticket to Claimed, assign tutor, set time claimed
-        current_ticket.tutor_id = tutor.id
-        current_ticket.status = m.Status.Claimed
-        current_ticket.time_claimed = now()
-        print("TIME TICKET CLAIMED: " + str(now()))
-        db.session.commit()
-
-        print("TUTOR ID THAT CLAIMED TICKET: " + str(current_ticket.tutor_id))
-    elif request.form.get("action") == "Close":
-        # edit status of ticket to CLOSED and set time closed on ticket
-        current_ticket.status = m.Status.Closed
-        current_ticket.time_closed = now()
-        print("TIME TICKET CLOSED: " + str(now()))
-        # calculate session duration from time claimed to time closed
-        duration = calc_session_duration(current_ticket.time_claimed, current_ticket.time_closed, current_ticket.session_duration)
-        print("DURATION: " + str(duration))
-        # TODO: get the duration calculation accounting for business days/hours too
-        current_ticket.session_duration = duration
-        db.session.commit()
-    elif request.form.get("action") == "ReOpen":
-        # edit status of ticket back to OPEN
-        current_ticket.status = m.Status.Open
-        db.session.commit()
-
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
+    return datetime.now()
