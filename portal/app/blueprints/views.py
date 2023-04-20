@@ -13,6 +13,8 @@ from ..model import Mode
 from ..model import Status
 
 from app.extensions import db
+from werkzeug.datastructures import ImmutableMultiDict
+
 import sys
 
 views = Blueprint('views', __name__)
@@ -38,31 +40,30 @@ def create_ticket():
 
     Student login is required to access this page.
     """
-    if request.method == 'POST':
-        email = request.form.get("email")
-        name = request.form.get("fullname")
-        course = request.form.get("course")
-        section = request.form.get("section")
-        assignment = request.form.get("assignment")
-        question = request.form.get("question")
-        problem = request.form.get("problem")
+    if request.method == 'GET':
+        # Render create-ticket template if GET request or if there was an error in submission data
+        return render_template('create-ticket.html')
 
+    ticket = _attempt_create_ticket(request.form)
+
+    if ticket:
         try:
-            ticket = Ticket(email, name, course, section, assignment, question, problem, Mode.Online)
             db.session.add(ticket)
             db.session.commit()
 
         except IntegrityError:
+            db.session.rollback()
             flash('Could not submit ticket, invalid data', category='error')
 
         except Exception as e:
             flash('Could not submit ticket, unknown reason', category='error')
             print(f'Failed to create ticket: {e}', file=sys.stderr)
 
-        return redirect(url_for('auth.index'))
+        else:
+            flash('Ticket created successfully!', category='success')
+            return redirect(url_for('auth.index'))
 
-    else:
-        return render_template('create-ticket.html')
+    return redirect(url_for('views.create_ticket'))
 
 @views.route('/view-tickets')
 @login_required
@@ -79,3 +80,39 @@ def view_tickets():
     tickets = Ticket.query.all()
 
     return render_template('view_tickets.html', tickets=tickets, Status=Status)
+
+# TODO: Look into using flask-wtf for form handling and validation
+
+def _attempt_create_ticket(form: ImmutableMultiDict):
+    email = _strip_or_none(form.get("email"))
+    name = _strip_or_none(form.get("fullname"))
+    course = _strip_or_none(form.get("course"))
+    section = _strip_or_none(form.get("section"))
+    assignment = _strip_or_none(form.get("assignment"))
+    question = _strip_or_none(form.get("question"))
+    problem = _strip_or_none(form.get("problem"))
+
+    if _str_empty(email):
+        flash('Could not submit ticket, email must not be empty!', category='error')
+
+    elif _str_empty(name):
+        flash('Could not submit ticket, name must not be empty!', category='error')
+
+    elif _str_empty(assignment):
+        flash('Could not submit ticket, assignment name must not be empty!', category='error')
+
+    elif _str_empty(question):
+        flash('Could not submit ticket, question must not be empty!', category='error')
+
+    # TODO: Check if course is a valid from a list of options
+    # TODO: Check if section is valid from a list of options
+    # TODO: Check if problem type is valid from a list of options
+
+    else:
+        return Ticket(email, name, course, section, assignment, question, problem, Mode.Online)
+
+def _strip_or_none(s: str):
+    return s.strip() if s is not None else None
+
+def _str_empty(s: str):
+    return s is not None and not s
