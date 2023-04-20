@@ -15,7 +15,7 @@ def test_create_ticket_post_with_auth(auth_client: FlaskClient, app: Flask):
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'type1',
-        'mode':'InPerson'
+        'mode': Mode.InPerson.value
     }
 
     response = auth_client.post('/create-ticket', data=test_form_data)
@@ -73,7 +73,7 @@ def create_ticket_with_invalid_data(auth_client: FlaskClient, app: Flask):
             'assignment':'assignment1',
             'question':'This is my question?',
             'problem':'type1',
-            'modeOfTicket':'InPerson'
+            'mode': Mode.InPerson.value
         }
 
     def _factory(**kwargs):
@@ -209,7 +209,6 @@ def test_create_ticket_whitespace_question(create_ticket_with_invalid_data, auth
     assert '302' in response.status
     assert b'href="/create-ticket"' in response.data
 
-@pytest.mark.skip(reason='Need to validate mode input from user')
 def test_create_ticket_invalid_mode(create_ticket_with_invalid_data, auth_client: FlaskClient):
     response = create_ticket_with_invalid_data(mode='invalid')
 
@@ -219,7 +218,7 @@ def test_create_ticket_invalid_mode(create_ticket_with_invalid_data, auth_client
 
         (category, message) = flashes[0]
         assert category == 'error'
-        assert message == 'Could not submit ticket, invalid data'
+        assert message == 'Could not submit ticket, must select a valid mode!'
 
     # Expect redirect back to create ticket page
     assert '302' in response.status

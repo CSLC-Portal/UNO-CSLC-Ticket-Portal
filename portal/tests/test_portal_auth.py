@@ -36,7 +36,7 @@ def test_claim_open_ticket(auth_client: FlaskClient, app: Flask):
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'type1',
-        'mode':'InPerson'
+        'mode': Mode.InPerson.value
     }
     response1 = auth_client.post('/create-ticket', data=ticket1)
 
@@ -71,7 +71,7 @@ def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'type1',
-        'mode':'InPerson'
+        'mode': Mode.InPerson.value
     }
     response1 = auth_client.post('/create-ticket', data=ticket1)
 
@@ -123,7 +123,7 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'type1',
-        'mode':'InPerson'
+        'mode': Mode.InPerson.value
     }
     response1 = auth_client.post('/create-ticket', data=ticket1)
 

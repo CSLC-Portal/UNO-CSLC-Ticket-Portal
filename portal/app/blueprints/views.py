@@ -47,7 +47,7 @@ def create_ticket():
     """
     if request.method == 'GET':
         # Render create-ticket template if GET request or if there was an error in submission data
-        return render_template('create-ticket.html')
+        return render_template('create-ticket.html', Mode=Mode)
 
     ticket = _attempt_create_ticket(request.form)
 
@@ -129,9 +129,18 @@ def update_ticket():
 
     return render_template('view_tickets.html', tickets=tickets, Status=Status, user=current_user)
 
-# TODO: Look into using flask-wtf for form handling and validation
-
+# TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):
+    """
+    Given an HTML form as an ImmutableMultiDict, extracts, strips, and verifies the following values :
+        - email: must be non-empty
+        - fullname: must be non-empty
+        - assignment: must be non-empty
+        - question: must be non-empty
+        - mode: must be valid model.Mode
+
+        returns a Ticket object if values are valid, None otherwise.
+    """
     email = _strip_or_none(form.get("email"))
     name = _strip_or_none(form.get("fullname"))
     course = _strip_or_none(form.get("course"))
@@ -139,7 +148,6 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
     assignment = _strip_or_none(form.get("assignment"))
     question = _strip_or_none(form.get("question"))
     problem = _strip_or_none(form.get("problem"))
-    mode = _strip_or_none(form.get("mode"))
 
     if _str_empty(email):
         flash('Could not submit ticket, email must not be empty!', category='error')
@@ -158,7 +166,18 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
     # TODO: Check if problem type is valid from a list of options
 
     else:
-        return Ticket(email, name, course, section, assignment, question, problem, mode)
+        mode_val = _strip_or_none(form.get("mode"))
+        mode = None
+
+        try:
+            if mode_val:
+                mode = Mode(int(mode_val))
+
+        except ValueError:
+            flash('Could not submit ticket, must select a valid mode!', category='error')
+
+        else:
+            return Ticket(email, name, course, section, assignment, question, problem, mode)
 
 def _strip_or_none(s: str):
     return s.strip() if s is not None else None

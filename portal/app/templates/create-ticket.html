@@ -59,11 +59,11 @@
 
     <p>Please select in person or online mode of help</p>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="inPersonRadio" name="mode" class="custom-control-input" value="InPerson" required>
+        <input type="radio" id="inPersonRadio" name="mode" class="custom-control-input" value="{{ Mode.InPerson.value }}" required>
         <label class="custom-control-label" for="inPersonRadio">In Person</label>
       </div>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="onlineRadio" name="mode" class="custom-control-input" value="Online" required>
+        <input type="radio" id="onlineRadio" name="mode" class="custom-control-input" value="{{ Mode.Online.value }}" required>
         <label class="custom-control-label" for="onlineRadio">Online</label>
     </div><br><br>
 
