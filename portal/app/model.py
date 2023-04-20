@@ -37,6 +37,7 @@ class Ticket(db.Model):
     mode = Column(Enum(Mode), doc='if ticket was made for online/in-person help')
     tutor_notes = Column(String(255), doc='space for tutors to write notes about student/ticket')
     tutor_id = Column(Integer, db.ForeignKey('Users.id'), doc='Foreign key to tutor id who claimed this ticket')
+    successful_session = Column(Boolean, doc='T/F if the tutor was able to help the student with issue on ticket')
 
     def __init__(self, sEmailIn, sNameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, timeIn, modeIn):
         self.student_email = sEmailIn

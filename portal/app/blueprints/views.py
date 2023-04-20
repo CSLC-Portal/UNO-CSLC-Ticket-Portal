@@ -85,7 +85,10 @@ def view_tickets():
     # get all tickets
     tickets = m.Ticket.query.all()
 
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)
+    # get the tutors to display for edit ticket modal
+    tutors = m.User.query.filter(m.User.permission_level >= 1)
+
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors)
 
 def calc_session_duration(start_time, end_time, current_session_duration):
     # print("START TIME IN: " + str(start_time))
@@ -155,4 +158,31 @@ def update_ticket():
 @views.route('/edit-ticket', methods=["GET", "POST"])
 @login_required
 def edit_ticket():
-    return "TEST"
+
+    # get ticket id back + current ticket
+    # ticketID = request.form.get("ticketIDModal")
+    # current_ticket = m.Ticket.query.get(ticketID)
+
+    # get info back from popup modal form
+    if request.method == "POST":
+        course = request.form.get("courseField")
+        section = request.form.get("sectionField")
+        assignment = request.form.get("assignmentNameField")
+        question = request.form.get("specificQuestionField")
+        problem = request.form.get("problemTypeField")
+        primaryTutor = request.form.get("primaryTutorInput")
+        tutorNotes = request.form.get("tutorNotes")
+        wasSuccessful = request.form.get("successfulSession")
+        print("Following info coming back from edit-ticket: ")
+        print("course: " + str(course))
+        print("section: " + str(section))
+        print("assignment: " + str(assignment))
+        print("question: " + str(question))
+        print("problem: " + str(problem))
+        print("primaryTutor: " + str(primaryTutor))
+        print("tutorNotes: " + str(tutorNotes))
+        print("wasSuccessful: " + str(wasSuccessful))
+
+    # query all tickets after possible updates and send back to view tickets page
+    tickets = m.Ticket.query.all()
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user)

@@ -51,9 +51,9 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form>
+          <form action="{{ url_for('views.edit_ticket') }}", method="POST">
           <div class="modal-body">
-              <input type="hidden" name="ticketID" value="{{ ticket.id }}">
+              <input type="hidden" name="ticketIDModal" value="{{ ticket.id }}">
               <strong>Email</strong>
               <p>{{ ticket.student_email }}</p>
 
@@ -84,7 +84,7 @@
               <input type="text" class="form-control" id="assignmentNameInput" placeholder="Assignment Placeholder" value="{{ ticket.assignment_name }}" name="assignmentNameField">
 
               <strong>Specific Question</strong>
-              <textarea class="form-control" id="specificQuestionInput" rows="3" placeholder="eg. Idk how to ______ , I am having issues with ____" name="specificQuestionField">{{ ticket.specific_question }}</textarea>
+              <textarea class="form-control" id="specificQuestionInput" rows="3" placeholder="Question Placeholder" name="specificQuestionField">{{ ticket.specific_question }}</textarea>
 
               <strong>Problem Type</strong>
               <select class="form-control" id="problemTypeInput" name="problemTypeField">
@@ -114,7 +114,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+
+            <button type="submit" class="btn btn-primary" name="SaveChanges">Save changes</button>
           </div>
         </form>
 
