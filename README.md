@@ -28,6 +28,8 @@ Still working on:
  - Creating automated unit tests for selenium
  - Automatic deployment to Azure Dynamic Web Apps
 
+Visit the [docs](https://claytonmsafranek.github.io/UNO-CSLC-Ticket-Portal/) for more info.
+
 ## Configuration
 
 ### Flask
