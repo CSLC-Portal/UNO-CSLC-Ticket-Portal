@@ -11,23 +11,23 @@ import os
 def create_app():
     app = Flask(__name__)
 
-    setup_env(app)
+    _setup_env(app)
     db.init_app(app)
     sess.init_app(app)
     login_manager.init_app(app)
 
-    create_db_models(app)
-    register_blueprints(app)
+    _create_db_models(app)
+    _register_blueprints(app)
     return app
 
-def setup_env(app: Flask):
+def _setup_env(app: Flask):
     # Default config is always set to ensure app runs correctly
     app.config.from_object(default_config)
 
     # Override defaults with any configuration settings from the environment
     app.config.from_prefixed_env()
 
-def register_blueprints(app: Flask):
+def _register_blueprints(app: Flask):
 
     # We need to import blueprints to register them
     from .blueprints.views import views
@@ -36,7 +36,7 @@ def register_blueprints(app: Flask):
     app.register_blueprint(views)
     app.register_blueprint(auth)
 
-def create_db_models(app: Flask):
+def _create_db_models(app: Flask):
     # NOTE: Import model scripts here...
     from . import model
 

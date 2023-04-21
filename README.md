@@ -18,8 +18,8 @@ The application is currently a work in progress. The following is a list of curr
 
 Previews:
 
-![Home Page Mock-up](https://github.com/claytonmsafranek/UNO-CSLC-Ticket-Portal/blob/update-readme-m3/portal/app/static/cslc_home_mock.jpeg)
-![View Tickets Mock-up](https://github.com/claytonmsafranek/UNO-CSLC-Ticket-Portal/blob/update-readme-m3/portal/app/static/cslc_view-tickets_mock.png)
+![Home Page Mock-up](https://github.com/claytonmsafranek/UNO-CSLC-Ticket-Portal/blob/main/portal/app/static/cslc_home_mock.jpeg)
+![View Tickets Mock-up](https://github.com/claytonmsafranek/UNO-CSLC-Ticket-Portal/blob/main/portal/app/static/cslc_view-tickets_mock.png)
 
 Still working on:
 
@@ -27,6 +27,8 @@ Still working on:
  - Testing microsoft authentication for remote server (with HTTPS connection)
  - Creating automated unit tests for selenium
  - Automatic deployment to Azure Dynamic Web Apps
+
+Visit the [docs](https://claytonmsafranek.github.io/UNO-CSLC-Ticket-Portal/) for more info.
 
 ## Configuration
 

@@ -33,6 +33,29 @@
     </div>
 
     <!-- Content that is page specific -->
+    <h1>CSLC Portal</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        {% if category == 'error' %}
+            <div class="alert alert-danger alter-dismissable fade show" role="alert">
+        {% elif category == 'warning' %}
+            <div class="alert alert-warning alter-dismissable fade show" role="alert">
+        {% elif category == 'success' %}
+            <div class="alert alert-success alter-dismissable fade show" role="alert">
+        {% else %}
+            <div class="alert alert-primary alter-dismissable fade show" role="alert">
+        {% endif %}
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     {% block content %}
     {% endblock %}
 
