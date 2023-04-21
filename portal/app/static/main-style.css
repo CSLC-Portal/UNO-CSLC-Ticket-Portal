@@ -186,3 +186,8 @@ footer {
     text-align: right;
     min-width: 360px;
  }
+
+ form {
+    width: 90%;
+    margin: auto;
+ }

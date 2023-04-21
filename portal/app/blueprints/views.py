@@ -47,7 +47,7 @@ def create_ticket():
     """
     if request.method == 'GET':
         # Render create-ticket template if GET request or if there was an error in submission data
-        return render_template('create-ticket.html', Mode=Mode)
+        return render_template('create-ticket.html', Mode=Mode, user=current_user)
 
     ticket = _attempt_create_ticket(request.form)
 
