@@ -89,89 +89,6 @@ def view_tickets():
     tutors = m.User.query.filter(m.User.permission_level >= 1)
     return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors, Status=Status)
 
-# TODO: Use flask-wtf for form handling and validation
-def _attempt_create_ticket(form: ImmutableMultiDict):
-    """
-    Given an HTML form as an ImmutableMultiDict, extracts, strips, and verifies the following values :
-        - email: must be non-empty
-        - fullname: must be non-empty
-        - assignment: must be non-empty
-        - question: must be non-empty
-        - mode: must be valid model.Mode
-
-        returns a Ticket object if values are valid, None otherwise.
-    """
-    email = _strip_or_none(form.get("email"))
-    name = _strip_or_none(form.get("fullname"))
-    course = _strip_or_none(form.get("course"))
-    section = _strip_or_none(form.get("section"))
-    assignment = _strip_or_none(form.get("assignment"))
-    question = _strip_or_none(form.get("question"))
-    problem = _strip_or_none(form.get("problem"))
-
-    if _str_empty(email):
-        flash('Could not submit ticket, email must not be empty!', category='error')
-
-    elif _str_empty(name):
-        flash('Could not submit ticket, name must not be empty!', category='error')
-
-    elif _str_empty(assignment):
-        flash('Could not submit ticket, assignment name must not be empty!', category='error')
-
-    elif _str_empty(question):
-        flash('Could not submit ticket, question must not be empty!', category='error')
-
-    # TODO: Check if course is a valid from a list of options
-    # TODO: Check if section is valid from a list of options
-    # TODO: Check if problem type is valid from a list of options
-
-    else:
-        mode_val = _strip_or_none(form.get("mode"))
-        mode = None
-
-        try:
-            if mode_val:
-                mode = Mode(int(mode_val))
-
-        except ValueError:
-            flash('Could not submit ticket, must select a valid mode!', category='error')
-
-        else:
-            return Ticket(email, name, course, section, assignment, question, problem, mode)
-
-def _strip_or_none(s: str):
-    return s.strip() if s is not None else None
-
-def _str_empty(s: str):
-    return s is not None and not s
-
-def _calc_session_duration(start_time, end_time, current_session_duration):
-    # print("START TIME IN: " + str(start_time))
-    # print("END TIME IN: " + str(end_time))
-    # print("CURRENT TIME IN: " + str(current_session_duration))
-
-    diff = end_time - start_time
-
-    # check if there is already time logged on the ticket, if so add that too
-    if current_session_duration is not None:
-        # python datetime and timedelta conversions
-        tmp = current_session_duration
-        diff = diff + timedelta(hours=tmp.hour, minutes=tmp.minute, seconds=tmp.second, microseconds=tmp.microsecond)
-
-    # convert timedelta() object back into datetime.datetime object to set into db
-    epoch = datetime(1970, 1, 1, 0, 0, 0)
-    result = epoch + diff
-
-    # chop off epoch year, month, and date. Just want HH:MM:SS (time) worked on ticket - date doesn't matter
-    return result.time()
-
-def _now():
-    """
-    Gets the current time in UTC.
-    :return: Current time in Coordinated Universal Time (UTC)
-    """
-    return datetime.now()
-
 @views.route('/update-ticket', methods=["GET", "POST"])
 @login_required
 def update_ticket():
@@ -290,3 +207,86 @@ def edit_ticket():
     # query all tickets after possible updates and send back to view tickets page
     tickets = m.Ticket.query.all()
     return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors, Status=Status)
+
+# TODO: Use flask-wtf for form handling and validation
+def _attempt_create_ticket(form: ImmutableMultiDict):
+    """
+    Given an HTML form as an ImmutableMultiDict, extracts, strips, and verifies the following values :
+        - email: must be non-empty
+        - fullname: must be non-empty
+        - assignment: must be non-empty
+        - question: must be non-empty
+        - mode: must be valid model.Mode
+
+        returns a Ticket object if values are valid, None otherwise.
+    """
+    email = _strip_or_none(form.get("email"))
+    name = _strip_or_none(form.get("fullname"))
+    course = _strip_or_none(form.get("course"))
+    section = _strip_or_none(form.get("section"))
+    assignment = _strip_or_none(form.get("assignment"))
+    question = _strip_or_none(form.get("question"))
+    problem = _strip_or_none(form.get("problem"))
+
+    if _str_empty(email):
+        flash('Could not submit ticket, email must not be empty!', category='error')
+
+    elif _str_empty(name):
+        flash('Could not submit ticket, name must not be empty!', category='error')
+
+    elif _str_empty(assignment):
+        flash('Could not submit ticket, assignment name must not be empty!', category='error')
+
+    elif _str_empty(question):
+        flash('Could not submit ticket, question must not be empty!', category='error')
+
+    # TODO: Check if course is a valid from a list of options
+    # TODO: Check if section is valid from a list of options
+    # TODO: Check if problem type is valid from a list of options
+
+    else:
+        mode_val = _strip_or_none(form.get("mode"))
+        mode = None
+
+        try:
+            if mode_val:
+                mode = Mode(int(mode_val))
+
+        except ValueError:
+            flash('Could not submit ticket, must select a valid mode!', category='error')
+
+        else:
+            return Ticket(email, name, course, section, assignment, question, problem, mode)
+
+def _strip_or_none(s: str):
+    return s.strip() if s is not None else None
+
+def _str_empty(s: str):
+    return s is not None and not s
+
+def _calc_session_duration(start_time, end_time, current_session_duration):
+    # print("START TIME IN: " + str(start_time))
+    # print("END TIME IN: " + str(end_time))
+    # print("CURRENT TIME IN: " + str(current_session_duration))
+
+    diff = end_time - start_time
+
+    # check if there is already time logged on the ticket, if so add that too
+    if current_session_duration is not None:
+        # python datetime and timedelta conversions
+        tmp = current_session_duration
+        diff = diff + timedelta(hours=tmp.hour, minutes=tmp.minute, seconds=tmp.second, microseconds=tmp.microsecond)
+
+    # convert timedelta() object back into datetime.datetime object to set into db
+    epoch = datetime(1970, 1, 1, 0, 0, 0)
+    result = epoch + diff
+
+    # chop off epoch year, month, and date. Just want HH:MM:SS (time) worked on ticket - date doesn't matter
+    return result.time()
+
+def _now():
+    """
+    Gets the current time in UTC.
+    :return: Current time in Coordinated Universal Time (UTC)
+    """
+    return datetime.now()
