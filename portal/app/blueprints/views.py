@@ -212,7 +212,7 @@ def update_ticket():
         current_ticket.status = m.Status.Open
         db.session.commit()
 
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, Status=Status, user=current_user, tutors=tutors)
+    return render_template('view_tickets.html', tickets=tickets, m=m, Status=Status, user=current_user, tutors=tutors)
 
 @views.route('/edit-ticket', methods=["GET", "POST"])
 @login_required
@@ -289,4 +289,4 @@ def edit_ticket():
 
     # query all tickets after possible updates and send back to view tickets page
     tickets = m.Ticket.query.all()
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors)
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors, Status=Status)
