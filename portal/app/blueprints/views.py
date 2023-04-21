@@ -12,6 +12,7 @@ from sqlalchemy.exc import IntegrityError
 from ..model import Ticket
 from ..model import Mode
 from ..model import Status
+from ..model import User
 
 from datetime import datetime
 from datetime import timedelta
@@ -83,6 +84,8 @@ def view_tickets():
     Student login is required to access this page.
     """
     tickets = Ticket.query.all()
+    # Get the user permission level here BEFORE attempting to load view-tickets page?
+    #user_level = User.query
 
     return render_template('view_tickets.html', tickets=tickets, Status=Status, user=current_user)
 
