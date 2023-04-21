@@ -27,6 +27,7 @@ jobs:
                   python -m pip install -U sphinx
 
             - name: Generate Docs
+              working-directory: docs
               run: |
                   make html
 
