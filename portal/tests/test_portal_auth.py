@@ -2,9 +2,6 @@
 from flask import Flask
 from app.model import Ticket, Status, Mode
 from flask.testing import FlaskClient
-import datetime
-from app import model as m
-from app.extensions import db
 
 import pytest
 
@@ -55,11 +52,11 @@ def test_claim_open_ticket(auth_client: FlaskClient, app: Flask):
     # make sure that test ticket status = claimed
     with app.app_context():
         assert '200' in response2.status
-        assert Ticket.query.first().status == m.Status.Claimed
-        assert Ticket.query.filter_by(status = m.Status.Claimed).count() == 1
+        assert Ticket.query.first().status == Status.Claimed
+        assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
         # check ticket is not in another category at the same time
-        assert Ticket.query.filter_by(status = m.Status.Open).count() != 1
-        assert Ticket.query.filter_by(status = m.Status.Closed).count() != 1
+        assert Ticket.query.filter_by(status = Status.Open).count() != 1
+        assert Ticket.query.filter_by(status = Status.Closed).count() != 1
 
 def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
     # make a ticket
@@ -89,11 +86,11 @@ def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
     # make sure that test ticket status = claimed
     with app.app_context():
         assert '200' in response2.status
-        assert Ticket.query.first().status == m.Status.Claimed
-        assert Ticket.query.filter_by(status = m.Status.Claimed).count() == 1
+        assert Ticket.query.first().status == Status.Claimed
+        assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
         # check ticket is not in another category at the same time
-        assert Ticket.query.filter_by(status = m.Status.Open).count() != 1
-        assert Ticket.query.filter_by(status = m.Status.Closed).count() != 1
+        assert Ticket.query.filter_by(status = Status.Open).count() != 1
+        assert Ticket.query.filter_by(status = Status.Closed).count() != 1
 
     # close claimed ticket
     closeData = {
@@ -105,11 +102,11 @@ def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
     # make sure that the test ticket status = closed
     with app.app_context():
         assert '200' in repsonse3.status
-        assert Ticket.query.first().status == m.Status.Closed
-        assert Ticket.query.filter_by(status = m.Status.Closed).count() == 1
+        assert Ticket.query.first().status == Status.Closed
+        assert Ticket.query.filter_by(status = Status.Closed).count() == 1
         # check ticket is not in another category at the same time
-        assert Ticket.query.filter_by(status = m.Status.Open).count() != 1
-        assert Ticket.query.filter_by(status = m.Status.Claimed).count() != 1
+        assert Ticket.query.filter_by(status = Status.Open).count() != 1
+        assert Ticket.query.filter_by(status = Status.Claimed).count() != 1
 
 def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
     # make a ticket
@@ -139,11 +136,11 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
     # make sure that test ticket status = claimed
     with app.app_context():
         assert '200' in response2.status
-        assert Ticket.query.first().status == m.Status.Claimed
-        assert Ticket.query.filter_by(status = m.Status.Claimed).count() == 1
+        assert Ticket.query.first().status == Status.Claimed
+        assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
         # check ticket is not in another category at the same time
-        assert Ticket.query.filter_by(status = m.Status.Open).count() != 1
-        assert Ticket.query.filter_by(status = m.Status.Closed).count() != 1
+        assert Ticket.query.filter_by(status = Status.Open).count() != 1
+        assert Ticket.query.filter_by(status = Status.Closed).count() != 1
 
     # close claimed ticket
     closeData = {
@@ -155,11 +152,11 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
     # make sure that the test ticket status = closed
     with app.app_context():
         assert '200' in repsonse3.status
-        assert Ticket.query.first().status == m.Status.Closed
-        assert Ticket.query.filter_by(status = m.Status.Closed).count() == 1
+        assert Ticket.query.first().status == Status.Closed
+        assert Ticket.query.filter_by(status = Status.Closed).count() == 1
         # check ticket is not in another category at the same time
-        assert Ticket.query.filter_by(status = m.Status.Open).count() != 1
-        assert Ticket.query.filter_by(status = m.Status.Claimed).count() != 1
+        assert Ticket.query.filter_by(status = Status.Open).count() != 1
+        assert Ticket.query.filter_by(status = Status.Claimed).count() != 1
 
     # reopen closed ticket
     reopenData = {
@@ -171,9 +168,9 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
     # make sure that the test ticket status is back to open
     with app.app_context():
         assert '200' in response4.status
-        assert Ticket.query.first().status == m.Status.Open
-        assert Ticket.query.filter_by(status = m.Status.Open).count() == 1
+        assert Ticket.query.first().status == Status.Open
+        assert Ticket.query.filter_by(status = Status.Open).count() == 1
         # check ticket is not in another category at the same time
-        assert Ticket.query.filter_by(status = m.Status.Claimed).count() != 1
-        assert Ticket.query.filter_by(status = m.Status.Closed).count() != 1
+        assert Ticket.query.filter_by(status = Status.Claimed).count() != 1
+        assert Ticket.query.filter_by(status = Status.Closed).count() != 1
 

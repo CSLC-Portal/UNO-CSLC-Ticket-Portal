@@ -1,8 +1,6 @@
 from flask import Flask
 from app.model import Ticket, Status, Mode, User
 from flask.testing import FlaskClient
-import datetime
-from app import model as m
 from app.extensions import db
 
 import pytest
@@ -204,25 +202,25 @@ def test_edit_tutor(auth_client: FlaskClient, app: Flask):
     # make sure that test ticket status = claimed
     with app.app_context():
         assert '200' in response2.status
-        assert Ticket.query.first().status == m.Status.Claimed
-        assert Ticket.query.filter_by(status = m.Status.Claimed).count() == 1
+        assert Ticket.query.first().status == Status.Claimed
+        assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
         # check ticket is not in another category at the same time
-        assert Ticket.query.filter_by(status = m.Status.Open).count() != 1
-        assert Ticket.query.filter_by(status = m.Status.Closed).count() != 1
+        assert Ticket.query.filter_by(status = Status.Open).count() != 1
+        assert Ticket.query.filter_by(status = Status.Closed).count() != 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         assert testTicket.tutor_id == 1 # this is current user
 
     # make new user and put in db - verify it got created
     with app.app_context():
-        tutor2 = m.User("oooooooooooooooiiiiddddd", 1, "Doctor", "Timothy Smith", False, False)
-        tutor3 = m.User("12332DASDVncud543234!*$(", 1, "Mister", "John Doe", False, False)
+        tutor2 = User("oooooooooooooooiiiiddddd", 1, "Doctor", "Timothy Smith", False, False)
+        tutor3 = User("12332DASDVncud543234!*$(", 1, "Mister", "John Doe", False, False)
         db.session.add(tutor2)
         db.session.add(tutor3)
         db.session.commit()
         # current user, tutor2, and tutor3 are all users in db
-        assert m.User.query.count() == 3
+        assert User.query.count() == 3
         # tutor2 and tutor3 only users with perm >= 1
-        assert m.User.query.filter(m.User.permission_level >= 1).count() == 2
+        assert User.query.filter(User.permission_level >= 1).count() == 2
 
     editData = {
         'ticketIDModal': '1',
@@ -357,25 +355,25 @@ def test_edit_multiple_attributes(auth_client: FlaskClient, app: Flask):
     # make sure that test ticket status = claimed
     with app.app_context():
         assert '200' in response2.status
-        assert Ticket.query.first().status == m.Status.Claimed
-        assert Ticket.query.filter_by(status = m.Status.Claimed).count() == 1
+        assert Ticket.query.first().status == Status.Claimed
+        assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
         # check ticket is not in another category at the same time
-        assert Ticket.query.filter_by(status = m.Status.Open).count() != 1
-        assert Ticket.query.filter_by(status = m.Status.Closed).count() != 1
+        assert Ticket.query.filter_by(status = Status.Open).count() != 1
+        assert Ticket.query.filter_by(status = Status.Closed).count() != 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         assert testTicket.tutor_id == 1 # this is current user
 
     # make new user and put in db - verify it got created
     with app.app_context():
-        tutor2 = m.User("oooooooooooooooiiiiddddd", 1, "Doctor", "Timothy Smith", False, False)
-        tutor3 = m.User("12332DASDVncud543234!*$(", 1, "Mister", "John Doe", False, False)
+        tutor2 = User("oooooooooooooooiiiiddddd", 1, "Doctor", "Timothy Smith", False, False)
+        tutor3 = User("12332DASDVncud543234!*$(", 1, "Mister", "John Doe", False, False)
         db.session.add(tutor2)
         db.session.add(tutor3)
         db.session.commit()
         # current user, tutor2, and tutor3 are all users in db
-        assert m.User.query.count() == 3
+        assert User.query.count() == 3
         # tutor2 and tutor3 only users with perm >= 1
-        assert m.User.query.filter(m.User.permission_level >= 1).count() == 2
+        assert User.query.filter(User.permission_level >= 1).count() == 2
 
     editData = {
         'ticketIDModal': '1',
