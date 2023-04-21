@@ -4,11 +4,11 @@
 
 <h1>View Tickets Page</h1><br>
 {% for ticket in tickets %}
-    {% if ticket.status == m.Status.Open %}
+    {% if ticket.status == Status.Open %}
     <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-    {% elif ticket.status == m.Status.Claimed %}
+    {% elif ticket.status == Status.Claimed %}
     <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
-    {% elif ticket.status == m.Status.Closed %}
+    {% elif ticket.status == Status.Closed %}
     <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
     {% endif %}
     <div class="card-header">
@@ -28,11 +28,11 @@
     <div class="card-footer">
       <form action="{{ url_for('views.update_ticket') }}", method="POST">
         <input type="hidden" name="ticketID" value="{{ ticket.id }}">
-        {% if ticket.status == m.Status.Open %}
+        {% if ticket.status == Status.Open %}
         <button type="submit" class="btn btn-primary" name="action" value="Claim">Claim</button>
-        {% elif ticket.status == m.Status.Claimed %}
+        {% elif ticket.status == Status.Claimed %}
         <button type="submit" class="btn btn-primary" name="action" value="Close">Close</button>
-        {% elif ticket.status == m.Status.Closed %}
+        {% elif ticket.status == Status.Closed %}
         <button type="submit" class="btn btn-primary" name="action" value="ReOpen">ReOpen</button>
         {% endif %}
       </form>

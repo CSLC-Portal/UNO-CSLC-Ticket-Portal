@@ -1,5 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, String, Integer, DateTime, Date, Enum, Boolean, Time
+from sqlalchemy import Column, String, Integer, DateTime, Enum, Boolean, Time
+from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
 from .extensions import db
 from flask_login import UserMixin
@@ -29,7 +29,7 @@ class Ticket(db.Model):
     assignment_name = Column(String(25), doc='Assignment student needs help with')
     specific_question = Column(String(25), doc='Student question about the assignment')
     problem_type = Column(String(25), doc='Type of problem student is having')
-    time_created = Column(DateTime(True), nullable=False, doc='Time ticket was created')
+    time_created = Column(DateTime(True), nullable=False, doc='Time ticket was created', default=func.now())
     time_claimed = Column(DateTime(True), doc='Time ticket was claimed by tutor')
     status = Column(Enum(Status), doc='Status of the ticket. 1=open, 2=claimed, 3=closed', default=Status.Open)
     time_closed = Column(DateTime(True), doc='Time the tutor marked ticket as closed')
@@ -39,7 +39,7 @@ class Ticket(db.Model):
     tutor_id = Column(Integer, db.ForeignKey('Users.id'), doc='Foreign key to tutor id who claimed this ticket')
     successful_session = Column(Boolean, doc='T/F if the tutor was able to help the student with issue on ticket')
 
-    def __init__(self, sEmailIn, sNameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, timeIn, modeIn):
+    def __init__(self, sEmailIn, sNameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, modeIn):
         self.student_email = sEmailIn
         self.student_name = sNameIn
         self.course = crsIn
@@ -47,7 +47,6 @@ class Ticket(db.Model):
         self.assignment_name = assgnIn
         self.specific_question = quesIn
         self.problem_type = prblmIn
-        self.time_created = timeIn
         self.mode = modeIn
 
 class User(db.Model, UserMixin):
