@@ -180,24 +180,23 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
 def test_edit_course(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created correctly
     with app.app_context():
-        assert '200' in response1.status
+        assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
-        assert testTicket.course == "data structures"
+        assert testTicket.course == "course1"
 
     editData = {
         'ticketIDModal': '1',
@@ -214,21 +213,20 @@ def test_edit_course(auth_client: FlaskClient, app: Flask):
 def test_edit_section(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created correctly
     with app.app_context():
-        assert '200' in response1.status
+        assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         assert testTicket.section == "section1"
@@ -248,21 +246,20 @@ def test_edit_section(auth_client: FlaskClient, app: Flask):
 def test_edit_assignment(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created correctly
     with app.app_context():
-        assert '200' in response1.status
+        assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         assert testTicket.assignment_name == "assignment1"
@@ -282,21 +279,20 @@ def test_edit_assignment(auth_client: FlaskClient, app: Flask):
 def test_edit_specific_question(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created correctly
     with app.app_context():
-        assert '200' in response1.status
+        assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         assert testTicket.specific_question == "This is my question?"
@@ -316,21 +312,20 @@ def test_edit_specific_question(auth_client: FlaskClient, app: Flask):
 def test_edit_problem_type(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created correctly
     with app.app_context():
-        assert '200' in response1.status
+        assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         assert testTicket.problem_type == "type1"
@@ -350,21 +345,20 @@ def test_edit_problem_type(auth_client: FlaskClient, app: Flask):
 def test_edit_tutor(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created correctly
     with app.app_context():
-        assert '200' in response1.status
+        assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         # no tutor has claimed ticket yet
@@ -416,21 +410,20 @@ def test_edit_tutor(auth_client: FlaskClient, app: Flask):
 def test_edit_tutor_notes(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created correctly
     with app.app_context():
-        assert '200' in response1.status
+        assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         assert testTicket.tutor_notes == None
@@ -450,21 +443,20 @@ def test_edit_tutor_notes(auth_client: FlaskClient, app: Flask):
 def test_edit_was_successful(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created correctly
     with app.app_context():
-        assert '200' in response1.status
+        assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         assert testTicket.successful_session == None
@@ -495,21 +487,20 @@ def test_edit_was_successful(auth_client: FlaskClient, app: Flask):
 def test_edit_multiple_attributes(auth_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
-        'emailAdressField':'test@test.email',
-        'firstNameField':'John',
-        'lastNameField':'Doe',
-        'courseField':'data structures',
-        'sectionField':'section1',
-        'assignmentNameField':'assignment1',
-        'specificQuestionField':'This is my question?',
-        'problemTypeField':'type1',
-        'modeOfTicket':'InPerson'
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/open-tickets', data=ticket1)
+    response1 = auth_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created correctly
     with app.app_context():
-        assert '200' in response1.status
+        assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         assert testTicket.tutor_notes == None
