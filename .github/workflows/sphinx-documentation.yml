@@ -32,10 +32,10 @@ jobs:
             - name: Generate Docs
               working-directory: docs
               run: |
-                  make html
+                  cd docs && make html
 
             - name: Deploy to Github Pages
               uses: peaceiris/actions-gh-pages@v3
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
-                publish_dir: build/html
+                publish_dir: _build/html
