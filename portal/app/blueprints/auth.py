@@ -18,9 +18,10 @@ CLIENT_ID = os.getenv('AAD_CLIENT_ID')
 CLIENT_SECRET = os.getenv('AAD_CLIENT_SECRET')
 REDIRECT_PATH = os.getenv('AAD_REDIRECT_PATH')
 
-assert CLIENT_ID, 'No client ID specified for authentication. Set AAD_CLIENT_ID env variable!'
-assert CLIENT_SECRET, 'No client secret specified for authentication. Set AAD_CLIENT_SECRET env variable!'
-assert REDIRECT_PATH, 'No redirect path specified for authentication. Set AAD_REDIRECT_PATH env variable!'
+def validate():
+    assert CLIENT_ID, 'No client ID specified for authentication. Set AAD_CLIENT_ID env variable!'
+    assert CLIENT_SECRET, 'No client secret specified for authentication. Set AAD_CLIENT_SECRET env variable!'
+    assert REDIRECT_PATH, 'No redirect path specified for authentication. Set AAD_REDIRECT_PATH env variable!'
 
 @auth.route("/")
 def index():

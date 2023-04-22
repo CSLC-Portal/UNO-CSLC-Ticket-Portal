@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Model for Portal Assets &mdash; UNO CSLC Portal 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tests package" href="tests.html" />
+    <link rel="prev" title="CSLC Portal" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            UNO CSLC Portal
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CSLC Portal</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Model for Portal Assets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#app.model.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Mode.InPerson"><code class="docutils literal notranslate"><span class="pre">Mode.InPerson</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Mode.Online"><code class="docutils literal notranslate"><span class="pre">Mode.Online</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#app.model.Status"><code class="docutils literal notranslate"><span class="pre">Status</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Status.Claimed"><code class="docutils literal notranslate"><span class="pre">Status.Claimed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Status.Closed"><code class="docutils literal notranslate"><span class="pre">Status.Closed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Status.Open"><code class="docutils literal notranslate"><span class="pre">Status.Open</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#app.model.Ticket"><code class="docutils literal notranslate"><span class="pre">Ticket</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.assignment_name"><code class="docutils literal notranslate"><span class="pre">Ticket.assignment_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.course"><code class="docutils literal notranslate"><span class="pre">Ticket.course</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.id"><code class="docutils literal notranslate"><span class="pre">Ticket.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.mode"><code class="docutils literal notranslate"><span class="pre">Ticket.mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.problem_type"><code class="docutils literal notranslate"><span class="pre">Ticket.problem_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.query"><code class="docutils literal notranslate"><span class="pre">Ticket.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.section"><code class="docutils literal notranslate"><span class="pre">Ticket.section</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.session_duration"><code class="docutils literal notranslate"><span class="pre">Ticket.session_duration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.specific_question"><code class="docutils literal notranslate"><span class="pre">Ticket.specific_question</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.status"><code class="docutils literal notranslate"><span class="pre">Ticket.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.student_email"><code class="docutils literal notranslate"><span class="pre">Ticket.student_email</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.student_name"><code class="docutils literal notranslate"><span class="pre">Ticket.student_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.time_claimed"><code class="docutils literal notranslate"><span class="pre">Ticket.time_claimed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.time_closed"><code class="docutils literal notranslate"><span class="pre">Ticket.time_closed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.time_created"><code class="docutils literal notranslate"><span class="pre">Ticket.time_created</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.tutor_id"><code class="docutils literal notranslate"><span class="pre">Ticket.tutor_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.tutor_notes"><code class="docutils literal notranslate"><span class="pre">Ticket.tutor_notes</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#app.model.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.oid"><code class="docutils literal notranslate"><span class="pre">User.oid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.permission_level"><code class="docutils literal notranslate"><span class="pre">User.permission_level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.query"><code class="docutils literal notranslate"><span class="pre">User.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.tutor_is_active"><code class="docutils literal notranslate"><span class="pre">User.tutor_is_active</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.tutor_is_working"><code class="docutils literal notranslate"><span class="pre">User.tutor_is_working</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.user_email"><code class="docutils literal notranslate"><span class="pre">User.user_email</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.user_name"><code class="docutils literal notranslate"><span class="pre">User.user_name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">UNO CSLC Portal</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">CSLC Portal</a></li>
+      <li class="breadcrumb-item active">Model for Portal Assets</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/app.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-app.model">
+<span id="model-for-portal-assets"></span><h1>Model for Portal Assets<a class="headerlink" href="#module-app.model" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.model.Mode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Mode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Mode class is designed to mimic an enum for values of which a ticket can be submitted.
+A ticket can either be submitted for online or inperson help. As shown below.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Mode.InPerson">
+<span class="sig-name descname"><span class="pre">InPerson</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#app.model.Mode.InPerson" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Mode.Online">
+<span class="sig-name descname"><span class="pre">Online</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#app.model.Mode.Online" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.model.Status">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Status" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>This Status class is designed to mimic an enum for values of which a ticket can obtain for its status value.
+A ticket can have the following three status values: Open, Claimed, or Closed. As shown below as well.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Status.Claimed">
+<span class="sig-name descname"><span class="pre">Claimed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#app.model.Status.Claimed" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Status.Closed">
+<span class="sig-name descname"><span class="pre">Closed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#app.model.Status.Closed" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Status.Open">
+<span class="sig-name descname"><span class="pre">Open</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#app.model.Status.Open" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.model.Ticket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Ticket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sEmailIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sNameIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crsIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assgnIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quesIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prblmIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modeIn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Ticket" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>The Ticket class is the main Model for the ticket objects that get created when students create and submit thier tickets for help.
+Every time a ticket is created, the student will only actualy enter in the following information:
+student_email, student_name, course, seciton, assignment_name, specific_question, and problem_type.
+The rest of the data fields are used in backoffice processing.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.assignment_name">
+<span class="sig-name descname"><span class="pre">assignment_name</span></span><a class="headerlink" href="#app.model.Ticket.assignment_name" title="Permalink to this definition"></a></dt>
+<dd><p>Assignment the student needs help with.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.course">
+<span class="sig-name descname"><span class="pre">course</span></span><a class="headerlink" href="#app.model.Ticket.course" title="Permalink to this definition"></a></dt>
+<dd><p>The specific course this ticket issue is related to.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.model.Ticket.id" title="Permalink to this definition"></a></dt>
+<dd><p>Autonumber primary key for the ticket table.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.mode">
+<span class="sig-name descname"><span class="pre">mode</span></span><a class="headerlink" href="#app.model.Ticket.mode" title="Permalink to this definition"></a></dt>
+<dd><p>Specifies whether the ticket was made for online or in-person help.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.problem_type">
+<span class="sig-name descname"><span class="pre">problem_type</span></span><a class="headerlink" href="#app.model.Ticket.problem_type" title="Permalink to this definition"></a></dt>
+<dd><p>Type of problem the student is having.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.model.Ticket.query" title="Permalink to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.section">
+<span class="sig-name descname"><span class="pre">section</span></span><a class="headerlink" href="#app.model.Ticket.section" title="Permalink to this definition"></a></dt>
+<dd><p>Course section ticket issue is relating to.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.session_duration">
+<span class="sig-name descname"><span class="pre">session_duration</span></span><a class="headerlink" href="#app.model.Ticket.session_duration" title="Permalink to this definition"></a></dt>
+<dd><p>Amount of time the tutor spent on the ticket/student.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.specific_question">
+<span class="sig-name descname"><span class="pre">specific_question</span></span><a class="headerlink" href="#app.model.Ticket.specific_question" title="Permalink to this definition"></a></dt>
+<dd><p>Student question about the assignment.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.status">
+<span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#app.model.Ticket.status" title="Permalink to this definition"></a></dt>
+<dd><p>Status of the ticket. 1=open, 2=claimed, 3=closed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.student_email">
+<span class="sig-name descname"><span class="pre">student_email</span></span><a class="headerlink" href="#app.model.Ticket.student_email" title="Permalink to this definition"></a></dt>
+<dd><p>Email of the student making the ticket.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.student_name">
+<span class="sig-name descname"><span class="pre">student_name</span></span><a class="headerlink" href="#app.model.Ticket.student_name" title="Permalink to this definition"></a></dt>
+<dd><p>The name of student making the ticket.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.time_claimed">
+<span class="sig-name descname"><span class="pre">time_claimed</span></span><a class="headerlink" href="#app.model.Ticket.time_claimed" title="Permalink to this definition"></a></dt>
+<dd><p>Time the ticket was claimed by tutor.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.time_closed">
+<span class="sig-name descname"><span class="pre">time_closed</span></span><a class="headerlink" href="#app.model.Ticket.time_closed" title="Permalink to this definition"></a></dt>
+<dd><p>Time the tutor marked the ticket as closed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.time_created">
+<span class="sig-name descname"><span class="pre">time_created</span></span><a class="headerlink" href="#app.model.Ticket.time_created" title="Permalink to this definition"></a></dt>
+<dd><p>Time the ticket was created.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.tutor_id">
+<span class="sig-name descname"><span class="pre">tutor_id</span></span><a class="headerlink" href="#app.model.Ticket.tutor_id" title="Permalink to this definition"></a></dt>
+<dd><p>Foreign key to the tutor who claimed this ticket.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Ticket.tutor_notes">
+<span class="sig-name descname"><span class="pre">tutor_notes</span></span><a class="headerlink" href="#app.model.Ticket.tutor_notes" title="Permalink to this definition"></a></dt>
+<dd><p>Space for tutors to write notes about student/ticket session.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.model.User">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oidIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permLevelIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emailIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isActiveIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isWorkingIn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.User" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">UserMixin</span></code></p>
+<p>The User class is the main model for every user that interacts with the CSLC Portal. In general there are only
+three types ofusers: students, tutuors, and admins. In order to determine what user is what, we have added a field
+called ‘permission_level’ which specifies which type of user the user object is. For example, a student User would have
+permission level of 1, tutor a permission level of 2, and an admin a permission level of 3. This way we can restrict what certain
+users are able to do on the CSLC portal like adding/modifying tutors, viewing ticket data, generating reports, etc</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.User.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.model.User.id" title="Permalink to this definition"></a></dt>
+<dd><p>Autonumber primary key</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.User.oid">
+<span class="sig-name descname"><span class="pre">oid</span></span><a class="headerlink" href="#app.model.User.oid" title="Permalink to this definition"></a></dt>
+<dd><p>ID token returned for the requestor</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.User.permission_level">
+<span class="sig-name descname"><span class="pre">permission_level</span></span><a class="headerlink" href="#app.model.User.permission_level" title="Permalink to this definition"></a></dt>
+<dd><p>Specifies permission level of user. e.g. 0=lowest, 3=superuser</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.User.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.model.User.query" title="Permalink to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.User.tutor_is_active">
+<span class="sig-name descname"><span class="pre">tutor_is_active</span></span><a class="headerlink" href="#app.model.User.tutor_is_active" title="Permalink to this definition"></a></dt>
+<dd><p>T/F if the tutor is currently employed</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.User.tutor_is_working">
+<span class="sig-name descname"><span class="pre">tutor_is_working</span></span><a class="headerlink" href="#app.model.User.tutor_is_working" title="Permalink to this definition"></a></dt>
+<dd><p>T/F if the tutor is currently working</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.User.user_email">
+<span class="sig-name descname"><span class="pre">user_email</span></span><a class="headerlink" href="#app.model.User.user_email" title="Permalink to this definition"></a></dt>
+<dd><p>Email of user</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.User.user_name">
+<span class="sig-name descname"><span class="pre">user_name</span></span><a class="headerlink" href="#app.model.User.user_name" title="Permalink to this definition"></a></dt>
+<dd><p>Users name</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="CSLC Portal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tests.html" class="btn btn-neutral float-right" title="tests package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Team GACK.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
