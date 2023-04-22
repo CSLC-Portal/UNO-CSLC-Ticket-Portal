@@ -1,3 +1,16 @@
+#content {
+    min-height: 100%;
+    padding-bottom: 50px;
+}
+
+footer {
+    height: 50px;
+    background-color: #292929;
+    text-align: right;
+    min-width: 360px;
+    width: 100%;
+ }
+
 .logo-section {
     right: 0px;
     height: 100px;
@@ -25,10 +38,31 @@
     right: 20px;
 }
 
+a.logo-text:visited {
+    color: white;
+    text-decoration: none;
+}
+
+a.logo-text:hover {
+    color: white;
+    text-decoration: none;
+}
+
+a.logo-text:active {
+    color: white;
+    text-decoration: none;
+}
+
+a.logo-text:link {
+    color: white;
+    text-decoration: none;
+}
+
 @media all and (min-width: 800px) {
     .logo-text {
         font-size: 35px;
         color: white;
+        text-decoration: none;
         position: relative;
         left: 20px;
     }
@@ -54,6 +88,7 @@
     .logo-text {
         font-size: 4vw;
         color: white;
+        text-decoration: none;
         position: relative;
         left: 20px;
     }
@@ -179,13 +214,6 @@ td.right-end, th.right-end {
     border-left: 1px solid #c5c4c4;
     vertical-align: middle;
 }
-
-footer {
-    height: 50px;
-    background-color: #292929;
-    text-align: right;
-    min-width: 360px;
- }
 
  form {
     width: 90%;

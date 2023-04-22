@@ -84,8 +84,11 @@ def view_tickets():
     Student login is required to access this page.
     """
     tickets = Ticket.query.all()
-    # Get the user permission level here BEFORE attempting to load view-tickets page?
-    #user_level = User.query
+    # Get the user permission level here BEFORE attempting to load view-tickets page
+    user_level = User.query.filter(User.id == current_user.id).first().permission_level
+    if(user_level < 2):
+        flash('Insufficient permission level to view tickets', category='error')
+        return redirect(url_for('auth.index'))
 
     return render_template('view_tickets.html', tickets=tickets, Status=Status, user=current_user)
 

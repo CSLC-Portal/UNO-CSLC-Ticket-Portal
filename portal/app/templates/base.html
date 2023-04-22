@@ -15,10 +15,10 @@
         <table class="logo">
             <tr>
                 <td class="logo">
-                    <img src="{{ url_for('static', filename='uno-icon-color.png') }}" alt="University of Nebraska at Omaha Logo" class="uno-logo" />
+                    <img src="{{ url_for('static', filename='uno-icon-color.png') }}" alt="University of Nebraska at Omaha Logo" class="uno-logo"/>
                 </td>
                 <td class="right-end">
-                    <div class="logo-text">Computer Science Learning Center</div>
+                    <a class="logo-text" href='/'>Computer Science Learning Center</div>
                 </td>
             </tr>
         </table>
@@ -55,8 +55,10 @@
     {% endwith %}
 
     <!-- Content that is page specific -->
+    <div id="content">
     {% block content %}
     {% endblock %}
+    </div>
 
     <!-- Footer -->
     <footer>
