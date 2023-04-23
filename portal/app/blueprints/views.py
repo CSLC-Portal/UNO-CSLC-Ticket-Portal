@@ -9,10 +9,10 @@ from flask_login import login_required
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
-from .. import model as m
-from ..model import Ticket
-from ..model import Mode
-from ..model import Status
+from app import model as m
+from app.model import Ticket
+from app.model import Mode
+from app.model import Status
 
 from datetime import datetime
 from datetime import timedelta
@@ -30,14 +30,14 @@ def create_ticket():
     """
     Serves the HTTP route /create-ticket. Shows a ticket create form on GET request.
     Submits a ticket on POST request with a form containing the following fields:
-        - email: Email address of user
-        - fullname: Full name of user
-        - course: Course relevant to the ticket submission
-        - section: Section of course relevant to the ticket submission
-        - assignment: Name of assignment relevant to the ticket submission
-        - question: Detailed questions relevant to the ticket submission
-        - problem: Type of problem needed help with
-        - mode: Whether the student is online or in-person
+    - email: Email address of user
+    - fullname: Full name of user
+    - course: Course relevant to the ticket submission
+    - section: Section of course relevant to the ticket submission
+    - assignment: Name of assignment relevant to the ticket submission
+    - question: Detailed questions relevant to the ticket submission
+    - problem: Type of problem needed help with
+    - mode: Whether the student is online or in-person
 
     Then redirects back to the home page.
 

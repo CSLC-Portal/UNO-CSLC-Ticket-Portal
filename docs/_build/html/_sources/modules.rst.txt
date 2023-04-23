@@ -1,8 +1,9 @@
-blueprints
-==========
+CSLC Portal
+===========
 
 .. toctree::
    :maxdepth: 4
 
-   auth
-   views
+   app
+   tests
+   app.blueprints
