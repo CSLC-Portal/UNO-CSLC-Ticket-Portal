@@ -28,13 +28,13 @@ jobs:
                   python -m pip install --upgrade pip
                   python -m pip install -U sphinx
                   python -m pip install sphinx_rtd_theme
+                  python -m pip install -r requirements.txt
 
             - name: Generate Docs
               working-directory: ./docs
               env:
                 PYTHONPATH: ${{ github.workspace }}../portal
               run: |
-                  if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
                   make html
 
             - name: Deploy to Github Pages
