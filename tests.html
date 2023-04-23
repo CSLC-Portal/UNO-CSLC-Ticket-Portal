@@ -47,9 +47,18 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Tests for Portal Functionality</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#configuration-for-tests">Configuration for Tests</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#create-ticket-tests">Create Ticket Tests</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#testing-unauthorized-functionality">Testing Unauthorized Functionality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tests.test_portal_anonymous">Testing Unauthorized Functionality</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_anonymous.test_create_ticket_no_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_no_auth()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_anonymous.test_index_no_auth"><code class="docutils literal notranslate"><span class="pre">test_index_no_auth()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_anonymous.test_logout_no_auth"><code class="docutils literal notranslate"><span class="pre">test_logout_no_auth()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_anonymous.test_mock_login"><code class="docutils literal notranslate"><span class="pre">test_mock_login()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#testing-authorized-functionality">Testing Authorized Functionality</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tests">Module contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tests.MockConfidentialClientApplication"><code class="docutils literal notranslate"><span class="pre">MockConfidentialClientApplication</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="app.blueprints.html">Portal Blueprints</a></li>
@@ -93,14 +102,61 @@ and end-to-end tests that involve every aspect of the CSLC portal. Below we will
 <section id="create-ticket-tests">
 <h2>Create Ticket Tests<a class="headerlink" href="#create-ticket-tests" title="Permalink to this heading"></a></h2>
 </section>
-<section id="testing-unauthorized-functionality">
-<h2>Testing Unauthorized Functionality<a class="headerlink" href="#testing-unauthorized-functionality" title="Permalink to this heading"></a></h2>
+<section id="module-tests.test_portal_anonymous">
+<span id="testing-unauthorized-functionality"></span><h2>Testing Unauthorized Functionality<a class="headerlink" href="#module-tests.test_portal_anonymous" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_portal_anonymous.test_create_ticket_no_auth">
+<span class="sig-prename descclassname"><span class="pre">tests.test_portal_anonymous.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_no_auth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_portal_anonymous.test_create_ticket_no_auth" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_portal_anonymous.test_index_no_auth">
+<span class="sig-prename descclassname"><span class="pre">tests.test_portal_anonymous.</span></span><span class="sig-name descname"><span class="pre">test_index_no_auth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_portal_anonymous.test_index_no_auth" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_portal_anonymous.test_logout_no_auth">
+<span class="sig-prename descclassname"><span class="pre">tests.test_portal_anonymous.</span></span><span class="sig-name descname"><span class="pre">test_logout_no_auth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_portal_anonymous.test_logout_no_auth" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_portal_anonymous.test_mock_login">
+<span class="sig-prename descclassname"><span class="pre">tests.test_portal_anonymous.</span></span><span class="sig-name descname"><span class="pre">test_mock_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_portal_anonymous.test_mock_login" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="testing-authorized-functionality">
 <h2>Testing Authorized Functionality<a class="headerlink" href="#testing-authorized-functionality" title="Permalink to this heading"></a></h2>
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="module-tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tests" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.MockConfidentialClientApplication">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.</span></span><span class="sig-name descname"><span class="pre">MockConfidentialClientApplication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_credential</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_authority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">http_client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_claims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_capabilities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">azure_region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_scopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">http_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance_discovery</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_broker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.MockConfidentialClientApplication" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfidentialClientApplication</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tests.MockConfidentialClientApplication.MOCK_EMAIL">
+<span class="sig-name descname"><span class="pre">MOCK_EMAIL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'someuser&#64;email.com'</span></em><a class="headerlink" href="#tests.MockConfidentialClientApplication.MOCK_EMAIL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tests.MockConfidentialClientApplication.MOCK_NAME">
+<span class="sig-name descname"><span class="pre">MOCK_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Some</span> <span class="pre">User'</span></em><a class="headerlink" href="#tests.MockConfidentialClientApplication.MOCK_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tests.MockConfidentialClientApplication.MOCK_OID">
+<span class="sig-name descname"><span class="pre">MOCK_OID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'00000000-0000-0000-0000-000000000000'</span></em><a class="headerlink" href="#tests.MockConfidentialClientApplication.MOCK_OID" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.MockConfidentialClientApplication.acquire_token_by_auth_code_flow">
+<span class="sig-name descname"><span class="pre">acquire_token_by_auth_code_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_code_flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.MockConfidentialClientApplication.acquire_token_by_auth_code_flow" title="Permalink to this definition"></a></dt>
+<dd><p>Override the acqure token function to return a mock token as would be returned from the actual library</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 

@@ -45,9 +45,22 @@
 <li class="toctree-l2"><a class="reference internal" href="app.html">Model for Portal Assets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.html">Tests for Portal Functionality</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Portal Blueprints</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#authorization-auth-component">Authorization (Auth) Component</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#views-component">Views Component</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app.blueprints.auth">Authorization (Auth) Component</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.authorized"><code class="docutils literal notranslate"><span class="pre">authorized()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.logout"><code class="docutils literal notranslate"><span class="pre">logout()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.unauthorized"><code class="docutils literal notranslate"><span class="pre">unauthorized()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.user_loader"><code class="docutils literal notranslate"><span class="pre">user_loader()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app.blueprints.views">Views Component</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.views.create_ticket"><code class="docutils literal notranslate"><span class="pre">create_ticket()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.views.update_ticket"><code class="docutils literal notranslate"><span class="pre">update_ticket()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.views.view_tickets"><code class="docutils literal notranslate"><span class="pre">view_tickets()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app.blueprints">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -85,14 +98,83 @@
 Views is the main componenet that sets up all of the routes that handle all of the logic that deals with ticket creation, deletion,
 editing, etc. Auth is the main component that ensures that the MicrosfotAuthenticator library is setup correctly and that all users who
 access the UNO CSLC Tutoring Portal are correctly authenticated and only certain access is granted to certain web pages.</p>
-<section id="authorization-auth-component">
-<h2>Authorization (Auth) Component<a class="headerlink" href="#authorization-auth-component" title="Permalink to this heading"></a></h2>
+<section id="module-app.blueprints.auth">
+<span id="authorization-auth-component"></span><h2>Authorization (Auth) Component<a class="headerlink" href="#module-app.blueprints.auth" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.blueprints.auth.authorized">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">authorized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.authorized" title="Permalink to this definition"></a></dt>
+<dd><p>Called when a user has authenticated with their microsoft account.
+We save their user info as a server side session. Any routes that
+require authentication can check if this user exists.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.blueprints.auth.index">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.index" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.blueprints.auth.logout">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.logout" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.blueprints.auth.unauthorized">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">unauthorized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.unauthorized" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.blueprints.auth.user_loader">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">user_loader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.user_loader" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.blueprints.auth.validate">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.validate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="views-component">
-<h2>Views Component<a class="headerlink" href="#views-component" title="Permalink to this heading"></a></h2>
+<section id="module-app.blueprints.views">
+<span id="views-component"></span><h2>Views Component<a class="headerlink" href="#module-app.blueprints.views" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.blueprints.views.create_ticket">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.views.</span></span><span class="sig-name descname"><span class="pre">create_ticket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.views.create_ticket" title="Permalink to this definition"></a></dt>
+<dd><p>Serves the HTTP route /create-ticket. Shows a ticket create form on GET request.
+Submits a ticket on POST request with a form containing the following fields:
+- email: Email address of user
+- fullname: Full name of user
+- course: Course relevant to the ticket submission
+- section: Section of course relevant to the ticket submission
+- assignment: Name of assignment relevant to the ticket submission
+- question: Detailed questions relevant to the ticket submission
+- problem: Type of problem needed help with
+- mode: Whether the student is online or in-person</p>
+<p>Then redirects back to the home page.</p>
+<p>Utilizes the flask funciton ‘render_template’ to render
+the passed in create-ticket.html template which is the form that students use to create/submit tickets.</p>
+<p>Student login is required to access this page.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.blueprints.views.update_ticket">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.views.</span></span><span class="sig-name descname"><span class="pre">update_ticket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.views.update_ticket" title="Permalink to this definition"></a></dt>
+<dd><p>This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
+:return: Render template to the original view-ticket.html page.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.blueprints.views.view_tickets">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.views.</span></span><span class="sig-name descname"><span class="pre">view_tickets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.views.view_tickets" title="Permalink to this definition"></a></dt>
+<dd><p>Serves the HTTP route /view-tickets. This function queries the Tickets database and passes the result query
+to the front end to display all of the availabe tickets in the database.</p>
+<p>Utilizes the flask funciton ‘render_template’ to render the passed in view-tickets.html template which is
+used to display all tickets to tutors to be able to claim individual tickets.</p>
+<p>Student login is required to access this page.</p>
+</dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="module-app.blueprints">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app.blueprints" title="Permalink to this heading"></a></h2>
 </section>
 </section>
 
