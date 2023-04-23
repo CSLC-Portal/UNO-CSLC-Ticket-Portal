@@ -30,7 +30,7 @@ Testing Unauthorized Functionality
    :show-inheritance:
 
 Testing Authorized Functionality
--------------------------------
+---------------------------------
 
 .. automodule:: tests.test_portal_auth
    :members:
