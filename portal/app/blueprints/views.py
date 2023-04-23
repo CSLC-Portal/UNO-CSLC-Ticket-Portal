@@ -9,6 +9,7 @@ from flask_login import login_required
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
+from .. import model as m
 from ..model import Ticket
 from ..model import Mode
 from ..model import Status
@@ -82,30 +83,31 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    tickets = Ticket.query.all()
-
-    return render_template('view_tickets.html', tickets=tickets, Status=Status, user=current_user)
+    # get all tickets
+    tickets = m.Ticket.query.all()
+    # get the tutors to display for edit ticket modal
+    tutors = m.User.query.filter(m.User.permission_level >= 1)
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors, Status=Status)
 
 @views.route('/update-ticket', methods=["GET", "POST"])
 @login_required
 def update_ticket():
-    """
-    This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
-    :return: Render template to the original view-ticket.html page.
-    """
-    tickets = Ticket.query.all()
+    # get the tutors to display for edit ticket modal if the user presses it
+    tutors = m.User.query.filter(m.User.permission_level >= 1)
+
+    tickets = m.Ticket.query.all()
     tutor = current_user
     ticketID = request.form.get("ticketID")
 
     print("RECIEVED TICKET ID: " + str(ticketID))
     print("VALUE OF ACTION: " + str(request.form.get("action")))
     # retrieve ticket by primary key using get()
-    current_ticket = Ticket.query.get(ticketID)
+    current_ticket = m.Ticket.query.get(ticketID)
 
     if request.form.get("action") == "Claim":
         # edit status of ticket to Claimed, assign tutor, set time claimed
         current_ticket.tutor_id = tutor.id
-        current_ticket.status = Status.Claimed
+        current_ticket.status = m.Status.Claimed
         current_ticket.time_claimed = _now()
         print("TIME TICKET CLAIMED: " + str(_now()))
         db.session.commit()
@@ -113,7 +115,7 @@ def update_ticket():
         print("TUTOR ID THAT CLAIMED TICKET: " + str(current_ticket.tutor_id))
     elif request.form.get("action") == "Close":
         # edit status of ticket to CLOSED and set time closed on ticket
-        current_ticket.status = Status.Closed
+        current_ticket.status = m.Status.Closed
         current_ticket.time_closed = _now()
         print("TIME TICKET CLOSED: " + str(_now()))
         # calculate session duration from time claimed to time closed
@@ -124,10 +126,87 @@ def update_ticket():
         db.session.commit()
     elif request.form.get("action") == "ReOpen":
         # edit status of ticket back to OPEN
-        current_ticket.status = Status.Open
+        current_ticket.status = m.Status.Open
         db.session.commit()
 
-    return render_template('view_tickets.html', tickets=tickets, Status=Status, user=current_user)
+    return render_template('view_tickets.html', tickets=tickets, m=m, Status=Status, user=current_user, tutors=tutors)
+
+@views.route('/edit-ticket', methods=["GET", "POST"])
+@login_required
+def edit_ticket():
+
+    # get ticket id back + current ticket
+    ticketID = request.form.get("ticketIDModal")
+    current_ticket = m.Ticket.query.get(ticketID)
+
+    # get the tutors to display for edit ticket modal if the user presses it
+    tutors = m.User.query.filter(m.User.permission_level >= 1)
+
+    # get info back from popup modal form
+    if request.method == "POST":
+        course = request.form.get("courseField")
+        section = request.form.get("sectionField")
+        assignment = request.form.get("assignmentNameField")
+        question = request.form.get("specificQuestionField")
+        problem = request.form.get("problemTypeField")
+        primaryTutor = request.form.get("primaryTutorInput")
+        tutorNotes = request.form.get("tutorNotes")
+        wasSuccessful = request.form.get("successfulSession")
+        print("Following info coming back from edit-ticket: ")
+
+        print("current ticket ID: " + str(ticketID))
+        print("course: " + str(course))
+        print("section: " + str(section))
+        print("assignment: " + str(assignment))
+        print("question: " + str(question))
+        print("problem: " + str(problem))
+        print("primaryTutor: " + str(primaryTutor))
+        print("tutorNotes: " + str(tutorNotes))
+        print("wasSuccessful: " + str(wasSuccessful))
+
+        # check for change in values from edit
+        if course is not None:
+            # new info for course came back, update it for current ticket
+            current_ticket.course = course
+            db.session.commit()
+        if section is not None:
+            # new info for section came back, update it for current ticket
+            current_ticket.section = section
+            db.session.commit()
+        if assignment != current_ticket.assignment_name:
+            # new info for assignment came back, update it for current ticket
+            current_ticket.assignment_name = assignment
+            db.session.commit()
+        if question != current_ticket.specific_question:
+            # new info for question came back, update it for current ticket
+            current_ticket.specific_question = question
+            db.session.commit()
+        if problem is not None:
+            # new info for problem came back, update it for current ticket
+            current_ticket.problem_type = problem
+            db.session.commit()
+        if primaryTutor is not None:
+            # new info for primary tutor came back, update it for current ticket
+
+            # newTutor = m.User.query.filter(m.User.user_name == primaryTutor).first()
+            print("Chaning primary tutor to: " + str(primaryTutor))
+            current_ticket.tutor_id = primaryTutor
+            db.session.commit()
+        if tutorNotes is not None:
+            # new info for tutor notes came back, update it for current ticket
+            current_ticket.tutor_notes = tutorNotes
+            db.session.commit()
+        if wasSuccessful is not None:
+            # new info for tutor notes came back, update it for current ticket
+            current_ticket.successful_session = True
+            db.session.commit()
+        else:
+            current_ticket.successful_session = False
+            db.session.commit()
+
+    # query all tickets after possible updates and send back to view tickets page
+    tickets = m.Ticket.query.all()
+    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors, Status=Status)
 
 # TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):
@@ -186,9 +265,9 @@ def _str_empty(s: str):
     return s is not None and not s
 
 def _calc_session_duration(start_time, end_time, current_session_duration):
-    print("START TIME IN: " + str(start_time))
-    print("END TIME IN: " + str(end_time))
-    print("CURRENT TIME IN: " + str(current_session_duration))
+    # print("START TIME IN: " + str(start_time))
+    # print("END TIME IN: " + str(end_time))
+    # print("CURRENT TIME IN: " + str(current_session_duration))
 
     diff = end_time - start_time
 
