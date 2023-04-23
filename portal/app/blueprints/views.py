@@ -9,6 +9,7 @@ from flask_login import login_required
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
+from app import model as m
 from app.model import Ticket
 from app.model import Mode
 from app.model import Status
