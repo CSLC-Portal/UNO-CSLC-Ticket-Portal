@@ -30,9 +30,8 @@ jobs:
                   python -m pip install sphinx_rtd_theme
 
             - name: Generate Docs
-              working-directory: docs
+              working-directory: ./docs
               run: |
-                  cd docs
                   make html
 
             - name: Deploy to Github Pages
