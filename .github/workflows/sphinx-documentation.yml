@@ -31,6 +31,8 @@ jobs:
 
             - name: Generate Docs
               working-directory: ./docs
+              env:
+                PYTHONPATH: ${{ github.workspace }}../portal
               run: |
                   make html
 
