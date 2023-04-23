@@ -88,6 +88,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="tests.html#tests.MockConfidentialClientApplication.acquire_token_by_auth_code_flow">acquire_token_by_auth_code_flow() (tests.MockConfidentialClientApplication method)</a>
 </li>
+      <li><a href="tests.html#tests.conftest.app">app() (in module tests.conftest)</a>
+</li>
       <li>
     app.blueprints
 
@@ -120,6 +122,8 @@
       </ul></li>
       <li><a href="app.html#app.model.Ticket.assignment_name">assignment_name (app.model.Ticket attribute)</a>
 </li>
+      <li><a href="tests.html#tests.conftest.auth_client">auth_client() (in module tests.conftest)</a>
+</li>
       <li><a href="app.blueprints.html#app.blueprints.auth.authorized">authorized() (in module app.blueprints.auth)</a>
 </li>
   </ul></td>
@@ -130,13 +134,21 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.html#app.model.Status.Claimed">Claimed (app.model.Status attribute)</a>
 </li>
+      <li><a href="tests.html#tests.conftest.cleanup">cleanup() (in module tests.conftest)</a>
+</li>
+      <li><a href="tests.html#tests.conftest.client">client() (in module tests.conftest)</a>
+</li>
       <li><a href="app.html#app.model.Status.Closed">Closed (app.model.Status attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.html#app.model.Ticket.course">course (app.model.Ticket attribute)</a>
 </li>
+      <li><a href="tests.html#tests.conftest.create_auth_client">create_auth_client() (in module tests.conftest)</a>
+</li>
       <li><a href="app.blueprints.html#app.blueprints.views.create_ticket">create_ticket() (in module app.blueprints.views)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.create_ticket_with_invalid_data">create_ticket_with_invalid_data() (in module tests.test_create_ticket)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -182,8 +194,6 @@
 </li>
       <li><a href="app.html#app.model.Mode">Mode (class in app.model)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     module
 
@@ -198,7 +208,13 @@
 </li>
         <li><a href="tests.html#module-tests">tests</a>
 </li>
+        <li><a href="tests.html#module-tests.conftest">tests.conftest</a>
+</li>
+        <li><a href="tests.html#module-tests.test_create_ticket">tests.test_create_ticket</a>
+</li>
         <li><a href="tests.html#module-tests.test_portal_anonymous">tests.test_portal_anonymous</a>
+</li>
+        <li><a href="tests.html#module-tests.test_portal_auth">tests.test_portal_auth</a>
 </li>
       </ul></li>
   </ul></td>
@@ -267,13 +283,49 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="tests.html#tests.test_portal_auth.test_claim_open_ticket">test_claim_open_ticket() (in module tests.test_portal_auth)</a>
+</li>
+      <li><a href="tests.html#tests.test_portal_auth.test_close_claimed_ticket">test_close_claimed_ticket() (in module tests.test_portal_auth)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_empty_assignment">test_create_ticket_empty_assignment() (in module tests.test_create_ticket)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_empty_email">test_create_ticket_empty_email() (in module tests.test_create_ticket)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_empty_name">test_create_ticket_empty_name() (in module tests.test_create_ticket)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_empty_question">test_create_ticket_empty_question() (in module tests.test_create_ticket)</a>
+</li>
+      <li><a href="tests.html#tests.test_portal_auth.test_create_ticket_get_with_auth">test_create_ticket_get_with_auth() (in module tests.test_portal_auth)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_invalid_mode">test_create_ticket_invalid_mode() (in module tests.test_create_ticket)</a>
+</li>
       <li><a href="tests.html#tests.test_portal_anonymous.test_create_ticket_no_auth">test_create_ticket_no_auth() (in module tests.test_portal_anonymous)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_no_data">test_create_ticket_no_data() (in module tests.test_create_ticket)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_post_with_auth">test_create_ticket_post_with_auth() (in module tests.test_create_ticket)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_assignment">test_create_ticket_whitespace_assignment() (in module tests.test_create_ticket)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_email">test_create_ticket_whitespace_email() (in module tests.test_create_ticket)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_name">test_create_ticket_whitespace_name() (in module tests.test_create_ticket)</a>
+</li>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_question">test_create_ticket_whitespace_question() (in module tests.test_create_ticket)</a>
 </li>
       <li><a href="tests.html#tests.test_portal_anonymous.test_index_no_auth">test_index_no_auth() (in module tests.test_portal_anonymous)</a>
 </li>
+      <li><a href="tests.html#tests.test_portal_auth.test_index_with_auth">test_index_with_auth() (in module tests.test_portal_auth)</a>
+</li>
+      <li><a href="tests.html#tests.test_portal_auth.test_logout_auth">test_logout_auth() (in module tests.test_portal_auth)</a>
+</li>
       <li><a href="tests.html#tests.test_portal_anonymous.test_logout_no_auth">test_logout_no_auth() (in module tests.test_portal_anonymous)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="tests.html#tests.test_portal_anonymous.test_mock_login">test_mock_login() (in module tests.test_portal_anonymous)</a>
+</li>
+      <li><a href="tests.html#tests.test_portal_auth.test_reopen_closed_ticket">test_reopen_closed_ticket() (in module tests.test_portal_auth)</a>
 </li>
       <li>
     tests
@@ -283,14 +335,33 @@
 </li>
       </ul></li>
       <li>
+    tests.conftest
+
+      <ul>
+        <li><a href="tests.html#module-tests.conftest">module</a>
+</li>
+      </ul></li>
+      <li>
+    tests.test_create_ticket
+
+      <ul>
+        <li><a href="tests.html#module-tests.test_create_ticket">module</a>
+</li>
+      </ul></li>
+      <li>
     tests.test_portal_anonymous
 
       <ul>
         <li><a href="tests.html#module-tests.test_portal_anonymous">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    tests.test_portal_auth
+
+      <ul>
+        <li><a href="tests.html#module-tests.test_portal_auth">module</a>
+</li>
+      </ul></li>
       <li><a href="app.html#app.model.Ticket">Ticket (class in app.model)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.time_claimed">time_claimed (app.model.Ticket attribute)</a>

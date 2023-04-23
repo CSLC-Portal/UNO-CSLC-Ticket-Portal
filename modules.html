@@ -124,8 +124,29 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html">Tests for Portal Functionality</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#configuration-for-tests">Configuration for Tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#create-ticket-tests">Create Ticket Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.conftest">Configuration for Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.app"><code class="docutils literal notranslate"><span class="pre">app()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.auth_client"><code class="docutils literal notranslate"><span class="pre">auth_client()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.cleanup"><code class="docutils literal notranslate"><span class="pre">cleanup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.client"><code class="docutils literal notranslate"><span class="pre">client()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.create_auth_client"><code class="docutils literal notranslate"><span class="pre">create_auth_client()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.test_create_ticket">Create Ticket Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.create_ticket_with_invalid_data"><code class="docutils literal notranslate"><span class="pre">create_ticket_with_invalid_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_empty_assignment"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_assignment()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_empty_email"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_empty_name"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_empty_question"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_question()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_invalid_mode"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_invalid_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_no_data"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_no_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_post_with_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_post_with_auth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_assignment"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_whitespace_assignment()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_email"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_whitespace_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_name"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_whitespace_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_question"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_whitespace_question()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.test_portal_anonymous">Testing Unauthorized Functionality</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_anonymous.test_create_ticket_no_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_no_auth()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_anonymous.test_index_no_auth"><code class="docutils literal notranslate"><span class="pre">test_index_no_auth()</span></code></a></li>
@@ -133,7 +154,15 @@
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_anonymous.test_mock_login"><code class="docutils literal notranslate"><span class="pre">test_mock_login()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#testing-authorized-functionality">Testing Authorized Functionality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.test_portal_auth">Testing Authorized Functionality</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_claim_open_ticket"><code class="docutils literal notranslate"><span class="pre">test_claim_open_ticket()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_close_claimed_ticket"><code class="docutils literal notranslate"><span class="pre">test_close_claimed_ticket()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_create_ticket_get_with_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_get_with_auth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_index_with_auth"><code class="docutils literal notranslate"><span class="pre">test_index_with_auth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_logout_auth"><code class="docutils literal notranslate"><span class="pre">test_logout_auth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_reopen_closed_ticket"><code class="docutils literal notranslate"><span class="pre">test_reopen_closed_ticket()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests">Module contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.MockConfidentialClientApplication"><code class="docutils literal notranslate"><span class="pre">MockConfidentialClientApplication</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tests.html#tests.MockConfidentialClientApplication.MOCK_EMAIL"><code class="docutils literal notranslate"><span class="pre">MockConfidentialClientApplication.MOCK_EMAIL</span></code></a></li>
