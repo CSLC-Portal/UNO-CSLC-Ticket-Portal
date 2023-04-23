@@ -49,6 +49,7 @@ class Ticket(db.Model):
     mode = Column(Enum(Mode), doc='Specifies whether the ticket was made for online or in-person help.')
     tutor_notes = Column(String(255), doc='Space for tutors to write notes about student/ticket session.')
     tutor_id = Column(String(50), db.ForeignKey('Users.id'), doc='Foreign key to the tutor who claimed this ticket.')
+    successful_session = Column(Boolean, doc='T/F if the tutor was able to help the student with issue on ticket')
 
     def __init__(self, sEmailIn, sNameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, modeIn):
         self.student_email = sEmailIn
@@ -77,8 +78,8 @@ class User(db.Model, UserMixin):
     user_name = Column(String(25), doc='Users name')
     tutor_is_active = Column(Boolean, doc='T/F if the tutor is currently employed')
     tutor_is_working = Column(Boolean, doc='T/F if the tutor is currently working')
+    tickets = db.relationship('Ticket', backref='user')
     # TODO: below are items that will eventually need to be defined as relationships to other tables that aren't yet created
-    #  - tickets
     #  - assisted_tickets
     #  - courses
 
@@ -91,4 +92,4 @@ class User(db.Model, UserMixin):
         self.tutor_is_working = isWorkingIn
 
     def __repr__(self):
-        return f'{self.user_fname} ({self.user_email})'
+        return f'{self.user_name} ({self.user_email})'
