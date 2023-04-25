@@ -83,14 +83,18 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    tickets = Ticket.query.all()
+    openTickets = Ticket.query.filter(Ticket.status == Status.Open) # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
+    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
+    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
+    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
+
     # Get the user permission level here BEFORE attempting to load view-tickets page
-    user_level = User.query.filter(User.id == current_user.id).first().permission_level
+    user_level = current_user.permission_level
     if(user_level < 2):
         flash('Insufficient permission level to view tickets', category='error')
         return redirect(url_for('auth.index'))
 
-    return render_template('view_tickets.html', tickets=tickets, Status=Status, user=current_user)
+    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets), loopNum=loopNum, Status=Status, user=current_user)
 
 @views.route('/update-ticket', methods=["GET", "POST"])
 @login_required
@@ -99,9 +103,13 @@ def update_ticket():
     This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
     :return: Render template to the original view-ticket.html page.
     """
-    tickets = Ticket.query.all()
     tutor = current_user
     ticketID = request.form.get("ticketID")
+
+    openTickets = Ticket.query.filter(Ticket.status == Status.Open) # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
+    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
+    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
+    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
 
     print("RECIEVED TICKET ID: " + str(ticketID))
     print("VALUE OF ACTION: " + str(request.form.get("action")))
@@ -133,7 +141,7 @@ def update_ticket():
         current_ticket.status = Status.Open
         db.session.commit()
 
-    return render_template('view_tickets.html', tickets=tickets, Status=Status, user=current_user)
+    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets), loopNum=loopNum, Status=Status, user=current_user)
 
 # TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):

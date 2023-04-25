@@ -219,3 +219,8 @@ td.right-end, th.right-end {
     width: 90%;
     margin: auto;
  }
+
+ .centered {
+    margin-left: auto;
+    margin-right: auto;
+ }
