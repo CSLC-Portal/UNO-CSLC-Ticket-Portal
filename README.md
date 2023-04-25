@@ -10,23 +10,26 @@ The recent loss of a previous tutoring portal is a major motivation for the deve
 
 The application is currently a work in progress. The following is a list of currently existing features in the application:
 
- - Temporary form for submitting a ticket.
- - Temporary 'view-tickets' page that shows submitted tickets.
- - A home page that asks to log in or shows username when logged in.
- - Login management; only authenticated users can view certain pages.
-   - Unauthenticated users will be redirected to Microsoft OAuth sign-in.
+- Form for submitting a ticket.
+- Page for viewing tickets.
+- Ability to claim/close tickets.
+- Editable tickets (can update most fields set for the ticket).
+- Front-end for administrative console. 
+- A home page that asks to log in or shows username when logged in.
+- Login management; only authenticated users can view certain pages (Unauthenticated users will be redirected to Microsoft sign-in).
+- Automatically generated, self-signed SSL certificates for HTTPS connections
 
 Previews:
 
 ![Home Page Mock-up](https://github.com/claytonmsafranek/UNO-CSLC-Ticket-Portal/blob/main/portal/app/static/cslc_home_mock.jpeg)
 ![View Tickets Mock-up](https://github.com/claytonmsafranek/UNO-CSLC-Ticket-Portal/blob/main/portal/app/static/cslc_view-tickets_mock.png)
 
-Still working on:
+Next Milestone [Milestone 5](https://github.com/claytonmsafranek/UNO-CSLC-Ticket-Portal/milestone/5) (still working on):
 
- - Front-end for home, view-tickets, and create-ticket pages
- - Testing microsoft authentication for the remote server (with HTTPS connection)
- - Creating automated unit tests for selenium
- - Automatic deployment to Azure Dynamic Web Apps
+ - Creating automated unit tests for selenium.
+ - Automatic deployment to Azure Dynamic Web Apps.
+ - Administrative console backend for adding tutors, courses, configuring the portal app and downloading reports.
+ - Tutor and Admin permissions (restrict views for authenticated users based on permission level).
 
 Visit the [docs](https://claytonmsafranek.github.io/UNO-CSLC-Ticket-Portal/) for more info.
 
