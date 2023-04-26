@@ -224,3 +224,9 @@ td.right-end, th.right-end {
     margin-left: auto;
     margin-right: auto;
  }
+
+ ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+ }

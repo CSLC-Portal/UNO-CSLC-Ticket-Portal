@@ -16,64 +16,75 @@
             Closed Tickets
         </th>
     </tr>
-    {% for i in range(loopNum) %}
+
     <tr>
         <td>
-        {% if i < openTickets|length %}
+        <ul>
+        {% for ticket in openTickets %}
+        <li>
         <div class="card text-white bg-secondary mb-3 centered" style="max-width: 18rem;">
-        <div class="card-header">{{ openTickets[i].student_name }} <br> {{ openTickets[i].time_created.strftime('%m/%d/%Y - %H:%M') }}</div>
+        <div class="card-header">{{ ticket.student_name }} <br> {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}</div>
         <div class="card-body">
-            <h5 class="card-title">{{ openTickets[i].course }}</h5>
-            <h6 class="card-title">Assignment: {{ openTickets[i].assignment_name }}</h6>
-            <p class="card-text">{{ openTickets[i].specific_question }}</p>
-            <h5 class="card-title">{{ openTickets[i].status }}</h5>
+            <h5 class="card-title">{{ ticket.course }}</h5>
+            <h6 class="card-title">Assignment: {{ ticket.assignment_name }}</h6>
+            <p class="card-text">{{ ticket.specific_question }}</p>
+            <h5 class="card-title">{{ ticket.status }}</h5>
             <form action="{{ url_for('views.update_ticket') }}", method="POST">
-                <input type="hidden" name="ticketID" value="{{ openTickets[i].id }}">
+                <input type="hidden" name="ticketID" value="{{ ticket.id }}">
                 <button type="submit" class="btn btn-primary" name="action" value="Claim">Claim</button>
                 <button type="submit" class="btn btn-primary" name="action" value="Close">Close</button>
             </form>
         </div>
         </div>
-        {% endif %}
+        </li>
+        {% endfor %}
+        </ul>
         </td>
 
         <td>
-        {% if i < claimedTickets|length %}
+        <ul>
+        {% for ticket in claimedTickets %}
+        <li>
         <div class="card text-white bg-warning mb-3 centered" style="max-width: 18rem;">
-        <div class="card-header">{{ claimedTickets[i].student_name }} <br> {{ claimedTickets[i].time_created.strftime('%m/%d/%Y - %H:%M') }}</div>
+        <div class="card-header">{{ ticket.student_name }} <br> {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}</div>
         <div class="card-body">
-            <h5 class="card-title">{{ claimedTickets[i].course }}</h5>
-            <h6 class="card-title">Assignment: {{ claimedTickets[i].assignment_name }}</h6>
-            <p class="card-text">{{ claimedTickets[i].specific_question }}</p>
-            <h5 class="card-title">{{ claimedTickets[i].status }}</h5>
+            <h5 class="card-title">{{ ticket.course }}</h5>
+            <h6 class="card-title">Assignment: {{ ticket.assignment_name }}</h6>
+            <p class="card-text">{{ ticket.specific_question }}</p>
+            <h5 class="card-title">{{ ticket.status }}</h5>
             <form action="{{ url_for('views.update_ticket') }}", method="POST">
-                <input type="hidden" name="ticketID" value="{{ claimedTickets[i].id }}">
+                <input type="hidden" name="ticketID" value="{{ ticket.id }}">
                 <button type="submit" class="btn btn-primary" name="action" value="Close">Close</button>
             </form>
         </div>
         </div>
-        {% endif %}
+        </li>
+        {% endfor %}
+        </ul>
         </td>
 
         <td>
-        {% if i < closedTickets|length %}
+        <ul>
+        {% for ticket in closedTickets %}
+        <li>
         <div class="card text-white bg-success mb-3 centered" style="max-width: 18rem;">
-        <div class="card-header">{{ closedTickets[i].student_name }} <br> {{ closedTickets[i].time_created.strftime('%m/%d/%Y - %H:%M') }}</div>
+        <div class="card-header">{{ ticket.student_name }} <br> {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}</div>
         <div class="card-body">
-            <h5 class="card-title">{{ closedTickets[i].course }}</h5>
-            <h6 class="card-title">Assignment: {{ closedTickets[i].assignment_name }}</h6>
-            <p class="card-text">{{ closedTickets[i].specific_question }}</p>
-            <h5 class="card-title">{{ closedTickets[i].status }}</h5>
+            <h5 class="card-title">{{ ticket.course }}</h5>
+            <h6 class="card-title">Assignment: {{ ticket.assignment_name }}</h6>
+            <p class="card-text">{{ ticket.specific_question }}</p>
+            <h5 class="card-title">{{ ticket.status }}</h5>
             <form action="{{ url_for('views.update_ticket') }}", method="POST">
-                <input type="hidden" name="ticketID" value="{{ closedTickets[i].id }}">
+                <input type="hidden" name="ticketID" value="{{ ticket.id }}">
                 <button type="submit" class="btn btn-primary" name="action" value="ReOpen">ReOpen</button>
             </form>
         </div>
         </div>
-        {% endif %}
+        </li>
+        {% endfor %}
+        </ul>
         </td>
     </tr>
-    {% endfor %}
 </table>
 
 {% endblock %}
