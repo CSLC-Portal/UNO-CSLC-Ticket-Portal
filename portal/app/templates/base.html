@@ -1,37 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main-style.css') }}" />
     <title>{% block title %}{% endblock %}</title>
 </head>
 
 <body>
-    <h1>CSLC Portal</h1>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-        {% if category == 'error' %}
-            <div class="alert alert-danger alter-dismissable fade show" role="alert">
-        {% elif category == 'warning' %}
-            <div class="alert alert-warning alter-dismissable fade show" role="alert">
-        {% elif category == 'success' %}
-            <div class="alert alert-success alter-dismissable fade show" role="alert">
+    <!-- Header content -->
+    <div class="logo-section">
+        <table class="logo">
+            <tr>
+                <td class="logo">
+                    <img src="{{ url_for('static', filename='uno-icon-color.png') }}" alt="University of Nebraska at Omaha Logo" class="uno-logo"/>
+                </td>
+                <td class="right-end">
+                    <a class="logo-text" href='/'>Computer Science Learning Center</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="nav-section">
+        {% if not user.is_authenticated %}
+            <a class="Login" href='{{ auth_url }}'>Sign In</a>
         {% else %}
-            <div class="alert alert-primary alter-dismissable fade show" role="alert">
+            <a class="Login" href="/logout">Logout</a>
         {% endif %}
-                {{ message }}
-                <button type="button" class="close" data-dismiss="alert">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        {% endfor %}
-    {% endif %}
+        <!-- this is where other links will go -->
+    </div>
+
+    <!-- Alert -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'error' %}
+                    <div class="alert alert-danger alter-dismissable fade show" role="alert">
+                {% elif category == 'warning' %}
+                    <div class="alert alert-warning alter-dismissable fade show" role="alert">
+                {% elif category == 'success' %}
+                    <div class="alert alert-success alter-dismissable fade show" role="alert">
+                {% else %}
+                    <div class="alert alert-primary alter-dismissable fade show" role="alert">
+                {% endif %}
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
     {% endwith %}
 
+    <!-- Content that is page specific -->
+    <div id="content">
     {% block content %}
     {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

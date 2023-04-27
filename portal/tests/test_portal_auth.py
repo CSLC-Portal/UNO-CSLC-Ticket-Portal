@@ -10,7 +10,7 @@ def test_index_with_auth(create_auth_client):
 
     response = client.get('/')
 
-    assert b'John Smith' in response.data
+    assert b'WELCOME TO THE UNO CSLC' in response.data
 
 def test_create_ticket_get_with_auth(auth_client: FlaskClient):
     response = auth_client.get('/create-ticket')

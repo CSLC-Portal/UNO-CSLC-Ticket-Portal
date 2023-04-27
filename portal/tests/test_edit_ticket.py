@@ -254,7 +254,7 @@ def test_edit_tutor_notes(auth_client: FlaskClient, app: Flask):
         assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
-        assert testTicket.tutor_notes == None
+        assert testTicket.tutor_notes == ""
 
     editData = {
         'ticketIDModal': '1',
@@ -331,7 +331,7 @@ def test_edit_multiple_attributes(auth_client: FlaskClient, app: Flask):
         assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
-        assert testTicket.tutor_notes == None
+        assert testTicket.tutor_notes == ""
 
     editData = {
         'ticketIDModal': '1',

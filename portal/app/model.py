@@ -47,7 +47,7 @@ class Ticket(db.Model):
     time_closed = Column(DateTime(True), doc='Time the tutor marked the ticket as closed.')
     session_duration = Column(Time(True), doc='Amount of time the tutor spent on the ticket/student.')
     mode = Column(Enum(Mode), doc='Specifies whether the ticket was made for online or in-person help.')
-    tutor_notes = Column(String(255), doc='Space for tutors to write notes about student/ticket session.')
+    tutor_notes = Column(String(255), doc='Space for tutors to write notes about student/ticket session.', default="")
     tutor_id = Column(Integer, db.ForeignKey('Users.id'), doc='Foreign key to the tutor who claimed this ticket.')
     successful_session = Column(Boolean, doc='T/F if the tutor was able to help the student with issue on ticket')
 

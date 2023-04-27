@@ -1,14 +1,93 @@
 {% extends "base.html" %}
 {% block title %}Future Site of CSLC Tutoring Portal{% endblock %}
+
 {% block content %}
+    <h1>WELCOME TO THE UNO CSLC</h1>
+    <h2>PKI 391 | [zoom link]</h2>
+    <br>
+    <hr class="solid" />
 
-{% if not user.is_authenticated %}
-    <h2>Login</h2>
-    <a href='{{ auth_url }}'>Sign In</a>
-{% else %}
-    <h2>Welcome {{ user.user_name }}!</h2>
-    <a href="/logout">Logout</a>
-{% endif %}
+    <h1 style="font-size: 20px">HOURS</h1>
 
+    <!-- TODO: Get current hours from database -->
+    <table class="hours">
+        <tr>
+            <th>
+                MONDAY
+            </th>
+            <th class="center">
+                TUESDAY
+            </th>
+            <th class="center">
+                WEDNESDAY
+            </th>
+            <th class="center">
+                THURSDAY
+            </th>
+            <th class="center">
+                FRIDAY
+            </th>
+            <th>
+                SATURDAY
+            </th>
+        </tr>
+        <tr>
+            <td>
+                00:00 - 00:00
+            </td>
+            <td class="center">
+                00:00 - 00:00
+            </td>
+            <td class="center">
+                00:00 - 00:00
+            </td>
+            <td class="center">
+                00:00 - 00:00
+            </td>
+            <td class="center">
+                00:00 - 00:00
+            </td>
+            <td>
+                00:00 - 00:00
+            </td>
+        </tr>
+        <!-- table row for create ticket button -->
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="2" style="padding-top:30px;">
+                <button class="create-ticket-button" onclick="window.location.href='/create-ticket'">
+                    Open Ticket
+                </button>
+            </td>
+            <td colspan="2"></td>
+        </tr>
+    </table>
+
+    <hr class="solid" />
+    <h1>COURSE AVAILABILITY</h1>
+
+    <!-- TODO: get offered courses and available tutors from database -->
+    <table>
+        <tr>
+            <th><h2>Course</h2></th>
+            <th><h2>Tutors</h2></th>
+        </tr>
+        <tr class="middle">
+            <td>IST0000</td>
+            <td>00</td>
+        </tr>
+        <tr class="middle">
+            <td>IST0000</td>
+            <td>00</td>
+        </tr>
+        <tr class="middle">
+            <td>IST0000</td>
+            <td>00</td>
+        </tr>
+        <tr>
+            <td>IST0000</td>
+            <td>00</td>
+        </tr>
+    </table>
 {% endblock %}
 

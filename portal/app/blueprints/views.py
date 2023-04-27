@@ -13,6 +13,7 @@ from app import model as m
 from app.model import Ticket
 from app.model import Mode
 from app.model import Status
+from app.model import User
 
 from datetime import datetime
 from datetime import timedelta
@@ -48,7 +49,7 @@ def create_ticket():
     """
     if request.method == 'GET':
         # Render create-ticket template if GET request or if there was an error in submission data
-        return render_template('create-ticket.html', Mode=Mode)
+        return render_template('create-ticket.html', Mode=Mode, user=current_user)
 
     ticket = _attempt_create_ticket(request.form)
 
@@ -83,21 +84,39 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    # get all tickets
-    tickets = m.Ticket.query.all()
-    # get the tutors to display for edit ticket modal
-    tutors = m.User.query.filter(m.User.permission_level >= 1)
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors, Status=Status)
+    tickets = Ticket.query.all()
+
+    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
+    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
+    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
+    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
+
+    # Get the user permission level here BEFORE attempting to load view-tickets page
+    user_level = current_user.permission_level
+    if (user_level < 2):
+        flash('Insufficient permission level to view tickets', category='error')
+        return redirect(url_for('auth.index'))
+
+    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
+                           loopNum=loopNum, Status=Status, user=current_user, tickets=tickets)
 
 @views.route('/update-ticket', methods=["GET", "POST"])
 @login_required
 def update_ticket():
+    """
+    This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
+    :return: Render template to the original view-ticket.html page.
+    """
     # get the tutors to display for edit ticket modal if the user presses it
     tutors = m.User.query.filter(m.User.permission_level >= 1)
-
-    tickets = m.Ticket.query.all()
+    tickets = Ticket.query.all()
     tutor = current_user
     ticketID = request.form.get("ticketID")
+
+    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
+    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
+    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
+    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
 
     print("RECIEVED TICKET ID: " + str(ticketID))
     print("VALUE OF ACTION: " + str(request.form.get("action")))
@@ -129,11 +148,18 @@ def update_ticket():
         current_ticket.status = m.Status.Open
         db.session.commit()
 
-    return render_template('view_tickets.html', tickets=tickets, m=m, Status=Status, user=current_user, tutors=tutors)
+    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
+                           loopNum=loopNum, Status=Status, user=current_user, tutors=tutors, tickets=tickets)
 
 @views.route('/edit-ticket', methods=["GET", "POST"])
 @login_required
 def edit_ticket():
+    # query all tickets after possible updates and send back to view tickets page
+    tickets = m.Ticket.query.all()
+    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
+    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
+    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
+    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
 
     # get ticket id back + current ticket
     ticketID = request.form.get("ticketIDModal")
@@ -204,9 +230,8 @@ def edit_ticket():
             current_ticket.successful_session = False
             db.session.commit()
 
-    # query all tickets after possible updates and send back to view tickets page
-    tickets = m.Ticket.query.all()
-    return render_template('view_tickets.html', tickets=tickets, m=m, user=current_user, tutors=tutors, Status=Status)
+    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
+                           loopNum=loopNum, Status=Status, user=current_user, tutors=tutors, tickets=tickets)
 
 # TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):
