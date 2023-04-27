@@ -7,13 +7,11 @@ services:
     # Disable the 'mysql' service if using alternative database management system.
     # Make sure you change the FLASK_SQLALCHEMY_DATABASE_URI to match the active database
     mysql:
-        build: ./mysql
         container_name: mysql
+        env_file: ./.env
+        build: ./mysql
 
         restart: always
-
-        env_file:
-            - ./.env
 
         environment:
             - MYSQL_DATABASE=portal-data
@@ -23,8 +21,9 @@ services:
             - 3306
 
     portal:
-        build: ./portal
         container_name: portal
+        env_file: ./.env
+        build: ./portal
 
         # This starts the service after mysql service, however database
         # may still not be initialized, so need a connect-retry loop to ensure
@@ -33,9 +32,6 @@ services:
             - mysql
 
         restart: always
-
-        env_file:
-            - ./.env
 
         environment:
             # Override any other settings to use the MySQL database
@@ -47,8 +43,18 @@ services:
             - 8000
 
     nginx:
-        build: ./nginx
         container_name: nginx
+        env_file: ./.env
+
+        build:
+            context: ./nginx
+            args:
+                - CERT_COUNTRY=${CERT_COUNTRY}
+                - CERT_STATE=${CERT_STATE}
+                - CERT_LOC=${CERT_LOC}
+                - CERT_ORG=${CERT_ORG}
+                - CERT_ORGUNIT=${CERT_ORGUNIT}
+                - SERVER_NAME=${FLASK_SERVER_NAME}
 
         restart: always
 

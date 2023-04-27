@@ -1,5 +1,8 @@
 from flask import Flask
-from .extensions import db, sess, login_manager
+from werkzeug.middleware.proxy_fix import ProxyFix
+from .extensions import db
+from .extensions import sess
+from .extensions import login_manager
 from . import default_config
 
 from time import sleep
@@ -10,6 +13,9 @@ import os
 # NOTE: DO NOT change the name of 'create_app()', it is used by gunicorn and flask
 def create_app():
     app = Flask(__name__)
+
+    # Tell Flask it is behind a proxy, for accurate result when using url_for with external = True
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
     _setup_env(app)
     db.init_app(app)
