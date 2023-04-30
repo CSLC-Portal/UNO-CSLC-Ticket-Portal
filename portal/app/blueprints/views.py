@@ -84,7 +84,7 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    tickets = m.Ticket.query.all() #.filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
+    tickets = m.Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
 
     # Get the user permission level here BEFORE attempting to load view-tickets page
     user_level = current_user.permission_level
@@ -103,7 +103,7 @@ def update_ticket():
     """
     # get the tutors to display for edit ticket modal if the user presses it
     tutors = m.User.query.filter(m.User.permission_level >= 1)
-    tickets = m.Ticket.query.all() #.filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
+    tickets = m.Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
     tutor = current_user
     ticketID = request.form.get("ticketID")
 
@@ -143,7 +143,7 @@ def update_ticket():
 @login_required
 def edit_ticket():
     # query all tickets after possible updates and send back to view tickets page
-    tickets = m.Ticket.query.all() #.filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
+    tickets = m.Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
 
     # get ticket id back + current ticket
     ticketID = request.form.get("ticketIDModal")
@@ -215,6 +215,12 @@ def edit_ticket():
             db.session.commit()
 
     return render_template('view_tickets.html', Status=Status, user=current_user, tutors=tutors, tickets=tickets)
+
+@views.route('/admin-add-course', methods=["GET", "POST"])
+@login_required
+def add_course():
+
+    return "TEST"
 
 # TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):
