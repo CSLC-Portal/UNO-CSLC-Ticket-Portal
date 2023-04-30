@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='main-style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main-style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-console.css') }}" />
     <title>{% block title %}{% endblock %}</title>
 </head>
 
@@ -15,7 +16,7 @@
         <table class="logo">
             <tr>
                 <td class="logo">
-                    <img src="{{ url_for('static', filename='uno-icon-color.png') }}" alt="University of Nebraska at Omaha Logo" class="uno-logo"/>
+                    <img src="{{ url_for('static', filename='img/uno-icon-color.png') }}" alt="University of Nebraska at Omaha Logo" class="uno-logo"/>
                 </td>
                 <td class="right-end">
                     <a class="logo-text" href='/'>Computer Science Learning Center</div>
