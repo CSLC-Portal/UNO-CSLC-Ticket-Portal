@@ -147,6 +147,19 @@ h2 {
     font-size: 25px;
 }
 
+h3 {
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+h4 {
+    text-align: center;
+    color: white;
+    font-size: 18px;
+}
+
 .solid {
     border-top: 1px solid #bbb;
     width: 70%;

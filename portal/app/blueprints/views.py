@@ -84,12 +84,7 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    tickets = Ticket.query.all()
-
-    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
-    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
-    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
+    tickets = m.Ticket.query.all() #.filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
 
     # Get the user permission level here BEFORE attempting to load view-tickets page
     user_level = current_user.permission_level
@@ -97,8 +92,7 @@ def view_tickets():
         flash('Insufficient permission level to view tickets', category='error')
         return redirect(url_for('auth.index'))
 
-    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
-                           loopNum=loopNum, Status=Status, user=current_user, tickets=tickets)
+    return render_template('view_tickets.html', Status=Status, user=current_user, tickets=tickets)
 
 @views.route('/update-ticket', methods=["GET", "POST"])
 @login_required
@@ -109,14 +103,9 @@ def update_ticket():
     """
     # get the tutors to display for edit ticket modal if the user presses it
     tutors = m.User.query.filter(m.User.permission_level >= 1)
-    tickets = Ticket.query.all()
+    tickets = m.Ticket.query.all() #.filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
     tutor = current_user
     ticketID = request.form.get("ticketID")
-
-    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
-    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
-    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
 
     print("RECIEVED TICKET ID: " + str(ticketID))
     print("VALUE OF ACTION: " + str(request.form.get("action")))
@@ -148,18 +137,13 @@ def update_ticket():
         current_ticket.status = m.Status.Open
         db.session.commit()
 
-    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
-                           loopNum=loopNum, Status=Status, user=current_user, tutors=tutors, tickets=tickets)
+    return render_template('view_tickets.html', Status=Status, user=current_user, tutors=tutors, tickets=tickets)
 
 @views.route('/edit-ticket', methods=["GET", "POST"])
 @login_required
 def edit_ticket():
     # query all tickets after possible updates and send back to view tickets page
-    tickets = m.Ticket.query.all()
-    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
-    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
-    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
+    tickets = m.Ticket.query.all() #.filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
 
     # get ticket id back + current ticket
     ticketID = request.form.get("ticketIDModal")
@@ -230,8 +214,7 @@ def edit_ticket():
             current_ticket.successful_session = False
             db.session.commit()
 
-    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
-                           loopNum=loopNum, Status=Status, user=current_user, tutors=tutors, tickets=tickets)
+    return render_template('view_tickets.html', Status=Status, user=current_user, tutors=tutors, tickets=tickets)
 
 # TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):
