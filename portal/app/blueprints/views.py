@@ -294,7 +294,9 @@ def _calc_session_duration(start_time, end_time, current_session_duration):
     # print("END TIME IN: " + str(end_time))
     # print("CURRENT TIME IN: " + str(current_session_duration))
 
-    diff = end_time - start_time
+    diff = timedelta(seconds=0)
+    if start_time is not None:
+        diff = end_time - start_time
 
     # check if there is already time logged on the ticket, if so add that too
     if current_session_duration is not None:
