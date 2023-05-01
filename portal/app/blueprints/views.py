@@ -13,7 +13,6 @@ from app.util import strip_or_none
 from app.util import str_empty
 from app.util import permission_required
 
-from app import model as m
 from app.model import Ticket
 from app.model import User
 from app.model import Mode
@@ -115,7 +114,7 @@ def update_ticket():
     """
     # get the tutors to display for edit ticket modal if the user presses it
     ticketID = request.form.get("ticketID")
-    current_ticket = m.Ticket.query.get(ticketID)
+    current_ticket = Ticket.query.get(ticketID)
 
     if current_ticket is None:
         flash('Could not update ticket status. Ticket not found in database.', category='error')
@@ -123,14 +122,14 @@ def update_ticket():
     # edit status of ticket to Claimed, assign tutor, set time claimed
     elif request.form.get("action") == "Claim":
         current_ticket.tutor_id = current_user.id
-        current_ticket.status = m.Status.Claimed
+        current_ticket.status = Status.Claimed
         current_ticket.time_claimed = datetime.now()
         db.session.commit()
         flash('Ticket claimed!', category='info')
 
     # edit status of ticket to CLOSED and set time closed on ticket
     elif request.form.get("action") == "Close":
-        current_ticket.status = m.Status.Closed
+        current_ticket.status = Status.Closed
         current_ticket.time_closed = datetime.now()
 
         # calculate session duration from time claimed to time closed
@@ -143,7 +142,7 @@ def update_ticket():
 
     # edit status of ticket back to OPEN
     elif request.form.get("action") == "ReOpen":
-        current_ticket.status = m.Status.Open
+        current_ticket.status = Status.Open
         db.session.commit()
         flash('Ticket opened!', category='info')
 
