@@ -89,7 +89,6 @@ def view_tickets():
     Student login is required to access this page.
     """
     tickets = Ticket.query.all()
-    tutors = User.query.filter(User.permission == Permission.Tutor or User.permission == Permission.Admin)
 
     openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (datetime.now() - Ticket.time_created).total_seconds()/(60*60) < 24)
     claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
@@ -102,8 +101,9 @@ def view_tickets():
         flash('Insufficient permission level to view tickets', category='error')
         return redirect(url_for('auth.index'))
 
+    # get the tutors to display for edit ticket modal if the user presses it
     return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
-                           loopNum=loopNum, Status=Status, user=current_user, tickets=tickets, tutors=tutors)
+                           loopNum=loopNum, Status=Status, user=current_user, tickets=tickets, tutors=User.get_tutors())
 
 @views.route('/update-ticket', methods=["GET", "POST"])
 @permission_required(Permission.Tutor)
@@ -114,35 +114,25 @@ def update_ticket():
     """
     # get the tutors to display for edit ticket modal if the user presses it
     ticketID = request.form.get("ticketID")
-    current_ticket = Ticket.query.get(ticketID)
+    ticket: Ticket = Ticket.query.get(ticketID)
 
-    if current_ticket is None:
+    # TODO: Check to make state is valid before changing it!!
+
+    if ticket is None:
         flash('Could not update ticket status. Ticket not found in database.', category='error')
 
-    # edit status of ticket to Claimed, assign tutor, set time claimed
     elif request.form.get("action") == "Claim":
-        current_ticket.tutor_id = current_user.id
-        current_ticket.status = Status.Claimed
-        current_ticket.time_claimed = datetime.now()
+        ticket.claim(current_user)
         db.session.commit()
         flash('Ticket claimed!', category='info')
 
-    # edit status of ticket to CLOSED and set time closed on ticket
     elif request.form.get("action") == "Close":
-        current_ticket.status = Status.Closed
-        current_ticket.time_closed = datetime.now()
-
-        # calculate session duration from time claimed to time closed
-        duration = _calc_session_duration(current_ticket.time_claimed, current_ticket.time_closed, current_ticket.session_duration)
-
-        # TODO: get the duration calculation accounting for business days/hours too
-        current_ticket.session_duration = duration
+        ticket.close()
         db.session.commit()
         flash('Ticket closed!', category='info')
 
-    # edit status of ticket back to OPEN
     elif request.form.get("action") == "ReOpen":
-        current_ticket.status = Status.Open
+        ticket.reopen()
         db.session.commit()
         flash('Ticket opened!', category='info')
 
@@ -217,9 +207,6 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
             return Ticket(email, name, course, section, assignment, question, problem, mode)
 
 def _attempt_edit_ticket(ticket: Ticket):
-    # get the tutors to display for edit ticket modal if the user presses it
-    # tutors = m.User.query.filter(m.User.permission >= 1)
-
     # get info back from popup modal form
     course = request.form.get("courseField")
     section = request.form.get("sectionField")
@@ -253,9 +240,6 @@ def _attempt_edit_ticket(ticket: Ticket):
 
     if primaryTutor is not None:
         # new info for primary tutor came back, update it for current ticket
-
-        # newTutor = m.User.query.filter(m.User.name == primaryTutor).first()
-        print("Chaning primary tutor to: " + str(primaryTutor))
         ticket.tutor_id = primaryTutor
 
     if tutorNotes is not None:
@@ -270,23 +254,3 @@ def _attempt_edit_ticket(ticket: Ticket):
         ticket.successful_session = False
 
     db.session.commit()
-
-def _calc_session_duration(start_time, end_time, current_session_duration):
-    # print("START TIME IN: " + str(start_time))
-    # print("END TIME IN: " + str(end_time))
-    # print("CURRENT TIME IN: " + str(current_session_duration))
-
-    diff = end_time - start_time
-
-    # check if there is already time logged on the ticket, if so add that too
-    if current_session_duration is not None:
-        # python datetime and timedelta conversions
-        tmp = current_session_duration
-        diff = diff + timedelta(hours=tmp.hour, minutes=tmp.minute, seconds=tmp.second, microseconds=tmp.microsecond)
-
-    # convert timedelta() object back into datetime.datetime object to set into db
-    epoch = datetime(1970, 1, 1, 0, 0, 0)
-    result = epoch + diff
-
-    # chop off epoch year, month, and date. Just want HH:MM:SS (time) worked on ticket - date doesn't matter
-    return result.time()

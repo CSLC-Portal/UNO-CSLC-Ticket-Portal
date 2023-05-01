@@ -17,7 +17,7 @@ def test_claim_open_ticket(tutor_client: FlaskClient, app: Flask):
         'problem':'type1',
         'mode': Mode.InPerson.value
     }
-    response1 = tutor_client.post('/create-ticket', data=ticket1)
+    tutor_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created
     with app.app_context():
@@ -28,11 +28,11 @@ def test_claim_open_ticket(tutor_client: FlaskClient, app: Flask):
         'ticketID': '1',
         'action': 'Claim'
     }
-    response2 = tutor_client.post('/update-ticket', data=claimData)
+    response = tutor_client.post('/update-ticket', data=claimData)
 
     # make sure that test ticket status = claimed
     with app.app_context():
-        assert '302' in response2.status
+        assert '302' in response.status
         assert Ticket.query.first().status == Status.Claimed
         assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
 
@@ -52,7 +52,7 @@ def test_close_claimed_ticket(tutor_client: FlaskClient, app: Flask):
         'problem':'type1',
         'mode': Mode.InPerson.value
     }
-    response1 = tutor_client.post('/create-ticket', data=ticket1)
+    tutor_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created
     with app.app_context():
@@ -63,11 +63,11 @@ def test_close_claimed_ticket(tutor_client: FlaskClient, app: Flask):
         'ticketID': '1',
         'action': 'Claim'
     }
-    response2 = tutor_client.post('/update-ticket', data=claimData)
+    response = tutor_client.post('/update-ticket', data=claimData)
 
     # make sure that test ticket status = claimed
     with app.app_context():
-        assert '302' in response2.status
+        assert '302' in response.status
         assert Ticket.query.first().status == Status.Claimed
         assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
         # check ticket is not in another category at the same time
@@ -102,7 +102,7 @@ def test_reopen_closed_ticket(tutor_client: FlaskClient, app: Flask):
         'problem':'type1',
         'mode': Mode.InPerson.value
     }
-    response1 = tutor_client.post('/create-ticket', data=ticket1)
+    tutor_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created
     with app.app_context():
@@ -113,11 +113,11 @@ def test_reopen_closed_ticket(tutor_client: FlaskClient, app: Flask):
         'ticketID': '1',
         'action': 'Claim'
     }
-    response2 = tutor_client.post('/update-ticket', data=claimData)
+    response = tutor_client.post('/update-ticket', data=claimData)
 
     # make sure that test ticket status = claimed
     with app.app_context():
-        assert '302' in response2.status
+        assert '302' in response.status
         assert Ticket.query.first().status == Status.Claimed
         assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
         # check ticket is not in another category at the same time
@@ -155,3 +155,30 @@ def test_reopen_closed_ticket(tutor_client: FlaskClient, app: Flask):
         # check ticket is not in another category at the same time
         assert Ticket.query.filter_by(status = Status.Claimed).count() != 1
         assert Ticket.query.filter_by(status = Status.Closed).count() != 1
+
+def test_close_open_ticket(tutor_client: FlaskClient, app: Flask):
+    # make a ticket
+    ticket1 = {
+        'email':'test@test.email',
+        'fullname':'John Doe',
+        'course':'course1',
+        'section':'section1',
+        'assignment':'assignment1',
+        'question':'This is my question?',
+        'problem':'type1',
+        'mode': Mode.InPerson.value
+    }
+    tutor_client.post('/create-ticket', data=ticket1)
+
+    # make sure test ticket gets created
+    with app.app_context():
+        assert Ticket.query.count() == 1
+
+    # close open ticket
+    response = tutor_client.post('/update-ticket', data={ 'ticketID': '1', 'action': 'Close' })
+
+    # make sure that test ticket status = claimed
+    with app.app_context():
+        assert '302' in response.status
+        assert Ticket.query.first().status == Status.Closed
+        assert Ticket.query.filter_by(status = Status.Closed).count() == 1

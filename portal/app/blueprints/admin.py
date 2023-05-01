@@ -30,8 +30,7 @@ def view_tutors():
     # NOTE: Cannot use inequality operators < > <= >= on enum from database as only
     #       the enum name is actually persisted.
     #
-    tutors = User.query.filter(User.permission == Permission.Tutor or User.permission == Permission.Admin)
-    return render_template('admin-tutors.html', tutors=tutors)
+    return render_template('admin-tutors.html', tutors=User.get_tutors())
 
 @admin.route('/tutors/add', methods=['POST'])
 @permission_required(Permission.Admin)

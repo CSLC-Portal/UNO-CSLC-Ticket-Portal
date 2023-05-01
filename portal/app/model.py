@@ -11,6 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from .extensions import db
 from flask_login import UserMixin
 
+from datetime import datetime
 import enum
 
 Base = declarative_base(name='Base')
@@ -63,43 +64,6 @@ class Season(enum.Enum):
     Summer = 3
     Fall = 4
 
-class Ticket(db.Model):
-    """
-    The Ticket class is the main Model for the ticket objects that get created when students create and submit thier tickets for help.
-    Every time a ticket is created, the student will only actualy enter in the following information:
-    student_email, student_name, course, seciton, assignment_name, specific_question, and problem_type.
-    The rest of the data fields are used in backoffice processing.
-    """
-    __tablename__ = 'Tickets'
-
-    id = Column(Integer, primary_key=True, doc='Autonumber primary key for the ticket table.')
-    student_email = Column(String(25), nullable=False, doc='Email of the student making the ticket.')
-    student_name = Column(String(25), doc='The name of student making the ticket.')
-    course = Column(String(25), doc='The specific course this ticket issue is related to.')
-    section = Column(String(25), doc='Course section ticket issue is relating to.')
-    assignment_name = Column(String(25), doc='Assignment the student needs help with.')
-    specific_question = Column(String(25), doc='Student question about the assignment.')
-    problem_type = Column(String(25), doc='Type of problem the student is having.')
-    time_created = Column(DateTime(True), nullable=False, doc='Time the ticket was created.', default=func.now())
-    time_claimed = Column(DateTime(True), doc='Time the ticket was claimed by tutor.')
-    status = Column(Enum(Status), doc='Status of the ticket. 1=open, 2=claimed, 3=closed.', default=Status.Open)
-    time_closed = Column(DateTime(True), doc='Time the tutor marked the ticket as closed.')
-    session_duration = Column(Time(True), doc='Amount of time the tutor spent on the ticket/student.')
-    mode = Column(Enum(Mode), doc='Specifies whether the ticket was made for online or in-person help.')
-    tutor_notes = Column(String(255), doc='Space for tutors to write notes about student/ticket session.', default="")
-    tutor_id = Column(Integer, db.ForeignKey('Users.id'), doc='Foreign key to the tutor who claimed this ticket.')
-    successful_session = Column(Boolean, doc='T/F if the tutor was able to help the student with issue on ticket')
-
-    def __init__(self, sEmailIn, sNameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, modeIn):
-        self.student_email = sEmailIn
-        self.student_name = sNameIn
-        self.course = crsIn
-        self.section = secIn
-        self.assignment_name = assgnIn
-        self.specific_question = quesIn
-        self.problem_type = prblmIn
-        self.mode = modeIn
-
 class User(db.Model, UserMixin):
     """
     The User class is the main model for every user that interacts with the CSLC Portal. In general there are only
@@ -127,8 +91,89 @@ class User(db.Model, UserMixin):
         self.tutor_is_active = isActiveIn
         self.tutor_is_working = isWorkingIn
 
+    @staticmethod
+    def get_tutors():
+        # TODO: Cannot use inequality operators < > <= >= on enum from database as only
+        #       the enum name is actually persisted. Find a way around this while keeping enum column?
+        return User.query.filter(User.permission == Permission.Tutor or User.permission == Permission.Admin)
+
+    @staticmethod
+    def get_students():
+        return User.query.filter(User.permission == Permission.Student)
+
+    @staticmethod
+    def get_admins():
+        return User.query.filter(User.permission == Permission.Admin)
+
     def __repr__(self):
         return f'{self.name} ({self.email})'
+
+class Ticket(db.Model):
+    """
+    The Ticket class is the main Model for the ticket objects that get created when students create and submit thier tickets for help.
+    Every time a ticket is created, the student will only actualy enter in the following information:
+    student_email, student_name, course, seciton, assignment_name, specific_question, and problem_type.
+    The rest of the data fields are used in backoffice processing.
+    """
+    __tablename__ = 'Tickets'
+
+    id = Column(Integer, primary_key=True, doc='Autonumber primary key for the ticket table.')
+    student_email = Column(String(25), nullable=False, doc='Email of the student making the ticket.')
+    student_name = Column(String(25), doc='The name of student making the ticket.')
+    course = Column(String(25), doc='The specific course this ticket issue is related to.')
+    section = Column(String(25), doc='Course section ticket issue is relating to.')
+    assignment_name = Column(String(25), doc='Assignment the student needs help with.')
+    specific_question = Column(String(25), doc='Student question about the assignment.')
+    problem_type = Column(String(25), doc='Type of problem the student is having.')
+    time_created = Column(DateTime(True), nullable=False, doc='Time the ticket was created.', default=func.now())
+    time_claimed = Column(DateTime(True), doc='Time the ticket was claimed by tutor.')
+    time_closed = Column(DateTime(True), doc='Time the tutor marked the ticket as closed.')
+    status = Column(Enum(Status), doc='Status of the ticket. 1=open, 2=claimed, 3=closed.', default=Status.Open)
+    mode = Column(Enum(Mode), doc='Specifies whether the ticket was made for online or in-person help.')
+    tutor_notes = Column(String(255), doc='Space for tutors to write notes about student/ticket session.', default="")
+    tutor_id = Column(Integer, db.ForeignKey('Users.id'), doc='Foreign key to the tutor who claimed this ticket.')
+    successful_session = Column(Boolean, doc='T/F if the tutor was able to help the student with issue on ticket')
+    # session_duration = Column(Time(True), doc='Amount of time the tutor spent on the ticket/student.')
+
+    def __init__(self, sEmailIn, sNameIn, crsIn, secIn, assgnIn, quesIn, prblmIn, modeIn):
+        self.student_email = sEmailIn
+        self.student_name = sNameIn
+        self.course = crsIn
+        self.section = secIn
+        self.assignment_name = assgnIn
+        self.specific_question = quesIn
+        self.problem_type = prblmIn
+        self.mode = modeIn
+
+    def claim(self, tutor: User):
+        self.tutor_id = tutor.id
+        self.status = Status.Claimed
+        self.time_claimed = datetime.now()
+
+    def close(self):
+        self.status = Status.Closed
+        self.time_closed = datetime.now()
+
+    def reopen(self):
+        self.status = Status.Open
+
+    def calc_duration_open(self):
+        if self.time_claimed is None:
+            return datetime.now() - self.time_created
+
+        return self.time_claimed - self.time_created
+
+    def calc_duration_claimed(self):
+        if self.time_claimed is None:
+            return 0  # Ticket hasn't been claimed yet
+
+        if self.time_closed is None:
+            return datetime.now() - self.time_claimed
+
+        return self.time_closed - self.time_claimed
+
+    def __repr__(self):
+        return f'Ticket: {self.specific_question} ({self.student_name})'
 
 class Messages(db.Model):
     """
@@ -148,6 +193,9 @@ class Messages(db.Model):
         self.message = messageIn
         self.start_date = startIn
         self.end_date = endIn
+
+    def __repr__(self):
+        return f'{self.message} ({self.start_date})'
 
 class ProblemTypes(db.Model):
     """

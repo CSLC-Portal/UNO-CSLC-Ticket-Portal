@@ -247,7 +247,7 @@ def test_edit_tutor(tutor_client: FlaskClient, app: Flask):
         db.session.commit()
 
         # current user, tutor2, and tutor3 are all users in db
-        students = User.query.filter(User.permission == Permission.Student)
+        students = User.get_students()
         assert User.query.count() == 3
         assert students.count() == 2
 
@@ -374,7 +374,7 @@ def test_edit_multiple_attributes(tutor_client: FlaskClient, app: Flask):
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
         assert testTicket.tutor_notes == "TTEESSTT Tutor N0T3s!!"
 
-# claim the open ticket
+    # claim the open ticket
     claimData = {
         'ticketID': '1',
         'action': 'Claim'
@@ -400,7 +400,7 @@ def test_edit_multiple_attributes(tutor_client: FlaskClient, app: Flask):
         db.session.add(tutor3)
         db.session.commit()
         # current user, tutor2, and tutor3 are all users in db
-        students = User.query.filter(User.permission == Permission.Student)
+        students = User.get_students()
         assert User.query.count() == 3
         assert students.count() == 2
 
