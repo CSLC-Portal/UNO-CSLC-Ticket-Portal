@@ -182,26 +182,28 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="app.html#app.model.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.email"><code class="docutils literal notranslate"><span class="pre">User.email</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.name"><code class="docutils literal notranslate"><span class="pre">User.name</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.oid"><code class="docutils literal notranslate"><span class="pre">User.oid</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.permission_level"><code class="docutils literal notranslate"><span class="pre">User.permission_level</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.permission"><code class="docutils literal notranslate"><span class="pre">User.permission</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.query"><code class="docutils literal notranslate"><span class="pre">User.query</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.tickets"><code class="docutils literal notranslate"><span class="pre">User.tickets</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.tutor_is_active"><code class="docutils literal notranslate"><span class="pre">User.tutor_is_active</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.tutor_is_working"><code class="docutils literal notranslate"><span class="pre">User.tutor_is_working</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.user_email"><code class="docutils literal notranslate"><span class="pre">User.user_email</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="app.html#app.model.User.user_name"><code class="docutils literal notranslate"><span class="pre">User.user_name</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html">Tests for Portal Functionality</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.conftest">Configuration for Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.admin_client"><code class="docutils literal notranslate"><span class="pre">admin_client()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.app"><code class="docutils literal notranslate"><span class="pre">app()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.auth_client"><code class="docutils literal notranslate"><span class="pre">auth_client()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.cleanup"><code class="docutils literal notranslate"><span class="pre">cleanup()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.client"><code class="docutils literal notranslate"><span class="pre">client()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.create_auth_client"><code class="docutils literal notranslate"><span class="pre">create_auth_client()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.tutor_client"><code class="docutils literal notranslate"><span class="pre">tutor_client()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.test_create_ticket">Create Ticket Tests</a><ul>
@@ -211,6 +213,7 @@
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_empty_name"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_empty_question"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_question()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_invalid_mode"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_invalid_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_no_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_no_auth()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_no_data"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_no_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_post_with_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_post_with_auth()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_assignment"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_whitespace_assignment()</span></code></a></li>
@@ -219,22 +222,8 @@
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_question"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_whitespace_question()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.test_portal_anonymous">Testing Unauthorized Functionality</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_anonymous.test_create_ticket_no_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_no_auth()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_anonymous.test_index_no_auth"><code class="docutils literal notranslate"><span class="pre">test_index_no_auth()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_anonymous.test_logout_no_auth"><code class="docutils literal notranslate"><span class="pre">test_logout_no_auth()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_anonymous.test_mock_login"><code class="docutils literal notranslate"><span class="pre">test_mock_login()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.test_portal_auth">Testing Authorized Functionality</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_claim_open_ticket"><code class="docutils literal notranslate"><span class="pre">test_claim_open_ticket()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_close_claimed_ticket"><code class="docutils literal notranslate"><span class="pre">test_close_claimed_ticket()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_create_ticket_get_with_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_get_with_auth()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_index_with_auth"><code class="docutils literal notranslate"><span class="pre">test_index_with_auth()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_logout_auth"><code class="docutils literal notranslate"><span class="pre">test_logout_auth()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_portal_auth.test_reopen_closed_ticket"><code class="docutils literal notranslate"><span class="pre">test_reopen_closed_ticket()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html#testing-unauthorized-functionality">Testing Unauthorized Functionality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html#testing-authorized-functionality">Testing Authorized Functionality</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests">Module contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tests.html#tests.MockConfidentialClientApplication"><code class="docutils literal notranslate"><span class="pre">MockConfidentialClientApplication</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tests.html#tests.MockConfidentialClientApplication.MOCK_EMAIL"><code class="docutils literal notranslate"><span class="pre">MockConfidentialClientApplication.MOCK_EMAIL</span></code></a></li>
@@ -254,7 +243,6 @@
 <li class="toctree-l3"><a class="reference internal" href="app.blueprints.html#app.blueprints.auth.logout"><code class="docutils literal notranslate"><span class="pre">logout()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.blueprints.html#app.blueprints.auth.unauthorized"><code class="docutils literal notranslate"><span class="pre">unauthorized()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.blueprints.html#app.blueprints.auth.user_loader"><code class="docutils literal notranslate"><span class="pre">user_loader()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="app.blueprints.html#app.blueprints.auth.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="app.blueprints.html#module-app.blueprints.views">Views Component</a><ul>

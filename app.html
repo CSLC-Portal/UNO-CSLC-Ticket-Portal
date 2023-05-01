@@ -147,15 +147,15 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#app.model.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.email"><code class="docutils literal notranslate"><span class="pre">User.email</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.name"><code class="docutils literal notranslate"><span class="pre">User.name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.oid"><code class="docutils literal notranslate"><span class="pre">User.oid</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.User.permission_level"><code class="docutils literal notranslate"><span class="pre">User.permission_level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.permission"><code class="docutils literal notranslate"><span class="pre">User.permission</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.query"><code class="docutils literal notranslate"><span class="pre">User.query</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.tickets"><code class="docutils literal notranslate"><span class="pre">User.tickets</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.tutor_is_active"><code class="docutils literal notranslate"><span class="pre">User.tutor_is_active</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.tutor_is_working"><code class="docutils literal notranslate"><span class="pre">User.tutor_is_working</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.User.user_email"><code class="docutils literal notranslate"><span class="pre">User.user_email</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.User.user_name"><code class="docutils literal notranslate"><span class="pre">User.user_name</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -732,13 +732,25 @@ customized per-model by overriding <code class="xref py py-attr docutils literal
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">UserMixin</span></code></p>
 <p>The User class is the main model for every user that interacts with the CSLC Portal. In general there are only
 three types ofusers: students, tutuors, and admins. In order to determine what user is what, we have added a field
-called ‘permission_level’ which specifies which type of user the user object is. For example, a student User would have
+called ‘permission’ which specifies which type of user the user object is. For example, a student User would have
 permission level of 1, tutor a permission level of 2, and an admin a permission level of 3. This way we can restrict what certain
 users are able to do on the CSLC portal like adding/modifying tutors, viewing ticket data, generating reports, etc</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.User.email">
+<span class="sig-name descname"><span class="pre">email</span></span><a class="headerlink" href="#app.model.User.email" title="Permalink to this definition"></a></dt>
+<dd><p>Email of user</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="app.model.User.id">
 <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.model.User.id" title="Permalink to this definition"></a></dt>
 <dd><p>Autonumber primary key for the users table.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.User.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#app.model.User.name" title="Permalink to this definition"></a></dt>
+<dd><p>Users name</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -748,9 +760,9 @@ users are able to do on the CSLC portal like adding/modifying tutors, viewing ti
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.User.permission_level">
-<span class="sig-name descname"><span class="pre">permission_level</span></span><a class="headerlink" href="#app.model.User.permission_level" title="Permalink to this definition"></a></dt>
-<dd><p>Specifies permission level of user. e.g. 0=lowest, 3=superuser</p>
+<dt class="sig sig-object py" id="app.model.User.permission">
+<span class="sig-name descname"><span class="pre">permission</span></span><a class="headerlink" href="#app.model.User.permission" title="Permalink to this definition"></a></dt>
+<dd><p>Specifies permission level of user</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -780,18 +792,6 @@ customized per-model by overriding <code class="xref py py-attr docutils literal
 <dt class="sig sig-object py" id="app.model.User.tutor_is_working">
 <span class="sig-name descname"><span class="pre">tutor_is_working</span></span><a class="headerlink" href="#app.model.User.tutor_is_working" title="Permalink to this definition"></a></dt>
 <dd><p>T/F if the tutor is currently working</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.User.user_email">
-<span class="sig-name descname"><span class="pre">user_email</span></span><a class="headerlink" href="#app.model.User.user_email" title="Permalink to this definition"></a></dt>
-<dd><p>Email of user</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.User.user_name">
-<span class="sig-name descname"><span class="pre">user_name</span></span><a class="headerlink" href="#app.model.User.user_name" title="Permalink to this definition"></a></dt>
-<dd><p>Users name</p>
 </dd></dl>
 
 </dd></dl>
