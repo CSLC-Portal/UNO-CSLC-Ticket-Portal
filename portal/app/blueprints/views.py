@@ -320,15 +320,18 @@ def add_course():
         else:
             displayOnIndex = False
 
+        # TODO: beef up the quality of checking for if course already exists in DB
         # create course but check if it is already added in DB
-        tmpCourse = Courses.query.filter_by(number=courseNumber, course_name=courseName)
+        tmpCourse = Courses.query.filter_by(number=courseNumber, course_name=courseName).first()
         if tmpCourse is None:
             newCourse = Courses(courseNumber, courseName, displayOnIndex)
             db.session.add(newCourse)
             db.session.commit()
-            # TODO: return success flash like create ticket
+            flash('Course created successfully!', category='success')
+            # TODO: return redirect for admin console home?
         else:
-            # TODO: return fail flash like create ticket
+            flash('Course already exists in database!', category='error')
+            print("COURSE ALREADY IN DB!")
             pass
 
     # get all courses, just for validation in html
