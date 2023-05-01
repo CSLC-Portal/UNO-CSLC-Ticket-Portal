@@ -1,10 +1,28 @@
 {% extends "base.html" %}
 {% block title %}Admin Console{% endblock %}
 {% block content %}
+<form action="{{ url_for('views.add_course') }}" method="POST">
+    <div class="form-group">
+        <label for="courseNumber"><strong>Course Number</strong></label>
+        <input type="text" class="form-control" id="courseNumber" placeholder="E.g. CSCI 4970" name="courseNumber" required>
+    </div>
 
-<form>
-    
+    <div class="form-group">
+        <label for="courseName"><strong>Course Name</strong></label>
+        <input type="text" class="form-control" id="courseName" placeholder="E.g. Capstone" name="courseName" required>
+    </div>
+
+    <input type="checkbox" id="displayOnIndex" name="displayOnIndex" value="display">
+    <label for="successfulSession"><strong>Display on Home Screen</strong></label><br><br>
+
+    <button type="submit" class="btn btn-primary" name="SaveChanges">Submit</button>
+
 </form>
+
+<h1>All added courses:</h1>
+{% for course in courses %}
+    {{ course.__repr__() }}<br>
+{% endfor %}
 
 
 {% endblock %}

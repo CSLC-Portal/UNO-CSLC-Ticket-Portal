@@ -14,6 +14,7 @@ from app.model import Ticket
 from app.model import Mode
 from app.model import Status
 from app.model import User
+from app.model import Courses
 
 from datetime import datetime
 from datetime import timedelta
@@ -216,12 +217,6 @@ def edit_ticket():
 
     return render_template('view_tickets.html', Status=Status, user=current_user, tutors=tutors, tickets=tickets)
 
-@views.route('/admin-add-course', methods=["GET", "POST"])
-@login_required
-def add_course():
-
-    return "TEST"
-
 # TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):
     """
@@ -306,3 +301,36 @@ def _now():
     :return: Current time in Coordinated Universal Time (UTC)
     """
     return datetime.now()
+
+@views.route('/admin-course', methods=["GET", "POST"])
+@login_required
+def add_course():
+
+    if request.method == "POST":
+        courseNumber = request.form.get("courseNumber")
+        courseName = request.form.get("courseName")
+        displayOnIndex = request.form.get("displayOnIndex")
+        print("COURSE NUMBER: " + str(courseNumber))
+        print("COURSE NAME: " + str(courseName))
+        print("DISPLAY ON INDEX: " + str(displayOnIndex))
+
+        # set on display
+        if displayOnIndex is not None:
+            displayOnIndex = True
+        else:
+            displayOnIndex = False
+
+        # create course but check if it is already added in DB
+        tmpCourse = Courses.query.filter_by(number=courseNumber, course_name=courseName)
+        if tmpCourse is None:
+            newCourse = Courses(courseNumber, courseName, displayOnIndex)
+            db.session.add(newCourse)
+            db.session.commit()
+            # TODO: return success flash like create ticket
+        else:
+            # TODO: return fail flash like create ticket
+            pass
+
+    # get all courses, just for validation in html
+    courses = Courses.query.all()
+    return render_template('admin-course.html', courses=courses)

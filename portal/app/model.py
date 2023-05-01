@@ -159,11 +159,13 @@ class Courses(db.Model):
     sections = db.relationship('Sections', backref='course')
     # TODO: add in tutors relationship and tickets relationship
 
-    def __init__(self, numIn, nameIn, displayIn, secIn):
+    def __init__(self, numIn, nameIn, displayIn):
         self.number = numIn
         self.course_name = nameIn
         self.on_display = displayIn
-        self.sections = secIn
+
+    def __repr__(self):
+        return f'{self.number}, {self.course_name}, {self.on_display}, Sections: {self.sections}'
 
 class Sections(db.Model):
     """
