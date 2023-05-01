@@ -103,7 +103,7 @@ def view_tickets():
 
     # get the tutors to display for edit ticket modal if the user presses it
     return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
-                           loopNum=loopNum, Status=Status, user=current_user, tickets=tickets, tutors=User.get_tutors())
+                           loopNum=loopNum, Status=Status, user=current_user, tickets=tickets)
 
 @views.route('/update-ticket', methods=["GET", "POST"])
 @permission_required(Permission.Tutor)

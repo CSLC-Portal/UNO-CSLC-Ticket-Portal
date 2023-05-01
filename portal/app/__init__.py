@@ -8,6 +8,8 @@ from . import default_config
 
 from .blueprints.admin import create_pseudo_user
 from sqlalchemy.exc import IntegrityError
+from .model import Mode
+from .model import Status
 from .model import Permission
 
 from time import sleep
@@ -36,6 +38,12 @@ def create_app():
     _add_default_admin(app)
 
     app.jinja_env.globals['user'] = current_user
+    app.jinja_env.globals['Mode'] = Mode
+    app.jinja_env.globals['Status'] = Status
+    app.jinja_env.globals['Permission'] = Permission
+
+    from . import model
+    app.jinja_env.globals['model'] = model
     return app
 
 def _setup_env(app: Flask):

@@ -3,6 +3,8 @@ from flask.testing import FlaskClient
 
 import os
 
+# TODO: Need to test more invalid input (e.g. long usernames, emails, etc.) break the database!
+
 def test_index_no_auth(client: FlaskClient):
     response = client.get('/')
 

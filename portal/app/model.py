@@ -4,6 +4,7 @@ from sqlalchemy import Integer
 from sqlalchemy import DateTime
 from sqlalchemy import Enum
 from sqlalchemy import Boolean
+from sqlalchemy import Text
 
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
@@ -83,8 +84,8 @@ class User(db.Model, UserMixin):
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the users table.')
     oid = Column(String(50), unique=True, doc='ID token returned for the requestor. This is returned from MS authentication')
     permission = Column(Enum(Permission), nullable=False, doc='Specifies permission level of user')
-    email = Column(String(25), unique=True, nullable=False, doc='Email of user')
-    name = Column(String(25), doc='Users name')
+    email = Column(String(120), unique=True, nullable=False, doc='Email of user')
+    name = Column(String(120), doc='Users name')
     tutor_is_active = Column(Boolean, doc='T/F if the tutor is currently employed')
     tutor_is_working = Column(Boolean, doc='T/F if the tutor is currently working')
     tickets = db.relationship('Ticket', backref='user')
@@ -135,19 +136,19 @@ class Ticket(db.Model):
     __tablename__ = 'Tickets'
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the ticket table.')
-    student_email = Column(String(25), nullable=False, doc='Email of the student making the ticket.')
-    student_name = Column(String(25), doc='The name of student making the ticket.')
-    course = Column(String(25), doc='The specific course this ticket issue is related to.')
-    section = Column(String(25), doc='Course section ticket issue is relating to.')
-    assignment_name = Column(String(25), doc='Assignment the student needs help with.')
-    specific_question = Column(String(25), doc='Student question about the assignment.')
-    problem_type = Column(String(25), doc='Type of problem the student is having.')
+    student_email = Column(String(120), nullable=False, doc='Email of the student making the ticket.')
+    student_name = Column(String(120), doc='The name of student making the ticket.')
+    course = Column(String(120), doc='The specific course this ticket issue is related to.')
+    section = Column(String(120), doc='Course section ticket issue is relating to.')
+    assignment_name = Column(String(120), doc='Assignment the student needs help with.')
+    specific_question = Column(Text, doc='Student question about the assignment.')
+    problem_type = Column(String(120), doc='Type of problem the student is having.')
     time_created = Column(DateTime(True), nullable=False, doc='Time the ticket was created.', default=func.now())
     time_claimed = Column(DateTime(True), doc='Time the ticket was claimed by tutor.')
     time_closed = Column(DateTime(True), doc='Time the tutor marked the ticket as closed.')
     status = Column(Enum(Status), doc='Status of the ticket. 1=open, 2=claimed, 3=closed.', default=Status.Open)
     mode = Column(Enum(Mode), doc='Specifies whether the ticket was made for online or in-person help.')
-    tutor_notes = Column(String(255), doc='Space for tutors to write notes about student/ticket session.', default="")
+    tutor_notes = Column(Text, doc='Space for tutors to write notes about student/ticket session.', default="")
     tutor_id = Column(Integer, db.ForeignKey('Users.id'), doc='Foreign key to the tutor who claimed this ticket.')
     successful_session = Column(Boolean, doc='T/F if the tutor was able to help the student with issue on ticket')
     # session_duration = Column(Time(True), doc='Amount of time the tutor spent on the ticket/student.')
@@ -192,7 +193,7 @@ class Ticket(db.Model):
     def __repr__(self):
         return f'Ticket: {self.specific_question} ({self.student_name})'
 
-class Messages(db.Model):
+class Message(db.Model):
     """
     The Messages class is the main model for storing messages that the CSLC admins put in place to be displayed on the website.
     Each message has a string message, a start date, and an end date. This way the admins are able to specify a certain length of
@@ -202,7 +203,7 @@ class Messages(db.Model):
     __tablename__ = 'Messages'
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Messages table')
-    message = Column(String(255), doc='The text of the message to be displayed.')
+    message = Column(Text, doc='The text of the message to be displayed.')
     start_date = Column(DateTime(True), nullable=False, doc='The start date for the duration of the message to be displayed.')
     end_date = Column(DateTime(True), nullable=False, doc='The end date for the duration of the message to be displayed.')
 
@@ -214,7 +215,7 @@ class Messages(db.Model):
     def __repr__(self):
         return f'{self.message} ({self.start_date})'
 
-class ProblemTypes(db.Model):
+class ProblemType(db.Model):
     """
     The ProblemTypes class is the main model for storing the different problem types that the admins and tutors would like to configure.
     The problem types themselves are set in the ticket creation process by the students creating the tickets. This table models the options
@@ -223,14 +224,14 @@ class ProblemTypes(db.Model):
     __tablename__ = 'ProblemTypes'
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the ProblemTypes table.')
-    problem_type = Column(String(255), doc='The description of the problem type - defined by admin or tutor.')
+    problem_type = Column(Text, doc='The description of the problem type - defined by admin or tutor.')
     # TODO: might want to add relationship to tickets value 'problem_type', something like this:
     # tickets = db.relationship('Ticket', backref='prblm_type')
 
     def __init__(self, prblmIn):
         self.problem_type = prblmIn
 
-class Courses(db.Model):
+class Course(db.Model):
     """
     The Courses class is the main model for storing the different courses that are available for assistence within the tutoring center. The
     courses that are in this table are defined and populated by admins (and possibly tutors too).
@@ -241,7 +242,7 @@ class Courses(db.Model):
     number = Column(String(25), nullable=False, doc='The course number for a class. E.g., CSCI 4970')
     course_name = Column(String(50), nullable=False, doc='The name of the course itself. E.g., Operating Systems, Java II, etc.')
     on_display = Column(Boolean, doc="T/F if course should be displayed in available courses. This way admin does not need to keep adding/deleting a course.")
-    sections = db.relationship('Sections', backref='course')
+    sections = db.relationship('Section', backref='course')
     # TODO: add in tutors relationship and tickets relationship
 
     def __init__(self, numIn, nameIn, displayIn, secIn):
@@ -250,7 +251,7 @@ class Courses(db.Model):
         self.on_display = displayIn
         self.sections = secIn
 
-class Sections(db.Model):
+class Section(db.Model):
     """
     The Sections class is the model for storing the different sections of courses that are available for assistence within the tutoring center.
     Different sections could be taught by different professors. Different sections are also taught at different times of the year. An example of
@@ -270,7 +271,7 @@ class Sections(db.Model):
         self.section_number = secIn
         self.time = timeIn
 
-class Professors(db.Model):
+class Professor(db.Model):
     """
     The Professors class is the model for representing different professors that teach various courses.
     """
@@ -279,13 +280,13 @@ class Professors(db.Model):
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Professors table.')
     first_name = Column(String(50), nullable=False, doc='First name of professor.')
     last_name = Column(String(50), nullable=False, doc='Last name of professor.')
-    sections = db.relationship('Sections', backref='professor')
+    sections = db.relationship('Section', backref='professor')
 
     def __init__(self, firstIn, lastIn):
         self.first_name = firstIn
         self.last_name = lastIn
 
-class Semesters(db.Model):
+class Semester(db.Model):
     """
     The Semesters class is used to model the different pieces of information that represent a college Semester. Each semester has
     a year, season, start date, and an end date. For example: Spring 2023 (which has a start date of Jan 26, and an end date of May 15).
@@ -299,7 +300,7 @@ class Semesters(db.Model):
     season = Column(Enum(Season), nullable=False, doc='The season of the semester. E.g., Fall')
     start_date = Column(DateTime(True), nullable=False, doc='The start date, or first day, of a semester.')
     end_date = Column(DateTime(True), nullable=False, doc='The end date, or last day, of a semester.')
-    sections = db.relationship('Sections', backref='semester')
+    sections = db.relationship('Section', backref='semester')
 
     def __init__(self, yearIn, seasonIn, startIn, endIn):
         self.year = yearIn

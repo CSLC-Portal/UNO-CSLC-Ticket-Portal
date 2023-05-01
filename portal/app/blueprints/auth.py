@@ -1,8 +1,19 @@
 from sys import stderr
+
 from flask import Blueprint
-from flask import render_template, session, request, redirect, url_for
-from flask_login import login_user, login_required, logout_user, current_user
-from sqlalchemy.orm import Query
+from flask import session
+from flask import request
+from flask import redirect
+from flask import url_for
+from flask import flash
+from flask import render_template
+
+from flask_login import login_user
+from flask_login import login_required
+from flask_login import logout_user
+from flask_login import current_user
+
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm.exc import MultipleResultsFound
 
 from ..model import Permission
@@ -46,6 +57,10 @@ def authorized():
     except ValueError:  # Usually caused by CSRF, Simply ignore them
         pass
 
+    except Exception as e:
+        flash('Could not sign-in, unknown error.', category='error')
+        print(f'{e}', file=stderr)
+
     return redirect(url_for("auth.index"))
 
 @auth.route("/logout")
@@ -78,8 +93,9 @@ def _user_from_claims(token_claims: str):
     try:
         user: User = User.query.filter_by(oid=oid).one_or_none()
 
-    except MultipleResultsFound:
+    except MultipleResultsFound as e:
         print(f'Found more than one user for oid: \'{oid}\'', file=stderr)
+        e.add_note(f'Found more than one user for oid: \'{oid}\'')
         return
 
     # This may be an incomplete user
@@ -99,8 +115,13 @@ def _user_from_claims(token_claims: str):
             print(f'Creating new entry in database for user {oid}...')
             user = User(oid, Permission.Student, preferred_name, name, False, False)
 
-        db.session.add(user)
-        db.session.commit()
+        try:
+            db.session.add(user)
+            db.session.commit()
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            raise e
 
     # TODO: Check if user is active tutor/admin and set them as actively working
 

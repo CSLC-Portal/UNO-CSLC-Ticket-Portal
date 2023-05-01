@@ -5,6 +5,8 @@ from flask.testing import FlaskClient
 
 import pytest
 
+# TODO: Need to test more invalid input (e.g. long strings, etc.) break the database!
+
 def test_create_ticket_no_auth(client: FlaskClient):
     response1 = client.get('/create-ticket')
     response2 = client.post('/create-ticket')
