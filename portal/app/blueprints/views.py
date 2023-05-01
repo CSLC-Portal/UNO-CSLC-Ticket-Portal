@@ -23,6 +23,7 @@ from app.extensions import db
 from werkzeug.datastructures import ImmutableMultiDict
 
 import sys
+import re
 
 views = Blueprint('views', __name__)
 
@@ -307,12 +308,17 @@ def _now():
 def add_course():
 
     if request.method == "POST":
-        courseNumber = request.form.get("courseNumber")
-        courseName = request.form.get("courseName")
+        courseDepartment = _strip_or_none(request.form.get("courseDepartment"))
+        courseNumber = _strip_or_none(request.form.get("courseNumber"))
+        courseName = _strip_or_none(request.form.get("courseName"))
         displayOnIndex = request.form.get("displayOnIndex")
+        print("COURSE DEPARTMENT: " + str(courseDepartment))
         print("COURSE NUMBER: " + str(courseNumber))
         print("COURSE NAME: " + str(courseName))
         print("DISPLAY ON INDEX: " + str(displayOnIndex))
+
+        # set up regex
+        # m = re.match("(^[A-Z]{2,4})\\s?(\\d{4})$", courseNumber)
 
         # set on display
         if displayOnIndex is not None:
@@ -320,19 +326,25 @@ def add_course():
         else:
             displayOnIndex = False
 
-        # TODO: beef up the quality of checking for if course already exists in DB
-        # create course but check if it is already added in DB
-        tmpCourse = Courses.query.filter_by(number=courseNumber, course_name=courseName).first()
-        if tmpCourse is None:
-            newCourse = Courses(courseNumber, courseName, displayOnIndex)
-            db.session.add(newCourse)
-            db.session.commit()
-            flash('Course created successfully!', category='success')
-            # TODO: return redirect for admin console home?
+        # validate the input coming in. store everything in DB the same
+        if _str_empty(courseDepartment):
+            flash('Could not create course, course department must not be empty!', category='error')
+        elif _str_empty(courseNumber):
+            flash('Could not create course, course number must not be empty!', category='error')
+        elif _str_empty(courseName):
+            flash('Could not create course, course name must not be empty!', category='error')
         else:
-            flash('Course already exists in database!', category='error')
-            print("COURSE ALREADY IN DB!")
-            pass
+
+            tmpCourse = Courses.query.filter_by(number=courseNumber, course_name=courseName).first()
+            if tmpCourse is None:
+                newCourse = Courses(courseDepartment, courseNumber, courseName, displayOnIndex)
+                db.session.add(newCourse)
+                db.session.commit()
+                flash('Course created successfully!', category='success')
+                # TODO: return redirect for admin console home?
+            else:
+                flash('Course already exists in database!', category='error')
+                print("COURSE ALREADY IN DB!")
 
     # get all courses, just for validation in html
     courses = Courses.query.all()
