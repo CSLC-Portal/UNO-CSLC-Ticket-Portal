@@ -1,8 +1,16 @@
-from sqlalchemy import Column, String, Integer, DateTime, Enum, Boolean, Time
+from sqlalchemy import Column
+from sqlalchemy import String
+from sqlalchemy import Integer
+from sqlalchemy import DateTime
+from sqlalchemy import Enum
+from sqlalchemy import Boolean
+from sqlalchemy import Time
+
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
 from .extensions import db
 from flask_login import UserMixin
+
 import enum
 
 Base = declarative_base(name='Base')
@@ -32,6 +40,18 @@ class Permission(enum.Enum):
     Student = 1
     Tutor = 2
     Admin = 3
+
+    def __lt__(self, other):
+        return self.value < other.value
+
+    def __gt__(self, other):
+        return self.value > other.value
+
+    def __le__(self, other):
+        return self.value <= other.value
+
+    def __ge__(self, other):
+        return self.value >= other.value
 
 class Season(enum.Enum):
     """
@@ -84,31 +104,31 @@ class User(db.Model, UserMixin):
     """
     The User class is the main model for every user that interacts with the CSLC Portal. In general there are only
     three types ofusers: students, tutuors, and admins. In order to determine what user is what, we have added a field
-    called 'permission_level' which specifies which type of user the user object is. For example, a student User would have
+    called 'permission' which specifies which type of user the user object is. For example, a student User would have
     permission level of 1, tutor a permission level of 2, and an admin a permission level of 3. This way we can restrict what certain
     users are able to do on the CSLC portal like adding/modifying tutors, viewing ticket data, generating reports, etc
     """
     __tablename__ = 'Users'
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the users table.')
-    oid = Column(String(50), doc='ID token returned for the requestor. This is returned from MS authentication')
-    permission_level = Column(Integer(), nullable=False, doc='Specifies permission level of user. e.g. 0=lowest, 3=superuser')
-    user_email = Column(String(25), nullable=False, doc='Email of user')
-    user_name = Column(String(25), doc='Users name')
+    oid = Column(String(50), unique=True, doc='ID token returned for the requestor. This is returned from MS authentication')
+    permission = Column(Enum(Permission), nullable=False, doc='Specifies permission level of user')
+    email = Column(String(25), unique=True, nullable=False, doc='Email of user')
+    name = Column(String(25), doc='Users name')
     tutor_is_active = Column(Boolean, doc='T/F if the tutor is currently employed')
     tutor_is_working = Column(Boolean, doc='T/F if the tutor is currently working')
     tickets = db.relationship('Ticket', backref='user')
 
     def __init__(self, oidIn, permLevelIn, emailIn, nameIn, isActiveIn, isWorkingIn):
         self.oid = oidIn
-        self.permission_level = permLevelIn
-        self.user_email = emailIn
-        self.user_name = nameIn
+        self.permission = permLevelIn
+        self.email = emailIn
+        self.name = nameIn
         self.tutor_is_active = isActiveIn
         self.tutor_is_working = isWorkingIn
 
     def __repr__(self):
-        return f'{self.user_name} ({self.user_email})'
+        return f'{self.name} ({self.email})'
 
 class Messages(db.Model):
     """

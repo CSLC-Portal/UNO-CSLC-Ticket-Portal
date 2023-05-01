@@ -1,30 +1,11 @@
-
 from flask import Flask
-from app.model import Ticket, Status, Mode
+from app.model import Ticket
+from app.model import Status
+from app.model import Mode
+
 from flask.testing import FlaskClient
 
-import pytest
-
-def test_index_with_auth(create_auth_client):
-    client = create_auth_client(name='John Smith')
-
-    response = client.get('/')
-
-    assert b'WELCOME TO THE UNO CSLC' in response.data
-
-def test_create_ticket_get_with_auth(auth_client: FlaskClient):
-    response = auth_client.get('/create-ticket')
-
-    assert b'<h1>Create Ticket Form</h1>' in response.data
-
-def test_logout_auth(auth_client: FlaskClient):
-    response = auth_client.get('/logout')
-
-    # We should be redirected to microsoft logout authority
-    assert '302' in response.status
-    assert b'logout' in response.data
-
-def test_claim_open_ticket(auth_client: FlaskClient, app: Flask):
+def test_claim_open_ticket(tutor_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
         'email':'test@test.email',
@@ -36,7 +17,7 @@ def test_claim_open_ticket(auth_client: FlaskClient, app: Flask):
         'problem':'type1',
         'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/create-ticket', data=ticket1)
+    response1 = tutor_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created
     with app.app_context():
@@ -47,18 +28,19 @@ def test_claim_open_ticket(auth_client: FlaskClient, app: Flask):
         'ticketID': '1',
         'action': 'Claim'
     }
-    response2 = auth_client.post('/update-ticket', data=claimData)
+    response2 = tutor_client.post('/update-ticket', data=claimData)
 
     # make sure that test ticket status = claimed
     with app.app_context():
-        assert '200' in response2.status
+        assert '302' in response2.status
         assert Ticket.query.first().status == Status.Claimed
         assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
+
         # check ticket is not in another category at the same time
         assert Ticket.query.filter_by(status = Status.Open).count() != 1
         assert Ticket.query.filter_by(status = Status.Closed).count() != 1
 
-def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
+def test_close_claimed_ticket(tutor_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
         'email':'test@test.email',
@@ -70,7 +52,7 @@ def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
         'problem':'type1',
         'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/create-ticket', data=ticket1)
+    response1 = tutor_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created
     with app.app_context():
@@ -81,11 +63,11 @@ def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
         'ticketID': '1',
         'action': 'Claim'
     }
-    response2 = auth_client.post('/update-ticket', data=claimData)
+    response2 = tutor_client.post('/update-ticket', data=claimData)
 
     # make sure that test ticket status = claimed
     with app.app_context():
-        assert '200' in response2.status
+        assert '302' in response2.status
         assert Ticket.query.first().status == Status.Claimed
         assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
         # check ticket is not in another category at the same time
@@ -97,18 +79,18 @@ def test_close_claimed_ticket(auth_client: FlaskClient, app: Flask):
         'ticketID': '1',
         'action': 'Close'
     }
-    repsonse3 = auth_client.post('/update-ticket', data=closeData)
+    repsonse3 = tutor_client.post('/update-ticket', data=closeData)
 
     # make sure that the test ticket status = closed
     with app.app_context():
-        assert '200' in repsonse3.status
+        assert '302' in repsonse3.status
         assert Ticket.query.first().status == Status.Closed
         assert Ticket.query.filter_by(status = Status.Closed).count() == 1
         # check ticket is not in another category at the same time
         assert Ticket.query.filter_by(status = Status.Open).count() != 1
         assert Ticket.query.filter_by(status = Status.Claimed).count() != 1
 
-def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
+def test_reopen_closed_ticket(tutor_client: FlaskClient, app: Flask):
     # make a ticket
     ticket1 = {
         'email':'test@test.email',
@@ -120,7 +102,7 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
         'problem':'type1',
         'mode': Mode.InPerson.value
     }
-    response1 = auth_client.post('/create-ticket', data=ticket1)
+    response1 = tutor_client.post('/create-ticket', data=ticket1)
 
     # make sure test ticket gets created
     with app.app_context():
@@ -131,11 +113,11 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
         'ticketID': '1',
         'action': 'Claim'
     }
-    response2 = auth_client.post('/update-ticket', data=claimData)
+    response2 = tutor_client.post('/update-ticket', data=claimData)
 
     # make sure that test ticket status = claimed
     with app.app_context():
-        assert '200' in response2.status
+        assert '302' in response2.status
         assert Ticket.query.first().status == Status.Claimed
         assert Ticket.query.filter_by(status = Status.Claimed).count() == 1
         # check ticket is not in another category at the same time
@@ -147,11 +129,11 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
         'ticketID': '1',
         'action': 'Close'
     }
-    repsonse3 = auth_client.post('/update-ticket', data=closeData)
+    repsonse3 = tutor_client.post('/update-ticket', data=closeData)
 
     # make sure that the test ticket status = closed
     with app.app_context():
-        assert '200' in repsonse3.status
+        assert '302' in repsonse3.status
         assert Ticket.query.first().status == Status.Closed
         assert Ticket.query.filter_by(status = Status.Closed).count() == 1
         # check ticket is not in another category at the same time
@@ -163,14 +145,13 @@ def test_reopen_closed_ticket(auth_client: FlaskClient, app: Flask):
         'ticketID': '1',
         'action': 'ReOpen'
     }
-    response4 = auth_client.post('/update-ticket', data=reopenData)
+    response4 = tutor_client.post('/update-ticket', data=reopenData)
 
     # make sure that the test ticket status is back to open
     with app.app_context():
-        assert '200' in response4.status
+        assert '302' in response4.status
         assert Ticket.query.first().status == Status.Open
         assert Ticket.query.filter_by(status = Status.Open).count() == 1
         # check ticket is not in another category at the same time
         assert Ticket.query.filter_by(status = Status.Claimed).count() != 1
         assert Ticket.query.filter_by(status = Status.Closed).count() != 1
-

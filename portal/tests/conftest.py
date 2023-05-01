@@ -1,5 +1,10 @@
-from app import create_app, extensions
+from app import create_app
+from app import extensions
 from flask import Flask
+
+from flask.testing import FlaskClient
+from app.model import Permission
+from app.blueprints.admin import create_pseudo_user
 
 import pytest
 import os
@@ -43,7 +48,7 @@ def client(app : Flask):
     return app.test_client()
 
 @pytest.fixture
-def create_auth_client(client: Flask):
+def create_auth_client(client: FlaskClient):
     """Provides an factory function for creating an authenticated client."""
 
     # This factory function sets some parameters we can choose in the test
@@ -68,6 +73,20 @@ def auth_client(create_auth_client):
     """Provides a default authenticated client."""
 
     return create_auth_client()
+
+@pytest.fixture
+def tutor_client(create_auth_client, app: Flask):
+    with app.app_context():
+        create_pseudo_user('tutor@email.com', Permission.Tutor)
+
+    return create_auth_client(email = 'tutor@email.com')
+
+@pytest.fixture
+def admin_client(create_auth_client, app: Flask):
+    with app.app_context():
+        create_pseudo_user('admin@email.com', Permission.Admin)
+
+    return create_auth_client(email = 'admin@email.com')
 
 @pytest.fixture(scope="session", autouse=True)
 def cleanup(request):

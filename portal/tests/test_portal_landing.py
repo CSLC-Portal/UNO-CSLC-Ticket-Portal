@@ -1,5 +1,6 @@
 
 from flask.testing import FlaskClient
+
 import os
 
 def test_index_no_auth(client: FlaskClient):
@@ -11,18 +12,6 @@ def test_index_no_auth(client: FlaskClient):
 
     # Make sure the login URL is correct
     assert b'https://login.microsoftonline.com/common' in response.data
-
-def test_create_ticket_no_auth(client: FlaskClient):
-    response1 = client.get('/create-ticket')
-    response2 = client.post('/create-ticket')
-
-    # Without authentication, expect redirect to authority login
-    assert '302' in response1.status
-    assert '302' in response2.status
-
-    # Make sure the login URL is correct
-    assert b'https://login.microsoftonline.com/common' in response1.data
-    assert b'https://login.microsoftonline.com/common' in response2.data
 
 def test_logout_no_auth(client: FlaskClient):
     response = client.get('/logout', data={})
@@ -38,3 +27,23 @@ def test_mock_login(client: FlaskClient):
 
     # After successfully authenticating, redirect to index page
     assert '302' in response.status
+
+def test_index_with_auth(create_auth_client):
+    client = create_auth_client(name='John Smith')
+
+    response = client.get('/')
+
+    assert b'WELCOME TO THE UNO CSLC' in response.data
+
+def test_create_ticket_get_with_auth(auth_client: FlaskClient):
+    response = auth_client.get('/create-ticket')
+
+    assert b'<h1>Create Ticket Form</h1>' in response.data
+
+def test_logout_with_auth(auth_client: FlaskClient):
+    response = auth_client.get('/logout')
+
+    # We should be redirected to microsoft logout authority
+    assert '302' in response.status
+    assert b'logout' in response.data
+

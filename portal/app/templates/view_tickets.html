@@ -28,7 +28,7 @@
             {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}
             <!-- Button trigger edit ticket modal -->
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false" style="background-color: transparent; border: none;">
-            <img src="static/pencil.svg" alt="edit ticket button">
+            <img src="static/img/pencil.svg" alt="edit ticket button">
         </div>
         <div class="card-body">
             <h5 class="card-title">{{ ticket.course }}</h5>
@@ -57,7 +57,7 @@
             {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}
             <!-- Button trigger edit ticket modal -->
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false" style="background-color: transparent; border: none;">
-            <img src="static/pencil.svg" alt="edit ticket button">
+            <img src="static/img/pencil.svg" alt="edit ticket button">
         </div>
         <div class="card-body">
             <h5 class="card-title">{{ ticket.course }}</h5>
@@ -85,7 +85,7 @@
             {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}
             <!-- Button trigger edit ticket modal -->
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false" style="background-color: transparent; border: none;">
-            <img src="static/pencil.svg" alt="edit ticket button">
+            <img src="static/img/pencil.svg" alt="edit ticket button">
         </button>
         </div>
         <div class="card-body">
@@ -164,9 +164,8 @@
 
             <strong>Primary Tutor</strong>
             <select class="form-control" id="primaryTutorInput" name="primaryTutorInput">
-              <option value="" disabled selected>{{ ticket.user.user_name }}</option>
               {% for tutor in tutors %}
-                  <option value="{{ tutor.id }}">{{ tutor.user_name }}</option>
+                  <option value="{{ tutor.id }}">{{ tutor.name }}</option>
               {% endfor %}
             </select>
 

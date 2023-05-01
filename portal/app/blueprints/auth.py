@@ -5,6 +5,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import Query
 from sqlalchemy.orm.exc import MultipleResultsFound
 
+from ..model import Permission
 from ..model import User
 from ..extensions import db, login_manager, auth_app_type
 
@@ -17,11 +18,6 @@ AUTHORITY = os.getenv('AAD_AUTHORITY', 'https://login.microsoftonline.com/common
 CLIENT_ID = os.getenv('AAD_CLIENT_ID')
 CLIENT_SECRET = os.getenv('AAD_CLIENT_SECRET')
 REDIRECT_PATH = os.getenv('AAD_REDIRECT_PATH')
-
-def validate():
-    assert CLIENT_ID, 'No client ID specified for authentication. Set AAD_CLIENT_ID env variable!'
-    assert CLIENT_SECRET, 'No client secret specified for authentication. Set AAD_CLIENT_SECRET env variable!'
-    assert REDIRECT_PATH, 'No redirect path specified for authentication. Set AAD_REDIRECT_PATH env variable!'
 
 @auth.route("/")
 def index():
@@ -80,21 +76,33 @@ def _user_from_claims(token_claims: str):
     oid = token_claims.get('oid')
 
     try:
-        user: Query = User.query.filter_by(oid=oid).one_or_none()
+        user: User = User.query.filter_by(oid=oid).one_or_none()
 
     except MultipleResultsFound:
         print(f'Found more than one user for oid: \'{oid}\'', file=stderr)
         return
 
-    # User does not exist in database, create new entry
+    # This may be an incomplete user
     if user is None:
-        print(f'Creating new entry in database for user {oid}...')
         name = token_claims.get('name')
         preferred_name = token_claims.get('preferred_username')
-        user = User(oid, 0, preferred_name, name, False, False)
+        user: User = User.query.filter_by(email=preferred_name).one_or_none()
+
+        # If user was found by email complete the remaining info
+        if user:
+            user.oid = oid
+            user.name = name
+            print(f'User was completed: {user}')
+
+        # If User still not found, then they don't exist in database, create new entry
+        else:
+            print(f'Creating new entry in database for user {oid}...')
+            user = User(oid, Permission.Student, preferred_name, name, False, False)
 
         db.session.add(user)
         db.session.commit()
+
+    # TODO: Check if user is active tutor/admin and set them as actively working
 
     return user
 
@@ -110,6 +118,9 @@ def _save_cache(cache):
         session["token_cache"] = cache.serialize()
 
 def _build_auth_app(cache=None):
+    assert CLIENT_ID, 'No client ID specified for authentication. Set AAD_CLIENT_ID env variable!'
+    assert CLIENT_SECRET, 'No client secret specified for authentication. Set AAD_CLIENT_SECRET env variable!'
+    assert REDIRECT_PATH, 'No redirect path specified for authentication. Set AAD_REDIRECT_PATH env variable!'
     return auth_app_type(CLIENT_ID, authority=AUTHORITY, client_credential=CLIENT_SECRET, token_cache=cache)
 
 def _build_auth_code_flow(scopes=None):

@@ -6,8 +6,13 @@ from .extensions import login_manager
 from flask_login import current_user
 from . import default_config
 
+from .blueprints.admin import create_pseudo_user
+from sqlalchemy.exc import IntegrityError
+from .model import Permission
+
 from time import sleep
 from sys import stderr
+
 import sys
 import os
 
@@ -28,6 +33,7 @@ def create_app():
 
     _create_db_models(app)
     _register_blueprints(app)
+    _add_default_admin(app)
 
     app.jinja_env.globals['user'] = current_user
     return app
@@ -85,3 +91,17 @@ def _create_db_models(app: Flask):
 
     print('Could not connect to or find database server, ensure it is running!', file=stderr)
     sys.exit(-1)
+
+def _add_default_admin(app: Flask):
+    admin_email = os.getenv('FLASK_DEFAULT_ADMIN_EMAIL')
+
+    if admin_email is None:
+        print('FLASK_DEFAULT_ADMIN_EMAIL not set. Considering setting this to add a default administrator')
+        return
+
+    with app.app_context():
+        try:
+            create_pseudo_user(admin_email, Permission.Admin)
+
+        except IntegrityError:
+            db.session.rollback()
