@@ -150,12 +150,15 @@
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.tutor_notes"><code class="docutils literal notranslate"><span class="pre">Ticket.tutor_notes</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#app.model.ToStrEnum"><code class="docutils literal notranslate"><span class="pre">ToStrEnum</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#app.model.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.email"><code class="docutils literal notranslate"><span class="pre">User.email</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.get_admins"><code class="docutils literal notranslate"><span class="pre">User.get_admins()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.get_pending"><code class="docutils literal notranslate"><span class="pre">User.get_pending()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.get_students"><code class="docutils literal notranslate"><span class="pre">User.get_students()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.get_tutors"><code class="docutils literal notranslate"><span class="pre">User.get_tutors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.is_complete"><code class="docutils literal notranslate"><span class="pre">User.is_complete()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.name"><code class="docutils literal notranslate"><span class="pre">User.name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.oid"><code class="docutils literal notranslate"><span class="pre">User.oid</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.permission"><code class="docutils literal notranslate"><span class="pre">User.permission</span></code></a></li>
@@ -331,7 +334,7 @@ customized per-model by overriding <code class="xref py py-attr docutils literal
 <dl class="py class">
 <dt class="sig sig-object py" id="app.model.Mode">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Mode" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#app.model.ToStrEnum" title="app.model.ToStrEnum"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToStrEnum</span></code></a></p>
 <p>Mode class is designed to mimic an enum for values of which a ticket can be submitted.
 A ticket can either be submitted for online or inperson help. As shown below.</p>
 <dl class="py attribute">
@@ -349,7 +352,7 @@ A ticket can either be submitted for online or inperson help. As shown below.</p
 <dl class="py class">
 <dt class="sig sig-object py" id="app.model.Permission">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Permission" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#app.model.ToStrEnum" title="app.model.ToStrEnum"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToStrEnum</span></code></a></p>
 <p>The Permission class is designed to mimic an enum for different permission levels that a User might have.
 The available permission levels are either: student, tutor, or admin</p>
 <dl class="py attribute">
@@ -447,7 +450,7 @@ customized per-model by overriding <code class="xref py py-attr docutils literal
 <dl class="py class">
 <dt class="sig sig-object py" id="app.model.Season">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Season</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Season" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#app.model.ToStrEnum" title="app.model.ToStrEnum"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToStrEnum</span></code></a></p>
 <p>The Season class is designed to mimic an enum for different season types that are used in creation of a Semester.
 The available season options are the seasons for college semesters: Spring, Summer, Fall, and potentially J-Term</p>
 <dl class="py attribute">
@@ -589,7 +592,7 @@ customized per-model by overriding <code class="xref py py-attr docutils literal
 <dl class="py class">
 <dt class="sig sig-object py" id="app.model.Status">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Status" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#app.model.ToStrEnum" title="app.model.ToStrEnum"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToStrEnum</span></code></a></p>
 <p>This Status class is designed to mimic an enum for values of which a ticket can obtain for its status value.
 A ticket can have the following three status values: Open, Claimed, or Closed. As shown below as well.</p>
 <dl class="py attribute">
@@ -753,6 +756,13 @@ customized per-model by overriding <code class="xref py py-attr docutils literal
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="app.model.ToStrEnum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">ToStrEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.ToStrEnum" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Class that overrides the __str__ method to return only the name of the enum.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="app.model.User">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oidIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permLevelIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emailIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nameIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isActiveIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isWorkingIn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.User" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">UserMixin</span></code></p>
@@ -773,6 +783,11 @@ users are able to do on the CSLC portal like adding/modifying tutors, viewing ti
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="app.model.User.get_pending">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_pending</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.User.get_pending" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="app.model.User.get_students">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_students</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.User.get_students" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -786,6 +801,13 @@ users are able to do on the CSLC portal like adding/modifying tutors, viewing ti
 <dt class="sig sig-object py" id="app.model.User.id">
 <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.model.User.id" title="Permalink to this definition"></a></dt>
 <dd><p>Autonumber primary key for the users table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.model.User.is_complete">
+<span class="sig-name descname"><span class="pre">is_complete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.User.is_complete" title="Permalink to this definition"></a></dt>
+<dd><p>Indicates whether or not this user is completed.
+Incomplete users could result from creating entries with only partial data</p>
 </dd></dl>
 
 <dl class="py attribute">
