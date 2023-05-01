@@ -143,7 +143,7 @@ def test_reopen_closed_ticket(tutor_client: FlaskClient, app: Flask):
     # reopen closed ticket
     reopenData = {
         'ticketID': '1',
-        'action': 'ReOpen'
+        'action': 'Open'
     }
     response4 = tutor_client.post('/update-ticket', data=reopenData)
 

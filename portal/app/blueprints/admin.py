@@ -2,11 +2,11 @@ from flask import Blueprint
 from flask import flash
 from flask import url_for
 from flask import redirect
+from flask import request
 from flask import render_template
 
 from app.model import User
 from app.model import Permission
-from werkzeug.datastructures import ImmutableMultiDict
 
 from app.extensions import db
 from sqlalchemy.exc import IntegrityError
@@ -34,23 +34,10 @@ def view_tutors():
 
 @admin.route('/tutors/add', methods=['POST'])
 @permission_required(Permission.Admin)
-def add_tutors():
-    return redirect(url_for('admin.tutors'))
+def add_tutor():
 
-def create_pseudo_user(email, permission):
-    """
-    Creates and inserts into the database an 'incomplete' user given an email and permission level.
-    When the user signs in using their email, the remaining info will be automatically updated
-    in the database.
-    """
-    pseudo_user = User(None, permission, email, None, False, False)
-    db.session.add(pseudo_user)
-    db.session.commit()
-
-def _attempt_add_tutor(form: ImmutableMultiDict):
-    email = strip_or_none(form.get("email"))
-
-    permission_val = strip_or_none(form.get("permission"))
+    email = strip_or_none(request.form.get("email"))
+    permission_val = strip_or_none(request.form.get("permission"))
     permission = None
 
     try:
@@ -72,3 +59,15 @@ def _attempt_add_tutor(form: ImmutableMultiDict):
 
     else:
         flash('New user successfully added!', category='success')
+
+    return redirect(url_for('admin.view_tutors'))
+
+def create_pseudo_user(email, permission):
+    """
+    Creates and inserts into the database an 'incomplete' user given an email and permission level.
+    When the user signs in using their email, the remaining info will be automatically updated
+    in the database.
+    """
+    pseudo_user = User(None, permission, email, None, False, False)
+    db.session.add(pseudo_user)
+    db.session.commit()

@@ -2,5 +2,5 @@
 exclude = __pycache__,templates,static
 max-complexity = 10
 max-line-length = 160
-ignore = H903, E266, D203, H306, E302, F401, E201, E202
+ignore = H903, E266, D203, H306, E302, F401, E201, E202, E711
 indent-size=4

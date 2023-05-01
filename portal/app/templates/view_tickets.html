@@ -27,8 +27,9 @@
             {{ ticket.student_name }} <br>
             {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}
             <!-- Button trigger edit ticket modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false" style="background-color: transparent; border: none;">
-            <img src="static/img/pencil.svg" alt="edit ticket button">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false" style="background-color: transparent; border: none;">
+                <img src="static/img/pencil.svg" alt="edit ticket button">
+            </button>
         </div>
         <div class="card-body">
             <h5 class="card-title">{{ ticket.course }}</h5>
@@ -56,8 +57,9 @@
             {{ ticket.student_name }} <br>
             {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}
             <!-- Button trigger edit ticket modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false" style="background-color: transparent; border: none;">
-            <img src="static/img/pencil.svg" alt="edit ticket button">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false" style="background-color: transparent; border: none;">
+                <img src="static/img/pencil.svg" alt="edit ticket button">
+            </button>
         </div>
         <div class="card-body">
             <h5 class="card-title">{{ ticket.course }}</h5>
@@ -84,9 +86,9 @@
             {{ ticket.student_name }} <br>
             {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}
             <!-- Button trigger edit ticket modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false" style="background-color: transparent; border: none;">
-            <img src="static/img/pencil.svg" alt="edit ticket button">
-        </button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false" style="background-color: transparent; border: none;">
+                <img src="static/img/pencil.svg" alt="edit ticket button">
+            </button>
         </div>
         <div class="card-body">
             <h5 class="card-title">{{ ticket.course }}</h5>
@@ -95,7 +97,7 @@
             <h5 class="card-title">{{ ticket.status }}</h5>
             <form action="{{ url_for('views.update_ticket') }}", method="POST">
                 <input type="hidden" name="ticketID" value="{{ ticket.id }}">
-                <button type="submit" class="btn btn-primary" name="action" value="ReOpen">ReOpen</button>
+                <button type="submit" class="btn btn-primary" name="action" value="Open">Open</button>
             </form>
         </div>
         </div>
@@ -108,14 +110,12 @@
 
 {% for ticket in tickets %}
 <!-- Modal -->
-<div class="modal fade" id="edit{{ ticket.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="edit{{ ticket.id }}" tabindex="-1" role="dialog" aria-labelledby="ticketTitle"  aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Ticket ID: {{ ticket.id }}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <h5 class="modal-title" id="ticketTitle">Ticket ID: {{ ticket.id }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form action="{{ url_for('views.edit_ticket') }}", method="POST">
         <div class="modal-body">
@@ -172,18 +172,15 @@
             <strong>Tutor Notes</strong>
             <textarea class="form-control" id="tutorNotes" rows="3" name="tutorNotes">{{ ticket.tutor_notes }}</textarea><br>
 
-            {% if ticket.successful_session == True %}
+            {% if ticket.successful_session %}
             <input type="checkbox" id="successfulSession" name="successfulSession" value="success" checked>
             {% else %}
             <input type="checkbox" id="successfulSession" name="successfulSession" value="success">
             {% endif %}
             <label for="successfulSession"><strong>Was Successful</strong></label>
-
-
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary" name="SaveChanges">Save changes</button>
         </div>
       </form>

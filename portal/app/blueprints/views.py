@@ -131,7 +131,7 @@ def update_ticket():
         db.session.commit()
         flash('Ticket closed!', category='info')
 
-    elif request.form.get("action") == "ReOpen":
+    elif request.form.get("action") == "Open":
         ticket.reopen()
         db.session.commit()
         flash('Ticket opened!', category='info')

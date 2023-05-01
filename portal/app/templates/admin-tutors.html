@@ -2,8 +2,105 @@
 {% block title %}Admin Console{% endblock %}
 {% block content %}
 
-{% for tutor in tutors %}
-    <p>{{ tutor.name }} {{ tutor.permission }}</p>
-{% endfor %}
+<div class="container p-3 gy-3">
+    <div class="row">
+        <div class="col">
+            <h1>Manage Tutors</h1>
+            <hr />
+        </div>
+    </div>
+
+    <div class="row p-3">
+        <form action="{{ url_for('admin.add_tutor') }}" method="post">
+            <div class="row g-2">
+                <div class="col-lg-8 col-12">
+                    <label class="form-label visually-hidden" for="email">Email</label>
+                    <div class="input-group">
+                        <div class="input-group-text">@</div>
+                        <input type="text" class="form-control" id="email" name="email" placeholder="User email" required>
+                    </div>
+                </div>
+                <div class="col-lg col-12">
+                    <label class="form-label visually-hidden" for="permission">Permission</label>
+                    <select class="form-select" name="permission" id="permission">
+                        <option value="{{ Permission.Tutor.value }}" selected>{{ Permission.Tutor }}</option>
+                        <option value="{{ Permission.Admin.value }}">{{ Permission.Admin }}</option>
+                    </select>
+                </div>
+                <div class="col-lg col-12 d-grid">
+                    <input type="submit" class="btn btn-primary" value="Add Tutor" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table align-middle caption-top">
+                    <caption>
+                        <h5 class="text-center">Pending Tutors</h5>
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Permission</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tutor in model.User.get_pending() %}
+                        <tr scope="row">
+                            <td>{{ tutor.email }}</td>
+                            <td>
+                                <span class="badge rounded-pill bg-warning">Pending</span>
+                            </td>
+                            <td>{{ tutor.permission }}</td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table align-middle caption-top">
+                    <caption>
+                        <h5 class="text-center">Existing Tutors</h5>
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Permission</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tutor in model.User.get_tutors() %}
+                        <tr scope="row">
+                            <td>{{ tutor.name }}</td>
+                            <td>{{ tutor.email }}</td>
+                            <td>
+                                {% if tutor.tutor_is_active %}
+                                    <span class="badge rounded-pill bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge rounded-pill bg-secondary">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ tutor.permission }}</td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

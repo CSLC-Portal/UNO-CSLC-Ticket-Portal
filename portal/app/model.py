@@ -4,7 +4,6 @@ from sqlalchemy import Integer
 from sqlalchemy import DateTime
 from sqlalchemy import Enum
 from sqlalchemy import Boolean
-from sqlalchemy import Time
 
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
@@ -16,7 +15,14 @@ import enum
 
 Base = declarative_base(name='Base')
 
-class Status(enum.Enum):
+class ToStrEnum(enum.Enum):
+    """
+    Class that overrides the __str__ method to return only the name of the enum.
+    """
+    def __str__(self) -> str:
+        return self.name
+
+class Status(ToStrEnum):
     """
     This Status class is designed to mimic an enum for values of which a ticket can obtain for its status value.
     A ticket can have the following three status values: Open, Claimed, or Closed. As shown below as well.
@@ -25,7 +31,7 @@ class Status(enum.Enum):
     Claimed = 2
     Closed = 3
 
-class Mode(enum.Enum):
+class Mode(ToStrEnum):
     """
     Mode class is designed to mimic an enum for values of which a ticket can be submitted.
     A ticket can either be submitted for online or inperson help. As shown below.
@@ -33,7 +39,7 @@ class Mode(enum.Enum):
     Online = 1
     InPerson = 2
 
-class Permission(enum.Enum):
+class Permission(ToStrEnum):
     """
     The Permission class is designed to mimic an enum for different permission levels that a User might have.
     The available permission levels are either: student, tutor, or admin
@@ -54,7 +60,7 @@ class Permission(enum.Enum):
     def __ge__(self, other):
         return self.value >= other.value
 
-class Season(enum.Enum):
+class Season(ToStrEnum):
     """
     The Season class is designed to mimic an enum for different season types that are used in creation of a Semester.
     The available season options are the seasons for college semesters: Spring, Summer, Fall, and potentially J-Term
@@ -91,11 +97,22 @@ class User(db.Model, UserMixin):
         self.tutor_is_active = isActiveIn
         self.tutor_is_working = isWorkingIn
 
+    def is_complete(self):
+        """
+        Indicates whether or not this user is completed.
+        Incomplete users could result from creating entries with only partial data
+        """
+        return self.oid is not None
+
     @staticmethod
     def get_tutors():
         # TODO: Cannot use inequality operators < > <= >= on enum from database as only
         #       the enum name is actually persisted. Find a way around this while keeping enum column?
-        return User.query.filter(User.permission == Permission.Tutor or User.permission == Permission.Admin)
+        return User.query.filter(((User.permission == Permission.Tutor) | (User.permission == Permission.Admin)) & (User.oid != None))
+
+    @staticmethod
+    def get_pending():
+        return User.query.filter(User.oid == None)
 
     @staticmethod
     def get_students():
