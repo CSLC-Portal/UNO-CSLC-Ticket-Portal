@@ -127,13 +127,17 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#app.model.Ticket"><code class="docutils literal notranslate"><span class="pre">Ticket</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.assignment_name"><code class="docutils literal notranslate"><span class="pre">Ticket.assignment_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.calc_duration_claimed"><code class="docutils literal notranslate"><span class="pre">Ticket.calc_duration_claimed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.calc_duration_open"><code class="docutils literal notranslate"><span class="pre">Ticket.calc_duration_open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.claim"><code class="docutils literal notranslate"><span class="pre">Ticket.claim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.close"><code class="docutils literal notranslate"><span class="pre">Ticket.close()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.course"><code class="docutils literal notranslate"><span class="pre">Ticket.course</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.id"><code class="docutils literal notranslate"><span class="pre">Ticket.id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.mode"><code class="docutils literal notranslate"><span class="pre">Ticket.mode</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.problem_type"><code class="docutils literal notranslate"><span class="pre">Ticket.problem_type</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.query"><code class="docutils literal notranslate"><span class="pre">Ticket.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.reopen"><code class="docutils literal notranslate"><span class="pre">Ticket.reopen()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.section"><code class="docutils literal notranslate"><span class="pre">Ticket.section</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.session_duration"><code class="docutils literal notranslate"><span class="pre">Ticket.session_duration</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.specific_question"><code class="docutils literal notranslate"><span class="pre">Ticket.specific_question</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.status"><code class="docutils literal notranslate"><span class="pre">Ticket.status</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Ticket.student_email"><code class="docutils literal notranslate"><span class="pre">Ticket.student_email</span></code></a></li>
@@ -148,6 +152,9 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#app.model.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.email"><code class="docutils literal notranslate"><span class="pre">User.email</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.get_admins"><code class="docutils literal notranslate"><span class="pre">User.get_admins()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.get_students"><code class="docutils literal notranslate"><span class="pre">User.get_students()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.User.get_tutors"><code class="docutils literal notranslate"><span class="pre">User.get_tutors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.name"><code class="docutils literal notranslate"><span class="pre">User.name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.User.oid"><code class="docutils literal notranslate"><span class="pre">User.oid</span></code></a></li>
@@ -616,6 +623,26 @@ The rest of the data fields are used in backoffice processing.</p>
 <dd><p>Assignment the student needs help with.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="app.model.Ticket.calc_duration_claimed">
+<span class="sig-name descname"><span class="pre">calc_duration_claimed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Ticket.calc_duration_claimed" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.model.Ticket.calc_duration_open">
+<span class="sig-name descname"><span class="pre">calc_duration_open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Ticket.calc_duration_open" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.model.Ticket.claim">
+<span class="sig-name descname"><span class="pre">claim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tutor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.model.User" title="app.model.User"><span class="pre">User</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Ticket.claim" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.model.Ticket.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Ticket.close" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="app.model.Ticket.course">
 <span class="sig-name descname"><span class="pre">course</span></span><a class="headerlink" href="#app.model.Ticket.course" title="Permalink to this definition"></a></dt>
@@ -652,16 +679,15 @@ customized per-model by overriding <code class="xref py py-attr docutils literal
 </div>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="app.model.Ticket.reopen">
+<span class="sig-name descname"><span class="pre">reopen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Ticket.reopen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="app.model.Ticket.section">
 <span class="sig-name descname"><span class="pre">section</span></span><a class="headerlink" href="#app.model.Ticket.section" title="Permalink to this definition"></a></dt>
 <dd><p>Course section ticket issue is relating to.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Ticket.session_duration">
-<span class="sig-name descname"><span class="pre">session_duration</span></span><a class="headerlink" href="#app.model.Ticket.session_duration" title="Permalink to this definition"></a></dt>
-<dd><p>Amount of time the tutor spent on the ticket/student.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -740,6 +766,21 @@ users are able to do on the CSLC portal like adding/modifying tutors, viewing ti
 <span class="sig-name descname"><span class="pre">email</span></span><a class="headerlink" href="#app.model.User.email" title="Permalink to this definition"></a></dt>
 <dd><p>Email of user</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.model.User.get_admins">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_admins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.User.get_admins" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.model.User.get_students">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_students</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.User.get_students" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.model.User.get_tutors">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_tutors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.User.get_tutors" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="app.model.User.id">
