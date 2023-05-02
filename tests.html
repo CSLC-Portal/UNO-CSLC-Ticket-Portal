@@ -53,7 +53,21 @@
 <li class="toctree-l4"><a class="reference internal" href="#tests.conftest.create_auth_client"><code class="docutils literal notranslate"><span class="pre">create_auth_client()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#create-ticket-tests">Create Ticket Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tests.test_create_ticket">Create Ticket Tests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.create_ticket_with_invalid_data"><code class="docutils literal notranslate"><span class="pre">create_ticket_with_invalid_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_empty_assignment"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_assignment()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_empty_email"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_email()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_empty_name"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_empty_question"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_question()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_invalid_mode"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_invalid_mode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_no_data"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_no_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_post_with_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_post_with_auth()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_whitespace_assignment"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_whitespace_assignment()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_whitespace_email"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_whitespace_email()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_whitespace_name"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_whitespace_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_whitespace_question"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_whitespace_question()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-tests.test_portal_anonymous">Testing Unauthorized Functionality</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_anonymous.test_create_ticket_no_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_no_auth()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_anonymous.test_index_no_auth"><code class="docutils literal notranslate"><span class="pre">test_index_no_auth()</span></code></a></li>
@@ -61,7 +75,15 @@
 <li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_anonymous.test_mock_login"><code class="docutils literal notranslate"><span class="pre">test_mock_login()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#testing-authorized-functionality">Testing Authorized Functionality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tests.test_portal_auth">Testing Authorized Functionality</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_auth.test_claim_open_ticket"><code class="docutils literal notranslate"><span class="pre">test_claim_open_ticket()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_auth.test_close_claimed_ticket"><code class="docutils literal notranslate"><span class="pre">test_close_claimed_ticket()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_auth.test_create_ticket_get_with_auth"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_get_with_auth()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_auth.test_index_with_auth"><code class="docutils literal notranslate"><span class="pre">test_index_with_auth()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_auth.test_logout_auth"><code class="docutils literal notranslate"><span class="pre">test_logout_auth()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_portal_auth.test_reopen_closed_ticket"><code class="docutils literal notranslate"><span class="pre">test_reopen_closed_ticket()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-tests">Module contents</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#tests.MockConfidentialClientApplication"><code class="docutils literal notranslate"><span class="pre">MockConfidentialClientApplication</span></code></a></li>
 </ul>
@@ -136,8 +158,68 @@ and end-to-end tests that involve every aspect of the CSLC portal. Below we will
 </dd></dl>
 
 </section>
-<section id="create-ticket-tests">
-<h2>Create Ticket Tests<a class="headerlink" href="#create-ticket-tests" title="Permalink to this heading"></a></h2>
+<section id="module-tests.test_create_ticket">
+<span id="create-ticket-tests"></span><h2>Create Ticket Tests<a class="headerlink" href="#module-tests.test_create_ticket" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.create_ticket_with_invalid_data">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">create_ticket_with_invalid_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.create_ticket_with_invalid_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_empty_assignment">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_empty_assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_ticket_with_invalid_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_empty_assignment" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_empty_email">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_empty_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_ticket_with_invalid_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_empty_email" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_empty_name">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_empty_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_ticket_with_invalid_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_empty_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_empty_question">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_empty_question</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_ticket_with_invalid_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_empty_question" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_invalid_mode">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_invalid_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_ticket_with_invalid_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_invalid_mode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_no_data">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_no_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_no_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_post_with_auth">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_post_with_auth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_post_with_auth" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_whitespace_assignment">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_whitespace_assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_ticket_with_invalid_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_whitespace_assignment" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_whitespace_email">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_whitespace_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_ticket_with_invalid_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_whitespace_email" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_whitespace_name">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_whitespace_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_ticket_with_invalid_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_whitespace_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_create_ticket.test_create_ticket_whitespace_question">
+<span class="sig-prename descclassname"><span class="pre">tests.test_create_ticket.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_whitespace_question</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_ticket_with_invalid_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_create_ticket.test_create_ticket_whitespace_question" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-tests.test_portal_anonymous">
 <span id="testing-unauthorized-functionality"></span><h2>Testing Unauthorized Functionality<a class="headerlink" href="#module-tests.test_portal_anonymous" title="Permalink to this heading"></a></h2>
@@ -162,8 +244,38 @@ and end-to-end tests that involve every aspect of the CSLC portal. Below we will
 <dd></dd></dl>
 
 </section>
-<section id="testing-authorized-functionality">
-<h2>Testing Authorized Functionality<a class="headerlink" href="#testing-authorized-functionality" title="Permalink to this heading"></a></h2>
+<section id="module-tests.test_portal_auth">
+<span id="testing-authorized-functionality"></span><h2>Testing Authorized Functionality<a class="headerlink" href="#module-tests.test_portal_auth" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_portal_auth.test_claim_open_ticket">
+<span class="sig-prename descclassname"><span class="pre">tests.test_portal_auth.</span></span><span class="sig-name descname"><span class="pre">test_claim_open_ticket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_portal_auth.test_claim_open_ticket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_portal_auth.test_close_claimed_ticket">
+<span class="sig-prename descclassname"><span class="pre">tests.test_portal_auth.</span></span><span class="sig-name descname"><span class="pre">test_close_claimed_ticket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_portal_auth.test_close_claimed_ticket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_portal_auth.test_create_ticket_get_with_auth">
+<span class="sig-prename descclassname"><span class="pre">tests.test_portal_auth.</span></span><span class="sig-name descname"><span class="pre">test_create_ticket_get_with_auth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_portal_auth.test_create_ticket_get_with_auth" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_portal_auth.test_index_with_auth">
+<span class="sig-prename descclassname"><span class="pre">tests.test_portal_auth.</span></span><span class="sig-name descname"><span class="pre">test_index_with_auth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_auth_client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_portal_auth.test_index_with_auth" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_portal_auth.test_logout_auth">
+<span class="sig-prename descclassname"><span class="pre">tests.test_portal_auth.</span></span><span class="sig-name descname"><span class="pre">test_logout_auth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_portal_auth.test_logout_auth" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_portal_auth.test_reopen_closed_ticket">
+<span class="sig-prename descclassname"><span class="pre">tests.test_portal_auth.</span></span><span class="sig-name descname"><span class="pre">test_reopen_closed_ticket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FlaskClient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_portal_auth.test_reopen_closed_ticket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-tests">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tests" title="Permalink to this heading"></a></h2>
