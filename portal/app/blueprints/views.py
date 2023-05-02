@@ -14,6 +14,7 @@ from app.model import Ticket
 from app.model import Mode
 from app.model import Status
 from app.model import User
+from app.model import ProblemTypes
 
 from datetime import datetime
 from datetime import timedelta
@@ -315,3 +316,36 @@ def _now():
     :return: Current time in Coordinated Universal Time (UTC)
     """
     return datetime.now()
+
+@views.route('/admin-problem-types', methods=["GET", "POST"])
+@login_required
+def add_problem_type():
+
+    if request.method == "POST":
+        problemType = request.form.get("problemType")
+        # courseName = request.form.get("courseName")
+        displayOnIndex = request.form.get("displayOnIndex")
+        print("PROBLEM TYPE: " + str(problemType))
+        # print("COURSE NAME: " + str(courseName))
+        print("DISPLAY ON INDEX: " + str(displayOnIndex))
+
+        # set on display
+        if displayOnIndex is not None:
+            displayOnIndex = True
+        else:
+            displayOnIndex = False
+
+        # create course but check if it is already added in DB
+        tmpProblemType = ProblemTypes.query.filter_by(problem_type=problemType)
+        if tmpProblemType is None:
+            newProblemType = ProblemTypes(problemType)
+            db.session.add(newProblemType)
+            db.session.commit()
+            # TODO: return success flash like create ticket
+        else:
+            # TODO: return fail flash like create ticket
+            pass
+
+    # get all courses, just for validation in html
+    problem = ProblemTypes.query.all()
+    return render_template('admin-problem-types.html', problem=problem)
