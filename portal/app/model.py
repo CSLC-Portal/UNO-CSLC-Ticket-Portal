@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime, Enum, Boolean, Time
+from sqlalchemy import Column, String, Integer, DateTime, Enum, Boolean, Time, Date
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
 from .extensions import db
@@ -216,8 +216,8 @@ class Semesters(db.Model):
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Semesters table.')
     year = Column(Integer, nullable=False, doc='The year of the semester. E.g., 2023.')
     season = Column(Enum(Season), nullable=False, doc='The season of the semester. E.g., Fall')
-    start_date = Column(DateTime(True), nullable=False, doc='The start date, or first day, of a semester.')
-    end_date = Column(DateTime(True), nullable=False, doc='The end date, or last day, of a semester.')
+    start_date = Column(Date, nullable=False, doc='The start date, or first day, of a semester.')
+    end_date = Column(Date, nullable=False, doc='The end date, or last day, of a semester.')
     sections = db.relationship('Sections', backref='semester')
 
     def __init__(self, yearIn, seasonIn, startIn, endIn):
@@ -225,6 +225,9 @@ class Semesters(db.Model):
         self.season = seasonIn
         self.start_date = startIn
         self.end_date = endIn
+
+    def __repr__(self):
+        return f'{self.season} {self.year}, ({self.start_date} - {self.end_date})'
 
 class CanTutor(db.Model):
     """

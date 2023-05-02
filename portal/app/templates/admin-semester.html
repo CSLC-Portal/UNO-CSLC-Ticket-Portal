@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Admin Add Semesters{% endblock %}
+{% block content %}
+<form action="" method="POST">
+    <div class="form-group">
+        <label for="yearInput"><strong>Year</strong></label>
+        <input type="text" class="form-control" id="yearInput" placeholder="E.g. 2023" name="yearInput" required>
+    </div>
+
+    <div class="form-group">
+        <label for="seasonInput"><strong>Course</strong></label>
+        <select class="form-control" id="seasonInput" name="seasonInput">
+          <option>Fall</option>
+          <option>Spring</option>
+          <option>Summer</option>
+          <option>J-Term</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="startDate"><strong>Start Date</strong></label><br>
+        <input type="date"  value="YYYY-MM-DD" name="startDate" id="startDate">
+    </div>
+
+    <div class="form-group">
+        <label for="endDate"><strong>End Date</strong></label><br>
+        <input type="date"  value="YYYY-MM-DD" name="endDate" id="endDate">
+    </div>
+
+    <button type="submit" class="btn btn-primary" name="SaveChanges">Submit</button>
+
+</form>
+
+<h1>All added semesters:</h1>
+{% for semester in semesters %}
+    {{ semester.__repr__() }}<br>
+{% endfor %}
+
+
+{% endblock %}

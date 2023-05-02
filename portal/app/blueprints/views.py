@@ -15,8 +15,9 @@ from app.model import Mode
 from app.model import Status
 from app.model import User
 from app.model import Courses
+from app.model import Semesters
 
-from datetime import datetime
+from datetime import datetime, date
 from datetime import timedelta
 
 from app.extensions import db
@@ -349,3 +350,42 @@ def add_course():
     # get all courses, just for validation in html
     courses = Courses.query.all()
     return render_template('admin-course.html', courses=courses)
+
+@views.route('/admin-semester', methods=["GET", "POST"])
+@login_required
+def admin_semester():
+
+    if request.method == "POST":
+        year = _strip_or_none(request.form.get("yearInput"))
+        season = _strip_or_none(request.form.get("seasonInput"))
+        startDate = _strip_or_none(request.form.get("startDate"))
+        endDate = _strip_or_none(request.form.get("endDate"))
+        print("YEAR: " + str(year))
+        print("SEASON: " + str(season))
+        print("START DATE: " + startDate)
+        print("END DATE: " + endDate)
+
+        # validate input coming in
+        if _str_empty(year):
+            flash('Could not create semester, year must not be empty!', category='error')
+        elif _str_empty(season):
+            flash('Could not create semester, season must not be empty!', category='error')
+        elif _str_empty(startDate):
+            flash('Could not create semester, start date must not be empty!', category='error')
+        elif _str_empty(endDate):
+            flash('Could not create semester, end date must not be empty!', category='error')
+        else:
+            # create semester and add it to DB, need to cast dates from string to date objects
+            start = datetime.strptime(startDate, "%Y-%m-%d").date()
+            end = datetime.strptime(startDate, "%Y-%m-%d").date()
+            newSemester = Semesters(year, season, start, end)
+            db.session.add(newSemester)
+            db.session.commit()
+            flash('Semester created successfully!', category='success')
+
+    num = Semesters.query.count()
+    print("NUM SEMESTERS: " + str(num))
+
+    # get all semesters, just for validation in html
+    semesters = Semesters.query.all()
+    return render_template('admin-semester.html', semesters=semesters)
