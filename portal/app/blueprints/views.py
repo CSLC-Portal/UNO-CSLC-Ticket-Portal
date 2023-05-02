@@ -377,7 +377,7 @@ def admin_semester():
         else:
             # create semester and add it to DB, need to cast dates from string to date objects
             start = datetime.strptime(startDate, "%Y-%m-%d").date()
-            end = datetime.strptime(startDate, "%Y-%m-%d").date()
+            end = datetime.strptime(endDate, "%Y-%m-%d").date()
             newSemester = Semesters(year, season, start, end)
             db.session.add(newSemester)
             db.session.commit()
