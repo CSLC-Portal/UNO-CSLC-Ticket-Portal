@@ -335,10 +335,11 @@ def add_course():
         elif _str_empty(courseName):
             flash('Could not create course, course name must not be empty!', category='error')
         else:
+            # check if course already exists in DB, get all unison input
 
-            tmpCourse = Courses.query.filter_by(number=courseNumber, course_name=courseName).first()
+            tmpCourse = Courses.query.filter_by(department=courseDepartment.upper(), number=courseNumber).first()
             if tmpCourse is None:
-                newCourse = Courses(courseDepartment, courseNumber, courseName, displayOnIndex)
+                newCourse = Courses(courseDepartment.upper(), courseNumber, courseName, displayOnIndex)
                 db.session.add(newCourse)
                 db.session.commit()
                 flash('Course created successfully!', category='success')
