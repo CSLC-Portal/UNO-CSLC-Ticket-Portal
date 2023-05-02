@@ -3,13 +3,17 @@
     padding-bottom: 50px;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 footer {
     height: 50px;
     background-color: #292929;
     text-align: right;
     min-width: 360px;
     width: 100%;
- }
+}
 
 .logo-section {
     right: 0px;
@@ -215,28 +219,30 @@ tr.middle {
     border-bottom: 1px solid #c5c4c4;
 }
 
-td.center, th.center {
+td.center,
+th.center {
     border-left: 1px solid #c5c4c4;
     border-right: 1px solid #c5c4c4;
 }
 
-td.right-end, th.right-end {
+td.right-end,
+th.right-end {
     border-left: 1px solid #c5c4c4;
     vertical-align: middle;
 }
 
- form {
+form {
     width: 90%;
     margin: auto;
- }
+}
 
- .centered {
+.centered {
     margin-left: auto;
     margin-right: auto;
- }
+}
 
- ul {
+ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
- }
+}

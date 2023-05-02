@@ -3,6 +3,7 @@
 flask_session/
 *.db
 **/.DS_Store
+**/_build/
 
 # Byte-compiled / optimized / DLL files
 **/__pycache__/

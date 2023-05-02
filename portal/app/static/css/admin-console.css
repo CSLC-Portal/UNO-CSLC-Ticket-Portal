@@ -1,16 +1,3 @@
-.logo-section {
-    height: 50px;
-    width: 100%;
-    padding-bottom: 150px;
-    text-align: center;
-    background-color: black;
-}
-
-.nav-section {
-    height: 50px;
-    background-color: #292929;
-}
-
 .heading-text {
     margin-top: 60px;
     text-align: center;
@@ -24,26 +11,6 @@
     text-align: center;
     color: grey;
     font-size: 25px;
-}
-
-.solid {
-    border-top: 1px solid #bbb;
-    width: 800px;
-    text-align: center;
-    left: 340px;
-    position: absolute;
-}
-
-.buttons {
-    text-align: center;
-}
-
-.uno-logo {
-    height: 70px;
-    width: 70px;
-    left: 400px;
-    margin-top: 40px;
-    position: absolute;
 }
 
 .vl {
@@ -103,14 +70,6 @@
     height: 80px;
 }
 
-.Status {
-    position: absolute;
-    margin-top: 9px;
-    color: white;
-    margin-left: 50px;
-    text-decoration: none;
-}
-
 .Home {
     position: absolute;
     margin-top: 9px;
@@ -131,13 +90,6 @@
     margin-top: 5px;
     position: absolute;
     margin-left: 1100px;
-    text-decoration: none;
-}
-.Login {
-    color: white;
-    margin-top: 9px;
-    position: absolute;
-    margin-left: 1250px;
     text-decoration: none;
 }
 
@@ -211,12 +163,30 @@
     font-size: 20px;
 }
 
-body {
-    padding-bottom: 16px;
-}
-
 .btn-secondary {
     background-color: #292929 !important;
     border: none !important;
     outline: none !important;
+}
+
+.sections {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.sub-section {
+
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+    text-align: center;
+    margin-top: 15px;
+    position: relative;
+    margin: auto;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 20px;
 }
