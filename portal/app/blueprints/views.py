@@ -145,11 +145,7 @@ def update_ticket():
 @login_required
 def edit_ticket():
     # query all tickets after possible updates and send back to view tickets page
-    tickets = m.Ticket.query.all()
-    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
-    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
-    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
+    tickets = m.Ticket.query.all() #.filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
 
     # get ticket id back + current ticket
     ticketID = request.form.get("ticketIDModal")

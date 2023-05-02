@@ -5,7 +5,9 @@ from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import Query
 from sqlalchemy.orm.exc import MultipleResultsFound
 
-from ..model import User
+from datetime import datetime
+
+from ..model import User, Messages, Config
 from ..extensions import db, login_manager, auth_app_type
 
 import os
@@ -26,7 +28,9 @@ def validate():
 @auth.route("/")
 def index():
     session["flow"] = _build_auth_code_flow()
-    return render_template('index.html', user=current_user, auth_url=session["flow"]["auth_uri"])
+    messages = Messages.query.filter(Messages.start_date < datetime.now(), Messages.end_date > datetime.now())
+    config = Config.query.one()
+    return render_template('index.html', user=current_user, auth_url=session["flow"]["auth_uri"], messages=messages, config=config)
 
 @auth.route(REDIRECT_PATH)
 def authorized():

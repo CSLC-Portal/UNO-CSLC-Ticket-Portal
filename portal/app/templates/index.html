@@ -11,6 +11,13 @@
 
     <!-- TODO: Get current hours from database -->
     <table class="hours">
+        <!-- table rows for messages -->
+        {% for message in messages %}
+        <tr>
+            <td colspan="6">
+                {{ message.message }}
+            </td>
+        </tr>
         <tr>
             <th>
                 MONDAY
@@ -51,6 +58,7 @@
                 00:00 - 00:00
             </td>
         </tr>
+        {% endfor %}
         <!-- table row for create ticket button -->
         <tr>
             <td colspan="2"></td>
