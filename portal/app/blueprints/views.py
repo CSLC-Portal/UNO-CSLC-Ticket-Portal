@@ -105,7 +105,7 @@ def view_tickets():
     return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
                            loopNum=loopNum, Status=Status, user=current_user, tickets=tickets)
 
-@views.route('/update-ticket', methods=["GET", "POST"])
+@views.route('/update-ticket', methods=["POST"])
 @permission_required(Permission.Tutor)
 def update_ticket():
     """

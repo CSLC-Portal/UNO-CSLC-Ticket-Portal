@@ -94,15 +94,20 @@ def _user_from_claims(token_claims: str):
         user: User = User.query.filter_by(oid=oid).one_or_none()
 
     except MultipleResultsFound as e:
-        print(f'Found more than one user for oid: \'{oid}\'', file=stderr)
         e.add_note(f'Found more than one user for oid: \'{oid}\'')
-        return
+        raise e
 
     # This may be an incomplete user
     if user is None:
         name = token_claims.get('name')
         preferred_name = token_claims.get('preferred_username')
-        user: User = User.query.filter_by(email=preferred_name).one_or_none()
+
+        try:
+            user: User = User.query.filter_by(email=preferred_name).one_or_none()
+
+        except MultipleResultsFound as e:
+            e.add_note(f'Found more than one user for email: \'{preferred_name}\'')
+            raise e
 
         # If user was found by email complete the remaining info
         if user:
