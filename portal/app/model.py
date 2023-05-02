@@ -248,6 +248,8 @@ class Config(db.Model):
     """
     __tablename__ = 'Config'
 
+    # need to have a primary key so just creating ID, will most liekly not be used
+    id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Config table.')
     zoom_link = Column(String(255), doc='The zoom link for the tutoring center.')
     # below are the hours for the tutring center, start/stop time for each day
     mon_start = Column(DateTime(True), doc='Start time for Mondays')
