@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Admin Console{% endblock %}
+{% block content %}
+
+{% for tutor in tutors %}
+    <p>{{ tutor.name }} {{ tutor.permission }}</p>
+{% endfor %}
+
+{% endblock %}

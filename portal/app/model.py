@@ -153,17 +153,21 @@ class Courses(db.Model):
     __tablename__ = 'Courses'
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Courses table.')
-    number = Column(String(25), nullable=False, doc='The course number for a class. E.g., CSCI 4970')
+    department = Column(String(10), nullable=False, doc='The department abreviation for a class. E.g., CSCI, IST, etc.')
+    number = Column(String(25), nullable=False, doc='The course number for a class. E.g., 4970')
     course_name = Column(String(50), nullable=False, doc='The name of the course itself. E.g., Operating Systems, Java II, etc.')
     on_display = Column(Boolean, doc="T/F if course should be displayed in available courses. This way admin does not need to keep adding/deleting a course.")
     sections = db.relationship('Sections', backref='course')
     # TODO: add in tutors relationship and tickets relationship
 
-    def __init__(self, numIn, nameIn, displayIn, secIn):
+    def __init__(self, depIn, numIn, nameIn, displayIn):
+        self.department = depIn
         self.number = numIn
         self.course_name = nameIn
         self.on_display = displayIn
-        self.sections = secIn
+
+    def __repr__(self):
+        return f'{self.department} {self.number}, {self.course_name}, {self.on_display}, Sections: {self.sections}'
 
 class Sections(db.Model):
     """
@@ -233,3 +237,32 @@ class CanTutor(db.Model):
     # id = Column(Integer, doc='Autonumber primary key for the CanTutor table.')
     tutor = Column(Integer, db.ForeignKey('Users.id'), primary_key=True, doc='The tutor that is able to tutor a course.')
     courses = Column(Integer, db.ForeignKey('Courses.id'), doc='Possible courses that a tutor can tutor.')
+
+class Config(db.Model):
+    """
+    The Config table is really just a table that stands alone so it can house all of the miscelaneous configuration items that
+    an admin might want to set for the tutoring center. For example, the hours of the tutoring center. Another thing that is currently
+    stored as of now is the zoom link for the tutoring center. If any more miscelaneous infomraiton needs to be stored in the future a column
+    can be added to this table to house it. As a future upgrade it would be nice to get this migrated to a configuration.json file that is just
+    read from and written to in the browser that way we do not havea flat relational table, with no relations.
+    """
+    __tablename__ = 'Config'
+
+    # need to have a primary key so just creating ID, will most liekly not be used
+    id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Config table.')
+    zoom_link = Column(String(255), doc='The zoom link for the tutoring center.')
+    # below are the hours for the tutring center, start/stop time for each day
+    mon_start = Column(DateTime(True), doc='Start time for Mondays')
+    mon_end = Column(DateTime(True), doc='End time for Mondays')
+    tue_start = Column(DateTime(True), doc='Start time for Tuesdays')
+    tue_end = Column(DateTime(True), doc='End time for Tuesdays')
+    wed_start = Column(DateTime(True), doc='Start time for Wednesdays')
+    wed_end = Column(DateTime(True), doc='End time for Wednesdays')
+    thur_start = Column(DateTime(True), doc='Start time for Thursdays')
+    thur_end = Column(DateTime(True), doc='End time for Thursdays')
+    fri_start = Column(DateTime(True), doc='Start time for Fridays')
+    fri_end = Column(DateTime(True), doc='End time for Fridays')
+    sat_start = Column(DateTime(True), doc='Start time for Saturdays')
+    sat_end = Column(DateTime(True), doc='End time for Saturdays')
+    sun_start = Column(DateTime(True), doc='Start time for Sundays')
+    sun_end = Column(DateTime(True), doc='End time for Sundays')

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Admin Console{% endblock %}
+{% block content %}
+
+<h1 class="heading-text">Administration Console</h1>
+
+<div class="sections">Messages</div>
+<a class="sub-section" href="#">Messages</a>
+<div class="sections">Courses and Sections</div>
+<a class="sub-section" href="#">Courses</a>
+<a class="sub-section" href="#">Course Sections</a>
+<a class="sub-section" href="#">Semesters</a>
+<a class="sub-section" href="#">Professors</a>
+<div class="sections">Student Problem Types</div>
+<a class="sub-section" href="#">Problem Types</a>
+<div class="sections">Tutor Info</div>
+<a class="sub-section" href="{{ url_for('admin.tutors') }}">Tutors</a>
+
+{% endblock %}

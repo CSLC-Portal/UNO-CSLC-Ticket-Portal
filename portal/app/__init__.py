@@ -3,6 +3,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from .extensions import db
 from .extensions import sess
 from .extensions import login_manager
+from flask_login import current_user
 from . import default_config
 
 from time import sleep
@@ -17,6 +18,9 @@ def create_app():
     # Tell Flask it is behind a proxy, for accurate result when using url_for with external = True
     app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
+    # Make trailing slashes optional
+    app.url_map.strict_slashes = False
+
     _setup_env(app)
     db.init_app(app)
     sess.init_app(app)
@@ -24,6 +28,8 @@ def create_app():
 
     _create_db_models(app)
     _register_blueprints(app)
+
+    app.jinja_env.globals['user'] = current_user
     return app
 
 def _setup_env(app: Flask):
@@ -38,9 +44,11 @@ def _register_blueprints(app: Flask):
     # We need to import blueprints to register them
     from .blueprints.views import views
     from .blueprints.auth import auth
+    from .blueprints.admin import admin
 
     app.register_blueprint(views)
     app.register_blueprint(auth)
+    app.register_blueprint(admin)
 
 def _create_db_models(app: Flask):
     # NOTE: Import model scripts here...

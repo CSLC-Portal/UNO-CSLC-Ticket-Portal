@@ -14,6 +14,7 @@ from app.model import Ticket
 from app.model import Mode
 from app.model import Status
 from app.model import User
+from app.model import Courses
 
 from datetime import datetime
 from datetime import timedelta
@@ -22,6 +23,7 @@ from app.extensions import db
 from werkzeug.datastructures import ImmutableMultiDict
 
 import sys
+import re
 
 views = Blueprint('views', __name__)
 
@@ -84,12 +86,7 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    tickets = Ticket.query.all()
-
-    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
-    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
-    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
+    tickets = m.Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
 
     # Get the user permission level here BEFORE attempting to load view-tickets page
     user_level = current_user.permission_level
@@ -97,8 +94,7 @@ def view_tickets():
         flash('Insufficient permission level to view tickets', category='error')
         return redirect(url_for('auth.index'))
 
-    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
-                           loopNum=loopNum, Status=Status, user=current_user, tickets=tickets)
+    return render_template('view_tickets.html', Status=Status, user=current_user, tickets=tickets)
 
 @views.route('/update-ticket', methods=["GET", "POST"])
 @login_required
@@ -109,14 +105,9 @@ def update_ticket():
     """
     # get the tutors to display for edit ticket modal if the user presses it
     tutors = m.User.query.filter(m.User.permission_level >= 1)
-    tickets = Ticket.query.all()
+    tickets = m.Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
     tutor = current_user
     ticketID = request.form.get("ticketID")
-
-    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
-    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
-    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
 
     print("RECIEVED TICKET ID: " + str(ticketID))
     print("VALUE OF ACTION: " + str(request.form.get("action")))
@@ -148,18 +139,13 @@ def update_ticket():
         current_ticket.status = m.Status.Open
         db.session.commit()
 
-    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
-                           loopNum=loopNum, Status=Status, user=current_user, tutors=tutors, tickets=tickets)
+    return render_template('view_tickets.html', Status=Status, user=current_user, tutors=tutors, tickets=tickets)
 
 @views.route('/edit-ticket', methods=["GET", "POST"])
 @login_required
 def edit_ticket():
     # query all tickets after possible updates and send back to view tickets page
-    tickets = m.Ticket.query.all()
-    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
-    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
-    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
+    tickets = m.Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
 
     # get ticket id back + current ticket
     ticketID = request.form.get("ticketIDModal")
@@ -230,8 +216,7 @@ def edit_ticket():
             current_ticket.successful_session = False
             db.session.commit()
 
-    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
-                           loopNum=loopNum, Status=Status, user=current_user, tutors=tutors, tickets=tickets)
+    return render_template('view_tickets.html', Status=Status, user=current_user, tutors=tutors, tickets=tickets)
 
 # TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):
@@ -294,7 +279,9 @@ def _calc_session_duration(start_time, end_time, current_session_duration):
     # print("END TIME IN: " + str(end_time))
     # print("CURRENT TIME IN: " + str(current_session_duration))
 
-    diff = end_time - start_time
+    diff = timedelta(seconds=0)
+    if start_time is not None:
+        diff = end_time - start_time
 
     # check if there is already time logged on the ticket, if so add that too
     if current_session_duration is not None:
@@ -315,3 +302,50 @@ def _now():
     :return: Current time in Coordinated Universal Time (UTC)
     """
     return datetime.now()
+
+@views.route('/admin-course', methods=["GET", "POST"])
+@login_required
+def add_course():
+
+    if request.method == "POST":
+        courseDepartment = _strip_or_none(request.form.get("courseDepartment"))
+        courseNumber = _strip_or_none(request.form.get("courseNumber"))
+        courseName = _strip_or_none(request.form.get("courseName"))
+        displayOnIndex = request.form.get("displayOnIndex")
+        print("COURSE DEPARTMENT: " + str(courseDepartment))
+        print("COURSE NUMBER: " + str(courseNumber))
+        print("COURSE NAME: " + str(courseName))
+        print("DISPLAY ON INDEX: " + str(displayOnIndex))
+
+        # set up regex
+        # m = re.match("(^[A-Z]{2,4})\\s?(\\d{4})$", courseNumber)
+
+        # set on display
+        if displayOnIndex is not None:
+            displayOnIndex = True
+        else:
+            displayOnIndex = False
+
+        # validate the input coming in. store everything in DB the same
+        if _str_empty(courseDepartment):
+            flash('Could not create course, course department must not be empty!', category='error')
+        elif _str_empty(courseNumber):
+            flash('Could not create course, course number must not be empty!', category='error')
+        elif _str_empty(courseName):
+            flash('Could not create course, course name must not be empty!', category='error')
+        else:
+
+            tmpCourse = Courses.query.filter_by(number=courseNumber, course_name=courseName).first()
+            if tmpCourse is None:
+                newCourse = Courses(courseDepartment, courseNumber, courseName, displayOnIndex)
+                db.session.add(newCourse)
+                db.session.commit()
+                flash('Course created successfully!', category='success')
+                # TODO: return redirect for admin console home?
+            else:
+                flash('Course already exists in database!', category='error')
+                print("COURSE ALREADY IN DB!")
+
+    # get all courses, just for validation in html
+    courses = Courses.query.all()
+    return render_template('admin-course.html', courses=courses)
