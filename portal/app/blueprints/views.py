@@ -16,6 +16,7 @@ from app.model import Status
 from app.model import User
 from app.model import Courses
 from app.model import Semesters
+from app.model import Professors
 
 from datetime import datetime, date
 from datetime import timedelta
@@ -348,7 +349,7 @@ def add_course():
                 flash("Course '" + courseDepartment + " " + courseNumber + "' already exists in database!", category='error')
                 print("COURSE ALREADY IN DB!")
 
-    # get all courses, just for validation in html
+    # get all courses
     courses = Courses.query.all()
     return render_template('admin-course.html', courses=courses)
 
@@ -395,6 +396,37 @@ def admin_semester():
     num = Semesters.query.count()
     print("NUM SEMESTERS: " + str(num))
 
-    # get all semesters, just for validation in html
+    # get all semesters
     semesters = Semesters.query.all()
     return render_template('admin-semester.html', semesters=semesters)
+
+@views.route('/admin-professor', methods=["GET", "POST"])
+@login_required
+def admin_professor():
+
+    if request.method == "POST":
+        firstName = _strip_or_none(request.form.get("firstNameInput"))
+        lastName = _strip_or_none(request.form.get("lastNameInput"))
+        print("FIRST NAME: " + str(firstName))
+        print("LAST NAME: " + str(lastName))
+
+        # validate input coming in
+        if _str_empty(firstName):
+            flash('Could not add professor, first name must not be empty!', category='error')
+        elif _str_empty(lastName):
+            flash('Could not add professor, last name must not be empty!', category='error')
+        else:
+            # check if professor already exists in DB, store all lower so checks against caps doesn't happen
+            tmpProfessor = Professors.query.filter_by(first_name=firstName.lower(), last_name=lastName.lower()).first()
+            if tmpProfessor is None:
+                # create professor and add it to DB, store as lower
+                newProfessor = Professors(firstName.lower(), lastName.lower())
+                db.session.add(newProfessor)
+                db.session.commit()
+                flash('Professor added successfully!', category='success')
+            else:
+                flash("Professor '" + firstName.title() + " " + lastName.title() + "' already exists in database!", category='error')
+
+    # get all professors
+    professors = Professors.query.all()
+    return render_template('admin-professor.html', professors=professors)

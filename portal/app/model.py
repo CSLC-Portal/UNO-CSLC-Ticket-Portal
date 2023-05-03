@@ -204,6 +204,9 @@ class Professors(db.Model):
         self.first_name = firstIn
         self.last_name = lastIn
 
+    def __repr__(self):
+        return f'{self.first_name} {self.last_name}, Sections: {self.sections}'
+
 class Semesters(db.Model):
     """
     The Semesters class is used to model the different pieces of information that represent a college Semester. Each semester has

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Admin Add Professors{% endblock %}
+{% block content %}
+<form action="" method="POST">
+    <div class="form-group">
+        <label for="firstNameInput"><strong>First Name</strong></label>
+        <input type="text" class="form-control" id="firstNameInput" name="firstNameInput" required>
+    </div>
+
+    <div class="form-group">
+        <label for="lastNameInput"><strong>Last Name</strong></label>
+        <input type="text" class="form-control" id="lastNameInput" name="lastNameInput" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary" name="SaveChanges">Submit</button>
+
+</form>
+
+<h1>All added Professors:</h1>
+{% for professor in professors %}
+    {{ professor.__repr__().title() }}<br>
+{% endfor %}
+
+
+{% endblock %}
