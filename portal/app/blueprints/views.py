@@ -304,22 +304,6 @@ def _now():
     """
     return datetime.now()
 
-@views.route('/admin-problem-types', methods=["GET", "POST"])
-@login_required
-def add_problem_type():
-
-    if request.method == "POST":
-        problemType = request.form.get("problemType")
-        # courseName = request.form.get("courseName")
-        displayOnIndex = request.form.get("displayOnIndex")
-        print("PROBLEM TYPE: " + str(problemType))
-        # print("COURSE NAME: " + str(courseName))
-        print("DISPLAY ON INDEX: " + str(displayOnIndex))
-
-        # get all courses, just for validation in html
-    problem = ProblemTypes.query.all()
-    return render_template('admin-problem-types.html', problem=problem)
-
 @views.route('/admin-course', methods=["GET", "POST"])
 @login_required
 def add_course():
