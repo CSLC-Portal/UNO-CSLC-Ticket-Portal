@@ -1,8 +1,7 @@
 
 # TODO: Make sure the flashed messages are correct!
 
-import email
-from flask import Flask, ctx
+from flask import Flask
 from flask.testing import FlaskClient
 from sqlalchemy.orm import Query
 
@@ -138,6 +137,7 @@ def test_admin_add_admin_existing_user(admin_client: FlaskClient, create_auth_cl
     create_auth_client(name='same', email=new_client_email, oid='xxxx')
 
     with app.app_context():
+        val = list(User.query.all())
         assert User.query.count() == 2
 
     response = admin_client.post('/admin/tutors/add', data={ 'email': new_client_email, 'permission': Permission.Admin.value })
@@ -155,3 +155,133 @@ def test_admin_add_admin_existing_user(admin_client: FlaskClient, create_auth_cl
         assert user.is_complete()
         assert user.email == 'new@user.com'
         assert user.permission == Permission.Admin
+
+def test_admin_remove_tutor(admin_client: FlaskClient, create_super_user, app: Flask):
+    create_super_user(email='tutor@email.com', oid='xxxx', permission = Permission.Tutor)
+
+    with app.app_context():
+        assert User.get_tutors().count() == 2
+
+    response = admin_client.post('/admin/tutors/remove', data={ 'userID': '2' })
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/admin/tutors"' in response.data
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'success'
+        assert message == 'User successfully removed!'
+
+    with app.app_context():
+        assert User.get_tutors().count() == 1
+        assert User.query.count() == 2
+
+def test_admin_remove_admin(admin_client: FlaskClient, create_super_user, app: Flask):
+    create_super_user(email='admin2@email.com', oid='xxxx')
+
+    with app.app_context():
+        assert User.get_tutors().count() == 2
+
+    response = admin_client.post('/admin/tutors/remove', data={ 'userID': '2' })
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/admin/tutors"' in response.data
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'success'
+        assert message == 'User successfully removed!'
+
+    with app.app_context():
+        assert User.get_tutors().count() == 1
+        assert User.query.count() == 2
+
+def test_admin_remove_self(admin_client: FlaskClient, app: Flask):
+    with app.app_context():
+        assert User.get_tutors().count() == 1
+
+    response = admin_client.post('/admin/tutors/remove', data={ 'userID': '1' })
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/admin/tutors"' in response.data
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'You cannot remove yourself from the role hierarchy!'
+
+    with app.app_context():
+        assert User.get_tutors().count() == 1
+        assert User.query.count() == 1
+
+def test_admin_remove_pending_tutor(admin_client: FlaskClient, app: Flask):
+    response = admin_client.post('/admin/tutors/add', data={ 'email': 'new@user.com', 'permission': Permission.Tutor.value })
+
+    with app.app_context():
+        assert User.get_tutors().count() == 1
+        assert User.query.count() == 2
+
+        pending: User = User.query.filter_by(email='new@user.com').one()
+        assert not pending.is_complete()
+        assert pending.permission == Permission.Tutor
+
+    response = admin_client.post('/admin/tutors/remove', data={ 'userID': '2' })
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/admin/tutors"' in response.data
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 2
+
+        (category, message) = flashes[1]
+        assert category == 'success'
+        assert message == 'User successfully removed!'
+
+    with app.app_context():
+        assert User.get_tutors().count() == 1
+        assert User.query.count() == 1
+
+def test_admin_remove_pending_admin(admin_client: FlaskClient, app: Flask):
+    response = admin_client.post('/admin/tutors/add', data={ 'email': 'new@user.com', 'permission': Permission.Admin.value })
+
+    with app.app_context():
+        assert User.get_tutors().count() == 1
+        assert User.query.count() == 2
+
+        pending: User = User.query.filter_by(email='new@user.com').one()
+        assert not pending.is_complete()
+        assert pending.permission == Permission.Admin
+
+    response = admin_client.post('/admin/tutors/remove', data={ 'userID': '2' })
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/admin/tutors"' in response.data
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 2
+
+        (category, message) = flashes[1]
+        assert category == 'success'
+        assert message == 'User successfully removed!'
+
+    with app.app_context():
+        assert User.get_tutors().count() == 1
+        assert User.query.count() == 1
+
+# TODO: Test invalid/NULL data!!!

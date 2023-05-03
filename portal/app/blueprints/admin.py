@@ -5,6 +5,8 @@ from flask import redirect
 from flask import request
 from flask import render_template
 
+from flask_login import current_user
+
 from app.model import User
 from app.model import Permission
 
@@ -62,6 +64,34 @@ def add_tutor():
 
     return redirect(url_for('admin.view_tutors'))
 
+@admin.route('/tutors/remove', methods=['POST'])
+@permission_required(Permission.Admin)
+def remove_tutor():
+    user_id = strip_or_none(request.form.get("userID"))
+
+    try:
+        user: User = User.query.get(user_id)
+
+        if user and user != current_user:
+            _attempt_delete_super_user(user)
+            flash('User successfully removed!', category='success')
+
+        elif user == current_user:
+            flash('You cannot remove yourself from the role hierarchy!', category='error')
+
+        else:
+            flash('Could not remove user, user does not exist!', category='error')
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not create pseudo user, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not remove user, unknown reason', category='error')
+        print(f'Failed to remove user: {e}', file=sys.stderr)
+
+    return redirect(url_for('admin.view_tutors'))
+
 def attempt_create_super_user(email, permission):
     """
     If the user doesn't exist, creates and inserts an 'incomplete' user into the database given an email and permission level.
@@ -78,5 +108,24 @@ def attempt_create_super_user(email, permission):
 
     else:
         user.permission = permission
+
+    db.session.commit()
+
+def _attempt_delete_super_user(user: User):
+    """
+    If the user is complete then their permissions will be set to the lowest level.
+    However, they will remain in the database and past information will be retained.
+
+    If the user is not complete then they will be removed from the database.
+    """
+
+    # The user was never completed, we can delete this record
+    if not user.is_complete():
+        # print(f'{user} is not a completed user, removing from database...')
+        db.session.delete(user)
+
+    else:
+        # print(f'{user}\'s permissions changing to {Permission.Student}...')
+        user.permission = Permission.Student
 
     db.session.commit()

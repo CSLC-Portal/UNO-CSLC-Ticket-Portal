@@ -34,73 +34,90 @@
         </form>
     </div>
 
+    {% macro user_table(caption) -%}
     <div class="row">
         <div class="col">
             <div class="table-responsive">
                 <table class="table align-middle caption-top">
                     <caption>
-                        <h5 class="text-center">Pending Tutors</h5>
+                        <h5 class="text-center">{{ caption }}</h5>
                     </caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Email</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Permission</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for tutor in model.User.get_pending() %}
-                        <tr scope="row">
-                            <td>{{ tutor.email }}</td>
-                            <td>
-                                <span class="badge rounded-pill bg-warning">Pending</span>
-                            </td>
-                            <td>{{ tutor.permission }}</td>
-                        </tr>
-                        {% endfor %}
-
-                    </tbody>
+                    {{ caller() }}
                 </table>
             </div>
         </div>
     </div>
+    {%- endmacro %}
 
-    <div class="row">
-        <div class="col">
-            <div class="table-responsive">
-                <table class="table align-middle caption-top">
-                    <caption>
-                        <h5 class="text-center">Existing Tutors</h5>
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Permission</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for tutor in model.User.get_tutors() %}
-                        <tr scope="row">
-                            <td>{{ tutor.name }}</td>
-                            <td>{{ tutor.email }}</td>
-                            <td>
-                                {% if tutor.tutor_is_active %}
-                                    <span class="badge rounded-pill bg-success">Active</span>
-                                {% else %}
-                                    <span class="badge rounded-pill bg-secondary">Inactive</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ tutor.permission }}</td>
-                        </tr>
-                        {% endfor %}
+    {% macro remove_user(user) -%}
+        {% if user != current_user %}
+        <form action="{{ url_for('admin.remove_tutor') }}" method="post">
+            <input type="hidden" name="userID" value="{{ user.id }}">
+            <input type="submit" class="btn btn-primary" value="Remove" />
+        </form>
+        {% else %}
+        <span class="badge rounded-pill bg-black">You</span>
+        {% endif %}
+    {%- endmacro %}
 
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    {% macro pending_tutors(pending) -%}
+        {% if pending.count() > 0 %}
+            {% call user_table('Pending Tutors') %}
+                <thead>
+                    <tr>
+                        <th scope="col">Email</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Permission</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tutor in pending %}
+                    <tr scope="row">
+                        <td>{{ tutor.email }}</td>
+                        <td>
+                            <span class="badge rounded-pill bg-warning">Pending</span>
+                        </td>
+                        <td>{{ tutor.permission }}</td>
+                        <td>{{ remove_user(tutor) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            {% endcall %}
+        {% endif %}
+    {%- endmacro %}
+
+    {{ pending_tutors(model.User.get_pending()) }}
+
+    {% call user_table('Existing Tutors') %}
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Status</th>
+                <th scope="col">Permission</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tutor in model.User.get_tutors() %}
+            <tr scope="row">
+                <td>{{ tutor.name }}</td>
+                <td>{{ tutor.email }}</td>
+                <td>
+                    {% if tutor.tutor_is_active %}
+                        <span class="badge rounded-pill bg-success">Active</span>
+                    {% else %}
+                        <span class="badge rounded-pill bg-secondary">Inactive</span>
+                    {% endif %}
+                </td>
+                <td>{{ tutor.permission }}</td>
+                <td>{{ remove_user(tutor) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    {% endcall %}
+
 </div>
 
 {% endblock %}

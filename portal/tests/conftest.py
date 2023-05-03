@@ -90,18 +90,22 @@ def auth_client(create_auth_client):
     return create_auth_client()
 
 @pytest.fixture
-def tutor_client(create_auth_client, app: Flask):
-    with app.app_context():
-        attempt_create_super_user('tutor@email.com', Permission.Tutor)
+def create_super_user(create_auth_client, app: Flask):
+    def _factor(name = None, email = None, oid = None, permission = Permission.Admin):
+        with app.app_context():
+            attempt_create_super_user(email, permission)
 
-    return create_auth_client(email = 'tutor@email.com')
+        return create_auth_client(name, email, oid)
+
+    return _factor
 
 @pytest.fixture
-def admin_client(create_auth_client, app: Flask):
-    with app.app_context():
-        attempt_create_super_user('admin@email.com', Permission.Admin)
+def tutor_client(create_super_user):
+    return create_super_user(email='tutor@email.com', permission=Permission.Tutor)
 
-    return create_auth_client(email = 'admin@email.com')
+@pytest.fixture
+def admin_client(create_super_user):
+    return create_super_user(email='admin@email.com')
 
 @pytest.fixture(scope="session", autouse=True)
 def cleanup(request):
