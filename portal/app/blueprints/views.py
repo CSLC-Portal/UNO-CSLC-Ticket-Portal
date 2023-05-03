@@ -345,7 +345,7 @@ def add_course():
                 flash('Course created successfully!', category='success')
                 # TODO: return redirect for admin console home?
             else:
-                flash('Course already exists in database!', category='error')
+                flash("Course '" + courseDepartment + " " + courseNumber + "' already exists in database!", category='error')
                 print("COURSE ALREADY IN DB!")
 
     # get all courses, just for validation in html
@@ -375,14 +375,22 @@ def admin_semester():
             flash('Could not create semester, start date must not be empty!', category='error')
         elif _str_empty(endDate):
             flash('Could not create semester, end date must not be empty!', category='error')
+        elif len(year) != 4:
+            flash('Could not create semester, please enter valid year in the format YYYY!', category='error')
         else:
-            # create semester and add it to DB, need to cast dates from string to date objects
-            start = datetime.strptime(startDate, "%Y-%m-%d").date()
-            end = datetime.strptime(endDate, "%Y-%m-%d").date()
-            newSemester = Semesters(year, season, start, end)
-            db.session.add(newSemester)
-            db.session.commit()
-            flash('Semester created successfully!', category='success')
+            # check if semester already exists in DB, impossible to have two summer 2023 semesters fo example
+            tmpSemester = Semesters.query.filter_by(season=season, year=year).first()
+            if tmpSemester is None:
+                # create semester and add it to DB, need to cast dates from string to date objects
+                start = datetime.strptime(startDate, "%Y-%m-%d").date()
+                end = datetime.strptime(endDate, "%Y-%m-%d").date()
+                newSemester = Semesters(year, season, start, end)
+                db.session.add(newSemester)
+                db.session.commit()
+                flash('Semester created successfully!', category='success')
+            else:
+                flash("Semester '" + season + " " + year + "' already exists in database!", category='error')
+                print("SEMESTER ALREADY IN DB!")
 
     num = Semesters.query.count()
     print("NUM SEMESTERS: " + str(num))
