@@ -48,11 +48,16 @@ def client(app : Flask):
     return app.test_client()
 
 @pytest.fixture
-def create_auth_client(client: FlaskClient):
+def create_auth_client(app : Flask):
     """Provides an factory function for creating an authenticated client."""
 
     # This factory function sets some parameters we can choose in the test
     def _factory(name = None, email = None, oid = None):
+
+        # We make a new client that way we can have multiple, each with their own session
+        # Using client() fixture would result in only one client being used for all create_auth_client()
+        new_client = app.test_client()
+
         if name is not None:
             MockConfidentialClientApplication.MOCK_NAME = name
 
@@ -62,9 +67,10 @@ def create_auth_client(client: FlaskClient):
         if oid is not None:
             MockConfidentialClientApplication.MOCK_OID = oid
 
-        client.get(os.getenv('AAD_REDIRECT_PATH'))
+        # Login the client
+        new_client.get(os.getenv('AAD_REDIRECT_PATH'))
 
-        return client
+        return new_client
 
     return _factory
 

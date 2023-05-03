@@ -44,7 +44,14 @@ def add_tutor():
         if permission_val:
             permission = Permission(int(permission_val))
 
-        create_pseudo_user(email, permission)
+        user: User = User.query.filter_by(email=email).one_or_none()
+
+        if user is None:
+            create_pseudo_user(email, permission)
+
+        else:
+            user.permission = permission
+            db.session.commit()
 
     except ValueError:
         flash('Could not submit ticket, must select a valid mode!', category='error')
