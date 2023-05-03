@@ -44,14 +44,7 @@ def add_tutor():
         if permission_val:
             permission = Permission(int(permission_val))
 
-        user: User = User.query.filter_by(email=email).one_or_none()
-
-        if user is None:
-            create_pseudo_user(email, permission)
-
-        else:
-            user.permission = permission
-            db.session.commit()
+        attempt_create_super_user(email, permission)
 
     except ValueError:
         flash('Could not submit ticket, must select a valid mode!', category='error')
@@ -69,12 +62,21 @@ def add_tutor():
 
     return redirect(url_for('admin.view_tutors'))
 
-def create_pseudo_user(email, permission):
+def attempt_create_super_user(email, permission):
     """
-    Creates and inserts into the database an 'incomplete' user given an email and permission level.
-    When the user signs in using their email, the remaining info will be automatically updated
-    in the database.
+    If the user doesn't exist, creates and inserts an 'incomplete' user into the database given an email and permission level.
+    When the user signs in using their email, the remaining info will be automatically updated in the database.
+
+    If the user exist, the the permission level is updated for the user.
     """
-    pseudo_user = User(None, permission, email, None, False, False)
-    db.session.add(pseudo_user)
+
+    user: User = User.query.filter_by(email=email).one_or_none()
+
+    if user is None:
+        pseudo_user = User(None, permission, email, None, False, False)
+        db.session.add(pseudo_user)
+
+    else:
+        user.permission = permission
+
     db.session.commit()

@@ -4,7 +4,7 @@ from flask import Flask
 
 from flask.testing import FlaskClient
 from app.model import Permission
-from app.blueprints.admin import create_pseudo_user
+from app.blueprints.admin import attempt_create_super_user
 
 import pytest
 import os
@@ -58,6 +58,11 @@ def create_auth_client(app : Flask):
         # Using client() fixture would result in only one client being used for all create_auth_client()
         new_client = app.test_client()
 
+        # Save previous values for future tests
+        old_name = MockConfidentialClientApplication.MOCK_NAME
+        old_email = MockConfidentialClientApplication.MOCK_EMAIL
+        old_oid = MockConfidentialClientApplication.MOCK_OID
+
         if name is not None:
             MockConfidentialClientApplication.MOCK_NAME = name
 
@@ -70,6 +75,10 @@ def create_auth_client(app : Flask):
         # Login the client
         new_client.get(os.getenv('AAD_REDIRECT_PATH'))
 
+        # Reapply previous values for future tests
+        MockConfidentialClientApplication.MOCK_NAME = old_name
+        MockConfidentialClientApplication.MOCK_EMAIL = old_email
+        MockConfidentialClientApplication.MOCK_OID = old_oid
         return new_client
 
     return _factory
@@ -83,14 +92,14 @@ def auth_client(create_auth_client):
 @pytest.fixture
 def tutor_client(create_auth_client, app: Flask):
     with app.app_context():
-        create_pseudo_user('tutor@email.com', Permission.Tutor)
+        attempt_create_super_user('tutor@email.com', Permission.Tutor)
 
     return create_auth_client(email = 'tutor@email.com')
 
 @pytest.fixture
 def admin_client(create_auth_client, app: Flask):
     with app.app_context():
-        create_pseudo_user('admin@email.com', Permission.Admin)
+        attempt_create_super_user('admin@email.com', Permission.Admin)
 
     return create_auth_client(email = 'admin@email.com')
 

@@ -6,11 +6,12 @@ from .extensions import login_manager
 from flask_login import current_user
 from . import default_config
 
-from .blueprints.admin import create_pseudo_user
+from .blueprints.admin import attempt_create_super_user
 from sqlalchemy.exc import IntegrityError
 from .model import Mode
 from .model import Status
 from .model import Permission
+from .model import User
 
 from time import sleep
 from sys import stderr
@@ -109,7 +110,11 @@ def _add_default_admin(app: Flask):
 
     with app.app_context():
         try:
-            create_pseudo_user(admin_email, Permission.Admin)
+            attempt_create_super_user(admin_email, Permission.Admin)
 
-        except IntegrityError:
+        except IntegrityError as e:
             db.session.rollback()
+            print(f'Failed to create default admin {admin_email}. Reason: {e}', file=stderr)
+
+        except Exception as e:
+            print(e, file=stderr)
