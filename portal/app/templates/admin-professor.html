@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Admin Add Professors{% endblock %}
 {% block content %}
-<form action="" method="POST">
+<form action="{{ url_for('views.add_professor') }}" method="POST">
     <div class="form-group">
         <label for="firstNameInput"><strong>First Name</strong></label>
         <input type="text" class="form-control" id="firstNameInput" name="firstNameInput" required>

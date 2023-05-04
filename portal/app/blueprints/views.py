@@ -17,6 +17,7 @@ from app.model import User
 from app.model import Courses
 from app.model import Semesters
 from app.model import Professors
+from app.model import Sections
 
 from datetime import datetime, date
 from datetime import timedelta
@@ -355,7 +356,7 @@ def add_course():
 
 @views.route('/admin-semester', methods=["GET", "POST"])
 @login_required
-def admin_semester():
+def add_semester():
 
     if request.method == "POST":
         year = _strip_or_none(request.form.get("yearInput"))
@@ -402,7 +403,7 @@ def admin_semester():
 
 @views.route('/admin-professor', methods=["GET", "POST"])
 @login_required
-def admin_professor():
+def add_professor():
 
     if request.method == "POST":
         firstName = _strip_or_none(request.form.get("firstNameInput"))
@@ -430,3 +431,40 @@ def admin_professor():
     # get all professors
     professors = Professors.query.all()
     return render_template('admin-professor.html', professors=professors)
+
+@views.route('/admin-sections', methods=["GET", "POST"])
+@login_required
+def add_section():
+
+    if request.method == "POST":
+        semester = _strip_or_none(request.form.get("semesterInput"))
+        course = _strip_or_none(request.form.get("courseInput"))
+        sectionNum = _strip_or_none(request.form.get("sectionNumberInput"))
+        monInput = _strip_or_none(request.form.get("mondayTime"))
+        tueInput = _strip_or_none(request.form.get("tuesdayTime"))
+        wedInput = _strip_or_none(request.form.get("wednesdayTime"))
+        thuInput = _strip_or_none(request.form.get("thursdayTime"))
+        friInput = _strip_or_none(request.form.get("fridayTime"))
+        secStartTime = _strip_or_none(request.form.get("sectionStartTime"))
+        secEndTime = _strip_or_none(request.form.get("sectionEndTime"))
+        professor = _strip_or_none(request.form.get("professorInput"))
+        print("SEMESTER: " + semester)
+        print("COURSE: " + course)
+        print("SECTION NUM: " + sectionNum)
+        print("MONDAY: " + str(monInput))
+        print("TUESDAY: " + str(tueInput))
+        print("WEDNESDAY: " + str(wedInput))
+        print("THURSDAY: " + str(thuInput))
+        print("FRIDAY: " + str(friInput))
+        print("SEC START: " + secStartTime)
+        print("SEC END: " + secEndTime)
+        print("PROFESSOR: " + professor)
+
+        # validate input coming in
+        if monInput is None and tueInput is None and wedInput is None and thuInput is None and friInput is None:
+            flash('Could not create section, must provide atleast one day of the week for section time!', category='error')
+        # TODO: add in condition for TOTONLINE courses, and need to edit html so times aren't required for it
+
+    # get all sections
+    sections = Sections.query.all()
+    return render_template('admin-sections.html', sections=sections)
