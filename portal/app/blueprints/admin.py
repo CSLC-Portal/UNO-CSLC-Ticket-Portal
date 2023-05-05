@@ -13,6 +13,7 @@ from app.model import Permission
 from app.extensions import db
 from sqlalchemy.exc import IntegrityError
 
+from app.util import str_empty
 from app.util import strip_or_none
 from app.util import permission_required
 
@@ -49,14 +50,14 @@ def add_tutor():
         attempt_create_super_user(email, permission)
 
     except ValueError:
-        flash('Could not submit ticket, must select a valid mode!', category='error')
+        flash('Could not add user, must select a valid mode!', category='error')
 
     except IntegrityError:
         db.session.rollback()
-        flash('Could not create pseudo user, invalid data', category='error')
+        flash('Could not add user, invalid data', category='error')
 
     except Exception as e:
-        flash('Could not create psuedo user, unknown reason', category='error')
+        flash('Could not add user, unknown reason', category='error')
         print(f'Failed to create pseudo user: {e}', file=sys.stderr)
 
     else:
@@ -84,7 +85,7 @@ def remove_tutor():
 
     except IntegrityError:
         db.session.rollback()
-        flash('Could not create pseudo user, invalid data!', category='error')
+        flash('Could not remove user, invalid data!', category='error')
 
     except Exception as e:
         flash('Could not remove user, unknown reason', category='error')
@@ -92,13 +93,19 @@ def remove_tutor():
 
     return redirect(url_for('admin.view_tutors'))
 
-def attempt_create_super_user(email, permission):
+def attempt_create_super_user(email: str, permission: Permission):
     """
     If the user doesn't exist, creates and inserts an 'incomplete' user into the database given an email and permission level.
     When the user signs in using their email, the remaining info will be automatically updated in the database.
 
     If the user exist, the the permission level is updated for the user.
     """
+
+    if str_empty(email):
+        # NOTE: Don't want to create custom exception class right now
+        #       Most of this should be handled by flask-wtf anyways in the future
+        #
+        raise Exception('Email must not be empty')
 
     user: User = User.query.filter_by(email=email).one_or_none()
 

@@ -1,6 +1,4 @@
 
-# TODO: Make sure the flashed messages are correct!
-
 from flask import Flask
 from flask.testing import FlaskClient
 from sqlalchemy.orm import Query
@@ -46,6 +44,14 @@ def test_admin_insufficient_privileges_student(auth_client: FlaskClient, admin_u
             assert '302' in response.status
             assert b'href="/"' in response.data
 
+        with auth_client.session_transaction() as session:
+            flashes = session['_flashes']
+            assert len(flashes) >= 1
+
+            (category, message) = flashes[0]
+            assert category == 'error'
+            assert message == 'Insufficient privileges to access this page!'
+
 def test_admin_insufficient_privileges_tutor(tutor_client: FlaskClient, admin_urls):
     for url in admin_urls:
         if 'GET' in url.methods:
@@ -61,6 +67,14 @@ def test_admin_insufficient_privileges_tutor(tutor_client: FlaskClient, admin_ur
             # Expect redirect back to index
             assert '302' in response.status
             assert b'href="/"' in response.data
+
+        with tutor_client.session_transaction() as session:
+            flashes = session['_flashes']
+            assert len(flashes) >= 1
+
+            (category, message) = flashes[0]
+            assert category == 'error'
+            assert message == 'Insufficient privileges to access this page!'
 
 def test_admin(admin_client: FlaskClient, admin_urls):
     for url in admin_urls:
@@ -90,6 +104,14 @@ def test_admin_add_tutor(admin_client: FlaskClient, app: Flask):
         assert user.email == 'new@user.com'
         assert user.permission == Permission.Tutor
 
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'success'
+        assert message == 'New user successfully added!'
+
 def test_admin_add_admin(admin_client: FlaskClient, app: Flask):
     response = admin_client.post('/admin/tutors/add', data={ 'email': 'new@user.com', 'permission': Permission.Admin.value })
 
@@ -106,6 +128,14 @@ def test_admin_add_admin(admin_client: FlaskClient, app: Flask):
         assert not user.is_complete()
         assert user.email == 'new@user.com'
         assert user.permission == Permission.Admin
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'success'
+        assert message == 'New user successfully added!'
 
 def test_admin_add_tutor_existing_user(admin_client: FlaskClient, create_auth_client, app: Flask):
     # Create another dummy user
@@ -131,6 +161,14 @@ def test_admin_add_tutor_existing_user(admin_client: FlaskClient, create_auth_cl
         assert user.email == 'new@user.com'
         assert user.permission == Permission.Tutor
 
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'success'
+        assert message == 'New user successfully added!'
+
 def test_admin_add_admin_existing_user(admin_client: FlaskClient, create_auth_client, app: Flask):
     # Create another dummy user
     new_client_email = 'new@user.com'
@@ -155,6 +193,14 @@ def test_admin_add_admin_existing_user(admin_client: FlaskClient, create_auth_cl
         assert user.is_complete()
         assert user.email == 'new@user.com'
         assert user.permission == Permission.Admin
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'success'
+        assert message == 'New user successfully added!'
 
 def test_admin_remove_tutor(admin_client: FlaskClient, create_super_user, app: Flask):
     create_super_user(email='tutor@email.com', oid='xxxx', permission = Permission.Tutor)
@@ -284,4 +330,95 @@ def test_admin_remove_pending_admin(admin_client: FlaskClient, app: Flask):
         assert User.get_tutors().count() == 1
         assert User.query.count() == 1
 
-# TODO: Test invalid/NULL data!!!
+def test_admin_add_no_data(admin_client: FlaskClient, app: Flask):
+    response = admin_client.post('/admin/tutors/add')
+
+    assert '302' in response.status
+    assert b'href="/admin/tutors"' in response.data
+
+    with app.app_context():
+        assert User.get_pending().count() == 0
+        assert User.query.count() == 1
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'Could not add user, invalid data'
+
+def test_admin_add_invalid_email(admin_client: FlaskClient, app: Flask):
+    # Empty email string
+    response = admin_client.post('/admin/tutors/add', data={ 'email': '', 'permission': Permission.Admin.value })
+
+    assert '302' in response.status
+    assert b'href="/admin/tutors"' in response.data
+
+    with app.app_context():
+        assert User.get_pending().count() == 0
+        assert User.query.count() == 1
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'Could not add user, unknown reason'
+
+def test_admin_add_invalid_permission(admin_client: FlaskClient, app: Flask):
+    # Invalid permission value
+    response = admin_client.post('/admin/tutors/add', data={ 'email': '', 'permission': 69 })
+
+    assert '302' in response.status
+    assert b'href="/admin/tutors"' in response.data
+
+    with app.app_context():
+        assert User.get_pending().count() == 0
+        assert User.query.count() == 1
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'Could not add user, must select a valid mode!'
+
+def test_admin_remove_no_data(admin_client: FlaskClient, create_super_user, app: Flask):
+    response = admin_client.post('/admin/tutors/remove')
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/admin/tutors"' in response.data
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'Could not remove user, user does not exist!'
+
+    with app.app_context():
+        assert User.get_tutors().count() == 1
+
+def test_admin_remove_invalid_id(admin_client: FlaskClient, create_super_user, app: Flask):
+    response = admin_client.post('/admin/tutors/remove', data={ 'userID': '69' })
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/admin/tutors"' in response.data
+
+    with admin_client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'Could not remove user, user does not exist!'
+
+    with app.app_context():
+        assert User.get_tutors().count() == 1
+
