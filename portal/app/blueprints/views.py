@@ -15,13 +15,7 @@ from app.util import permission_required
 
 from app.model import Ticket
 from app.model import Mode
-from app.model import Status
 from app.model import Permission
-from app.model import User
-from app.model import Course
-
-from datetime import datetime
-from datetime import timedelta
 
 from app.extensions import db
 from werkzeug.datastructures import ImmutableMultiDict
