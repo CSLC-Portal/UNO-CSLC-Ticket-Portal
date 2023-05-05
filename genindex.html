@@ -74,6 +74,7 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
@@ -82,6 +83,7 @@
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
@@ -96,9 +98,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="tests.html#tests.MockConfidentialClientApplication.acquire_token_by_auth_code_flow">acquire_token_by_auth_code_flow() (tests.MockConfidentialClientApplication method)</a>
 </li>
-      <li><a href="app.blueprints.html#app.blueprints.views.add_course">add_course() (in module app.blueprints.views)</a>
-</li>
       <li><a href="app.html#app.model.Permission.Admin">Admin (app.model.Permission attribute)</a>
+</li>
+      <li><a href="tests.html#tests.conftest.admin_client">admin_client() (in module tests.conftest)</a>
 </li>
       <li><a href="tests.html#tests.conftest.app">app() (in module tests.conftest)</a>
 </li>
@@ -144,7 +146,13 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="app.html#app.model.Ticket.calc_duration_claimed">calc_duration_claimed() (app.model.Ticket method)</a>
+</li>
+      <li><a href="app.html#app.model.Ticket.calc_duration_open">calc_duration_open() (app.model.Ticket method)</a>
+</li>
       <li><a href="app.html#app.model.CanTutor">CanTutor (class in app.model)</a>
+</li>
+      <li><a href="app.html#app.model.Ticket.claim">claim() (app.model.Ticket method)</a>
 </li>
       <li><a href="app.html#app.model.Status.Claimed">Claimed (app.model.Status attribute)</a>
 </li>
@@ -152,23 +160,27 @@
 </li>
       <li><a href="tests.html#tests.conftest.client">client() (in module tests.conftest)</a>
 </li>
+      <li><a href="app.html#app.model.Ticket.close">close() (app.model.Ticket method)</a>
+</li>
       <li><a href="app.html#app.model.Status.Closed">Closed (app.model.Status attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.html#app.model.Config">Config (class in app.model)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.course">course (app.model.Ticket attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.Sections.course_id">course_id (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Course">Course (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Courses.course_name">course_name (app.model.Courses attribute)</a>
+      <li><a href="app.html#app.model.Section.course_id">course_id (app.model.Section attribute)</a>
+</li>
+      <li><a href="app.html#app.model.Course.course_name">course_name (app.model.Course attribute)</a>
 </li>
       <li><a href="app.html#app.model.CanTutor.courses">courses (app.model.CanTutor attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Courses">Courses (class in app.model)</a>
-</li>
       <li><a href="tests.html#tests.conftest.create_auth_client">create_auth_client() (in module tests.conftest)</a>
+</li>
+      <li><a href="tests.html#tests.conftest.create_super_user">create_super_user() (in module tests.conftest)</a>
 </li>
       <li><a href="app.blueprints.html#app.blueprints.views.create_ticket">create_ticket() (in module app.blueprints.views)</a>
 </li>
@@ -180,7 +192,7 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.Courses.department">department (app.model.Courses attribute)</a>
+      <li><a href="app.html#app.model.Course.department">department (app.model.Course attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -190,12 +202,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.blueprints.html#app.blueprints.views.edit_ticket">edit_ticket() (in module app.blueprints.views)</a>
 </li>
+      <li><a href="app.html#app.model.User.email">email (app.model.User attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.Messages.end_date">end_date (app.model.Messages attribute)</a>
+      <li><a href="app.html#app.model.Message.end_date">end_date (app.model.Message attribute)</a>
 
       <ul>
-        <li><a href="app.html#app.model.Semesters.end_date">(app.model.Semesters attribute)</a>
+        <li><a href="app.html#app.model.Semester.end_date">(app.model.Semester attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -206,7 +220,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.html#app.model.Season.Fall">Fall (app.model.Season attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Professors.first_name">first_name (app.model.Professors attribute)</a>
+      <li><a href="app.html#app.model.Professor.first_name">first_name (app.model.Professor attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -217,23 +231,39 @@
   </ul></td>
 </tr></table>
 
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="app.html#app.model.User.get_admins">get_admins() (app.model.User static method)</a>
+</li>
+      <li><a href="app.html#app.model.User.get_pending">get_pending() (app.model.User static method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="app.html#app.model.User.get_students">get_students() (app.model.User static method)</a>
+</li>
+      <li><a href="app.html#app.model.User.get_tutors">get_tutors() (app.model.User static method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.html#app.model.Config.id">id (app.model.Config attribute)</a>
 
       <ul>
-        <li><a href="app.html#app.model.Courses.id">(app.model.Courses attribute)</a>
+        <li><a href="app.html#app.model.Course.id">(app.model.Course attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Messages.id">(app.model.Messages attribute)</a>
+        <li><a href="app.html#app.model.Message.id">(app.model.Message attribute)</a>
 </li>
-        <li><a href="app.html#app.model.ProblemTypes.id">(app.model.ProblemTypes attribute)</a>
+        <li><a href="app.html#app.model.ProblemType.id">(app.model.ProblemType attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Professors.id">(app.model.Professors attribute)</a>
+        <li><a href="app.html#app.model.Professor.id">(app.model.Professor attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Sections.id">(app.model.Sections attribute)</a>
+        <li><a href="app.html#app.model.Section.id">(app.model.Section attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Semesters.id">(app.model.Semesters attribute)</a>
+        <li><a href="app.html#app.model.Semester.id">(app.model.Semester attribute)</a>
 </li>
         <li><a href="app.html#app.model.Ticket.id">(app.model.Ticket attribute)</a>
 </li>
@@ -245,6 +275,8 @@
       <li><a href="app.blueprints.html#app.blueprints.auth.index">index() (in module app.blueprints.auth)</a>
 </li>
       <li><a href="app.html#app.model.Mode.InPerson">InPerson (app.model.Mode attribute)</a>
+</li>
+      <li><a href="app.html#app.model.User.is_complete">is_complete() (app.model.User method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -260,7 +292,7 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.Professors.last_name">last_name (app.model.Professors attribute)</a>
+      <li><a href="app.html#app.model.Professor.last_name">last_name (app.model.Professor attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -272,9 +304,9 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.Messages.message">message (app.model.Messages attribute)</a>
+      <li><a href="app.html#app.model.Message.message">message (app.model.Message attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Messages">Messages (class in app.model)</a>
+      <li><a href="app.html#app.model.Message">Message (class in app.model)</a>
 </li>
       <li><a href="tests.html#tests.MockConfidentialClientApplication.MOCK_EMAIL">MOCK_EMAIL (tests.MockConfidentialClientApplication attribute)</a>
 </li>
@@ -306,10 +338,6 @@
 </li>
         <li><a href="tests.html#module-tests.test_create_ticket">tests.test_create_ticket</a>
 </li>
-        <li><a href="tests.html#module-tests.test_portal_anonymous">tests.test_portal_anonymous</a>
-</li>
-        <li><a href="tests.html#module-tests.test_portal_auth">tests.test_portal_auth</a>
-</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -323,7 +351,11 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.Courses.number">number (app.model.Courses attribute)</a>
+      <li><a href="app.html#app.model.User.name">name (app.model.User attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="app.html#app.model.Course.number">number (app.model.Course attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -333,7 +365,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.html#app.model.User.oid">oid (app.model.User attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Courses.on_display">on_display (app.model.Courses attribute)</a>
+      <li><a href="app.html#app.model.Course.on_display">on_display (app.model.Course attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -347,11 +379,11 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="app.html#app.model.User.permission">permission (app.model.User attribute)</a>
+</li>
       <li><a href="app.html#app.model.Permission">Permission (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.User.permission_level">permission_level (app.model.User attribute)</a>
-</li>
-      <li><a href="app.html#app.model.ProblemTypes.problem_type">problem_type (app.model.ProblemTypes attribute)</a>
+      <li><a href="app.html#app.model.ProblemType.problem_type">problem_type (app.model.ProblemType attribute)</a>
 
       <ul>
         <li><a href="app.html#app.model.Ticket.problem_type">(app.model.Ticket attribute)</a>
@@ -359,11 +391,11 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.ProblemTypes">ProblemTypes (class in app.model)</a>
+      <li><a href="app.html#app.model.ProblemType">ProblemType (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Sections.professor_id">professor_id (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Professor">Professor (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Professors">Professors (class in app.model)</a>
+      <li><a href="app.html#app.model.Section.professor_id">professor_id (app.model.Section attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -376,23 +408,31 @@
       <ul>
         <li><a href="app.html#app.model.Config.query">(app.model.Config attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Courses.query">(app.model.Courses attribute)</a>
+        <li><a href="app.html#app.model.Course.query">(app.model.Course attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Messages.query">(app.model.Messages attribute)</a>
+        <li><a href="app.html#app.model.Message.query">(app.model.Message attribute)</a>
 </li>
-        <li><a href="app.html#app.model.ProblemTypes.query">(app.model.ProblemTypes attribute)</a>
+        <li><a href="app.html#app.model.ProblemType.query">(app.model.ProblemType attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Professors.query">(app.model.Professors attribute)</a>
+        <li><a href="app.html#app.model.Professor.query">(app.model.Professor attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Sections.query">(app.model.Sections attribute)</a>
+        <li><a href="app.html#app.model.Section.query">(app.model.Section attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Semesters.query">(app.model.Semesters attribute)</a>
+        <li><a href="app.html#app.model.Semester.query">(app.model.Semester attribute)</a>
 </li>
         <li><a href="app.html#app.model.Ticket.query">(app.model.Ticket attribute)</a>
 </li>
         <li><a href="app.html#app.model.User.query">(app.model.User attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="app.html#app.model.Ticket.reopen">reopen() (app.model.Ticket method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -403,29 +443,27 @@
 </li>
       <li><a href="app.html#app.model.Config.sat_start">sat_start (app.model.Config attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Semesters.season">season (app.model.Semesters attribute)</a>
+      <li><a href="app.html#app.model.Semester.season">season (app.model.Semester attribute)</a>
 </li>
       <li><a href="app.html#app.model.Season">Season (class in app.model)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.section">section (app.model.Ticket attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Sections.section_number">section_number (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Section">Section (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Courses.sections">sections (app.model.Courses attribute)</a>
+      <li><a href="app.html#app.model.Section.section_number">section_number (app.model.Section attribute)</a>
+</li>
+      <li><a href="app.html#app.model.Course.sections">sections (app.model.Course attribute)</a>
 
       <ul>
-        <li><a href="app.html#app.model.Professors.sections">(app.model.Professors attribute)</a>
+        <li><a href="app.html#app.model.Professor.sections">(app.model.Professor attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Semesters.sections">(app.model.Semesters attribute)</a>
+        <li><a href="app.html#app.model.Semester.sections">(app.model.Semester attribute)</a>
 </li>
       </ul></li>
-      <li><a href="app.html#app.model.Sections">Sections (class in app.model)</a>
+      <li><a href="app.html#app.model.Semester">Semester (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Sections.semester_id">semester_id (app.model.Sections attribute)</a>
-</li>
-      <li><a href="app.html#app.model.Semesters">Semesters (class in app.model)</a>
-</li>
-      <li><a href="app.html#app.model.Ticket.session_duration">session_duration (app.model.Ticket attribute)</a>
+      <li><a href="app.html#app.model.Section.semester_id">semester_id (app.model.Section attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -433,10 +471,10 @@
 </li>
       <li><a href="app.html#app.model.Season.Spring">Spring (app.model.Season attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Messages.start_date">start_date (app.model.Messages attribute)</a>
+      <li><a href="app.html#app.model.Message.start_date">start_date (app.model.Message attribute)</a>
 
       <ul>
-        <li><a href="app.html#app.model.Semesters.start_date">(app.model.Semesters attribute)</a>
+        <li><a href="app.html#app.model.Semester.start_date">(app.model.Semester attribute)</a>
 </li>
       </ul></li>
       <li><a href="app.html#app.model.Ticket.status">status (app.model.Ticket attribute)</a>
@@ -463,10 +501,6 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="tests.html#tests.test_portal_auth.test_claim_open_ticket">test_claim_open_ticket() (in module tests.test_portal_auth)</a>
-</li>
-      <li><a href="tests.html#tests.test_portal_auth.test_close_claimed_ticket">test_close_claimed_ticket() (in module tests.test_portal_auth)</a>
-</li>
       <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_empty_assignment">test_create_ticket_empty_assignment() (in module tests.test_create_ticket)</a>
 </li>
       <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_empty_email">test_create_ticket_empty_email() (in module tests.test_create_ticket)</a>
@@ -475,11 +509,9 @@
 </li>
       <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_empty_question">test_create_ticket_empty_question() (in module tests.test_create_ticket)</a>
 </li>
-      <li><a href="tests.html#tests.test_portal_auth.test_create_ticket_get_with_auth">test_create_ticket_get_with_auth() (in module tests.test_portal_auth)</a>
-</li>
       <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_invalid_mode">test_create_ticket_invalid_mode() (in module tests.test_create_ticket)</a>
 </li>
-      <li><a href="tests.html#tests.test_portal_anonymous.test_create_ticket_no_auth">test_create_ticket_no_auth() (in module tests.test_portal_anonymous)</a>
+      <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_no_auth">test_create_ticket_no_auth() (in module tests.test_create_ticket)</a>
 </li>
       <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_no_data">test_create_ticket_no_data() (in module tests.test_create_ticket)</a>
 </li>
@@ -493,18 +525,6 @@
 </li>
       <li><a href="tests.html#tests.test_create_ticket.test_create_ticket_whitespace_question">test_create_ticket_whitespace_question() (in module tests.test_create_ticket)</a>
 </li>
-      <li><a href="tests.html#tests.test_portal_anonymous.test_index_no_auth">test_index_no_auth() (in module tests.test_portal_anonymous)</a>
-</li>
-      <li><a href="tests.html#tests.test_portal_auth.test_index_with_auth">test_index_with_auth() (in module tests.test_portal_auth)</a>
-</li>
-      <li><a href="tests.html#tests.test_portal_auth.test_logout_auth">test_logout_auth() (in module tests.test_portal_auth)</a>
-</li>
-      <li><a href="tests.html#tests.test_portal_anonymous.test_logout_no_auth">test_logout_no_auth() (in module tests.test_portal_anonymous)</a>
-</li>
-      <li><a href="tests.html#tests.test_portal_anonymous.test_mock_login">test_mock_login() (in module tests.test_portal_anonymous)</a>
-</li>
-      <li><a href="tests.html#tests.test_portal_auth.test_reopen_closed_ticket">test_reopen_closed_ticket() (in module tests.test_portal_auth)</a>
-</li>
       <li>
     tests
 
@@ -512,8 +532,6 @@
         <li><a href="tests.html#module-tests">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     tests.conftest
 
@@ -528,20 +546,8 @@
         <li><a href="tests.html#module-tests.test_create_ticket">module</a>
 </li>
       </ul></li>
-      <li>
-    tests.test_portal_anonymous
-
-      <ul>
-        <li><a href="tests.html#module-tests.test_portal_anonymous">module</a>
-</li>
-      </ul></li>
-      <li>
-    tests.test_portal_auth
-
-      <ul>
-        <li><a href="tests.html#module-tests.test_portal_auth">module</a>
-</li>
-      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.html#app.model.Config.thur_end">thur_end (app.model.Config attribute)</a>
 </li>
       <li><a href="app.html#app.model.Config.thur_start">thur_start (app.model.Config attribute)</a>
@@ -550,13 +556,15 @@
 </li>
       <li><a href="app.html#app.model.User.tickets">tickets (app.model.User attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Sections.time">time (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Section.time">time (app.model.Section attribute)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.time_claimed">time_claimed (app.model.Ticket attribute)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.time_closed">time_closed (app.model.Ticket attribute)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.time_created">time_created (app.model.Ticket attribute)</a>
+</li>
+      <li><a href="app.html#app.model.ToStrEnum">ToStrEnum (class in app.model)</a>
 </li>
       <li><a href="app.html#app.model.Config.tue_end">tue_end (app.model.Config attribute)</a>
 </li>
@@ -565,6 +573,8 @@
       <li><a href="app.html#app.model.CanTutor.tutor">tutor (app.model.CanTutor attribute)</a>
 </li>
       <li><a href="app.html#app.model.Permission.Tutor">Tutor (app.model.Permission attribute)</a>
+</li>
+      <li><a href="tests.html#tests.conftest.tutor_client">tutor_client() (in module tests.conftest)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.tutor_id">tutor_id (app.model.Ticket attribute)</a>
 </li>
@@ -584,25 +594,17 @@
 </li>
       <li><a href="app.blueprints.html#app.blueprints.views.update_ticket">update_ticket() (in module app.blueprints.views)</a>
 </li>
-      <li><a href="app.html#app.model.User">User (class in app.model)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.User.user_email">user_email (app.model.User attribute)</a>
+      <li><a href="app.html#app.model.User">User (class in app.model)</a>
 </li>
       <li><a href="app.blueprints.html#app.blueprints.auth.user_loader">user_loader() (in module app.blueprints.auth)</a>
-</li>
-      <li><a href="app.html#app.model.User.user_name">user_name (app.model.User attribute)</a>
 </li>
   </ul></td>
 </tr></table>
 
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.blueprints.html#app.blueprints.auth.validate">validate() (in module app.blueprints.auth)</a>
-</li>
-  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.blueprints.html#app.blueprints.views.view_tickets">view_tickets() (in module app.blueprints.views)</a>
 </li>
@@ -624,7 +626,7 @@
 <h2 id="Y">Y</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.Semesters.year">year (app.model.Semesters attribute)</a>
+      <li><a href="app.html#app.model.Semester.year">year (app.model.Semester attribute)</a>
 </li>
   </ul></td>
 </tr></table>
