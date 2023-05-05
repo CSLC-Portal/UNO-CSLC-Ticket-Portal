@@ -16,6 +16,10 @@ from app.util import permission_required
 from app.model import Ticket
 from app.model import Mode
 from app.model import Permission
+from app.model import Message
+from app.model import Config
+
+from datetime import datetime
 
 from app.extensions import db
 from werkzeug.datastructures import ImmutableMultiDict
@@ -27,7 +31,9 @@ views = Blueprint('views', __name__)
 
 @views.route("/")
 def index():
-    return render_template('index.html')
+    messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
+    #config = Config.query.one()
+    return render_template('index.html',  messages=messages)#config=config, messages=messages)
 
 @views.route('/create-ticket', methods=['POST', 'GET'])
 @login_required

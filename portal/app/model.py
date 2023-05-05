@@ -11,7 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from .extensions import db
 from flask_login import UserMixin
 
-from datetime import datetime
+import datetime
 import enum
 
 Base = declarative_base(name='Base')
@@ -170,7 +170,7 @@ class Ticket(db.Model):
     def claim(self, tutor: User):
         self.tutor_id = tutor.id
         self.status = Status.Claimed
-        self.time_claimed = datetime.now()
+        self.time_claimed = datetime.datetime.now()
 
     def close(self):
         self.status = Status.Closed
@@ -181,7 +181,7 @@ class Ticket(db.Model):
 
     def calc_duration_open(self):
         if self.time_claimed is None:
-            return datetime.now() - self.time_created
+            return datetime.datetime.now() - self.time_created
 
         return self.time_claimed - self.time_created
 
@@ -190,7 +190,7 @@ class Ticket(db.Model):
             return 0  # Ticket hasn't been claimed yet
 
         if self.time_closed is None:
-            return datetime.now() - self.time_claimed
+            return datetime.datetime.now() - self.time_claimed
 
         return self.time_closed - self.time_claimed
 

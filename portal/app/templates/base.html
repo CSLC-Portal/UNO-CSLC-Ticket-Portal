@@ -42,8 +42,8 @@
 
             {% if user.permission >= Permission.Tutor %}
             <li class="nav-link">
-                <div class="Tutor dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <div>
+                    <button class="btn btn-secondary shadow-none dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         Tutor
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -63,7 +63,7 @@
                     Admin
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <!-- TODO: ADMIN CONSOLE, REPORTS
+                        <!-- TODO: REPORTS
                             <li><a class="dropdown-item" href="reports.html">Reports</a></li>
                         -->
                         <li><a class="dropdown-item" href="{{ url_for('admin.console') }}">Administration Console</a></li>
