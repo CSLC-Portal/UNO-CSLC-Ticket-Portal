@@ -17,7 +17,8 @@
                     <label class="form-label visually-hidden" for="email">Email</label>
                     <div class="input-group">
                         <div class="input-group-text">@</div>
-                        <input type="text" class="form-control" id="email" name="email" placeholder="User email" required>
+                        <input type="text" class="form-control" id="email" name="email" placeholder="User email"
+                            required>
                     </div>
                 </div>
                 <div class="col-lg col-12">
@@ -49,74 +50,109 @@
     </div>
     {%- endmacro %}
 
-    {% macro remove_user(user) -%}
-        {% if user != current_user %}
-        <form action="{{ url_for('admin.remove_tutor') }}" method="post">
-            <input type="hidden" name="userID" value="{{ user.id }}">
-            <input type="submit" class="btn btn-primary" value="Remove" />
-        </form>
-        {% else %}
-        <span class="badge rounded-pill bg-black">You</span>
-        {% endif %}
+    {% macro remove_user_button(user) -%}
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove-{{ user.id }}">
+        Remove
+    </button>
+    {%- endmacro %}
+
+    {% macro remove_user_modal(user) %}
+    <div class="modal fade " id="prompt-remove-{{ user.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="title-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title fs-5" id="title-label">Remove User</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to remove <strong>{{ user.email }}'s</strong> permissions?
+                </div>
+                <form action="{{ url_for('admin.remove_tutor') }}" method="post">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <input type="hidden" name="userID" value="{{ user.id }}">
+                        <input type="submit" class="btn btn-primary" value="Yes" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     {%- endmacro %}
 
     {% macro pending_tutors(pending) -%}
-        {% if pending.count() > 0 %}
-            {% call user_table('Pending Tutors') %}
-                <thead>
-                    <tr>
-                        <th scope="col">Email</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Permission</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for tutor in pending %}
-                    <tr scope="row">
-                        <td>{{ tutor.email }}</td>
-                        <td>
-                            <span class="badge rounded-pill bg-warning">Pending</span>
-                        </td>
-                        <td>{{ tutor.permission }}</td>
-                        <td>{{ remove_user(tutor) }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            {% endcall %}
-        {% endif %}
+    {% if pending.count() > 0 %}
+    {% call user_table('Pending Tutors') %}
+    <thead>
+        <tr>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">Permission</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tutor in pending %}
+        <tr scope="row">
+            <td>{{ tutor.email }}</td>
+            <td>
+                <span class="badge rounded-pill bg-warning">Pending</span>
+            </td>
+            <td>{{ tutor.permission }}</td>
+            <td>{{ remove_user_button(tutor) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    {% endcall %}
+    {% endif %}
     {%- endmacro %}
 
     {{ pending_tutors(model.User.get_pending()) }}
 
     {% call user_table('Existing Tutors') %}
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Status</th>
-                <th scope="col">Permission</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for tutor in model.User.get_tutors() %}
-            <tr scope="row">
-                <td>{{ tutor.name }}</td>
-                <td>{{ tutor.email }}</td>
-                <td>
-                    {% if tutor.tutor_is_active %}
-                        <span class="badge rounded-pill bg-success">Active</span>
-                    {% else %}
-                        <span class="badge rounded-pill bg-secondary">Inactive</span>
-                    {% endif %}
-                </td>
-                <td>{{ tutor.permission }}</td>
-                <td>{{ remove_user(tutor) }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">Permission</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tutor in model.User.get_tutors() %}
+        <tr scope="row">
+            <td>{{ tutor.name }}</td>
+            <td>{{ tutor.email }}</td>
+            <td>
+                {% if tutor.tutor_is_active %}
+                <span class="badge rounded-pill bg-success">Active</span>
+                {% else %}
+                <span class="badge rounded-pill bg-secondary">Inactive</span>
+                {% endif %}
+            </td>
+            <td>{{ tutor.permission }}</td>
+            <td>
+                {% if user != current_user %}
+                {{ remove_user_button(tutor) }}
+                {% else %}
+                <span class="badge rounded-pill bg-black">You</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
     {% endcall %}
+
+    {% for tutor in model.User.get_tutors() %}
+        {% if tutor != current_user %}
+            {{ remove_user_modal(tutor) }}
+        {% endif %}
+    {% endfor %}
+
+    {% for tutor in model.User.get_pending() %}
+        {{ remove_user_modal(tutor) }}
+    {% endfor %}
 
 </div>
 
