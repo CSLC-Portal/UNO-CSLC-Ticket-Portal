@@ -92,14 +92,14 @@
         </tr>
     </thead>
     <tbody>
-        {% for tutor in pending %}
+        {% for user in pending %}
         <tr scope="row">
-            <td>{{ tutor.email }}</td>
+            <td>{{ user.email }}</td>
             <td>
                 <span class="badge rounded-pill bg-warning">Pending</span>
             </td>
-            <td>{{ tutor.permission }}</td>
-            <td>{{ remove_user_button(tutor) }}</td>
+            <td>{{ user.permission }}</td>
+            <td>{{ remove_user_button(user) }}</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -120,23 +120,23 @@
         </tr>
     </thead>
     <tbody>
-        {% for tutor in model.User.get_tutors() %}
+        {% for user in model.User.get_tutors() %}
         <tr scope="row">
-            <td>{{ tutor.name }}</td>
-            <td>{{ tutor.email }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
             <td>
-                {% if tutor.tutor_is_active %}
-                <span class="badge rounded-pill bg-success">Active</span>
+                {% if user.tutor_is_active %}
+                    <span class="badge rounded-pill bg-success">Active</span>
                 {% else %}
-                <span class="badge rounded-pill bg-secondary">Inactive</span>
+                    <span class="badge rounded-pill bg-secondary">Inactive</span>
                 {% endif %}
             </td>
-            <td>{{ tutor.permission }}</td>
+            <td>{{ user.permission }}</td>
             <td>
                 {% if user != current_user %}
-                {{ remove_user_button(tutor) }}
+                    {{ remove_user_button(user) }}
                 {% else %}
-                <span class="badge rounded-pill bg-black">You</span>
+                    <span class="badge rounded-pill bg-black">You</span>
                 {% endif %}
             </td>
         </tr>
@@ -144,14 +144,14 @@
     </tbody>
     {% endcall %}
 
-    {% for tutor in model.User.get_tutors() %}
-        {% if tutor != current_user %}
-            {{ remove_user_modal(tutor) }}
+    {% for user in model.User.get_tutors() %}
+        {% if user != current_user %}
+            {{ remove_user_modal(user) }}
         {% endif %}
     {% endfor %}
 
-    {% for tutor in model.User.get_pending() %}
-        {{ remove_user_modal(tutor) }}
+    {% for user in model.User.get_pending() %}
+        {{ remove_user_modal(user) }}
     {% endfor %}
 
 </div>
