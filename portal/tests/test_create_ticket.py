@@ -5,6 +5,20 @@ from flask.testing import FlaskClient
 
 import pytest
 
+# TODO: Need to test more invalid input (e.g. long strings, etc.) break the database!
+
+def test_create_ticket_no_auth(client: FlaskClient):
+    response1 = client.get('/create-ticket')
+    response2 = client.post('/create-ticket')
+
+    # Without authentication, expect redirect to authority login
+    assert '302' in response1.status
+    assert '302' in response2.status
+
+    # Make sure the login URL is correct
+    assert b'https://login.microsoftonline.com/common' in response1.data
+    assert b'https://login.microsoftonline.com/common' in response2.data
+
 def test_create_ticket_post_with_auth(auth_client: FlaskClient, app: Flask):
 
     test_form_data = {

@@ -100,7 +100,7 @@
             </p>
             <form action="{{ url_for('views.update_ticket') }}", method="POST">
                 <input type="hidden" name="ticketID" value="{{ ticket.id }}">
-                <button type="submit" class="btn btn-danger" name="action" value="ReOpen">ReOpen</button>
+                <button type="submit" class="btn btn-danger" name="action" value="Open">Open</button>
                 <!-- Button trigger edit ticket modal -->
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false"> View </button>
             </form>
@@ -116,14 +116,12 @@
 
 {% for ticket in tickets %}
 <!-- Modal -->
-<div class="modal fade" id="edit{{ ticket.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="edit{{ ticket.id }}" tabindex="-1" role="dialog" aria-labelledby="ticketTitle"  aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Ticket ID: {{ ticket.id }}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <h5 class="modal-title" id="ticketTitle">Ticket ID: {{ ticket.id }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form action="{{ url_for('views.edit_ticket') }}", method="POST">
         <div class="modal-body">
@@ -172,27 +170,23 @@
 
             <strong>Primary Tutor</strong>
             <select class="form-control" id="primaryTutorInput" name="primaryTutorInput">
-              <option value="" disabled selected>{{ ticket.user.user_name }}</option>
-              {% for tutor in tutors %}
-                  <option value="{{ tutor.id }}">{{ tutor.user_name }}</option>
+              {% for tutor in model.User.get_tutors() %}
+                  <option value="{{ tutor.id }}">{{ tutor.name }}</option>
               {% endfor %}
             </select>
 
             <strong>Tutor Notes</strong>
             <textarea class="form-control" id="tutorNotes" rows="3" name="tutorNotes">{{ ticket.tutor_notes }}</textarea><br>
 
-            {% if ticket.successful_session == True %}
+            {% if ticket.successful_session %}
             <input type="checkbox" id="successfulSession" name="successfulSession" value="success" checked>
             {% else %}
             <input type="checkbox" id="successfulSession" name="successfulSession" value="success">
             {% endif %}
             <label for="successfulSession"><strong>Was Successful</strong></label>
-
-
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary" name="SaveChanges">Save changes</button>
         </div>
       </form>
