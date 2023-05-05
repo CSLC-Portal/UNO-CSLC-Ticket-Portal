@@ -47,7 +47,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Portal Blueprints</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#module-app.blueprints.auth">Authorization (Auth) Component</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.authorized"><code class="docutils literal notranslate"><span class="pre">authorized()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.build_auth_url"><code class="docutils literal notranslate"><span class="pre">build_auth_url()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.logout"><code class="docutils literal notranslate"><span class="pre">logout()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.unauthorized"><code class="docutils literal notranslate"><span class="pre">unauthorized()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.blueprints.auth.user_loader"><code class="docutils literal notranslate"><span class="pre">user_loader()</span></code></a></li>
@@ -56,6 +56,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-app.blueprints.views">Views Component</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#app.blueprints.views.create_ticket"><code class="docutils literal notranslate"><span class="pre">create_ticket()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.blueprints.views.edit_ticket"><code class="docutils literal notranslate"><span class="pre">edit_ticket()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.blueprints.views.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.blueprints.views.update_ticket"><code class="docutils literal notranslate"><span class="pre">update_ticket()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.blueprints.views.view_tickets"><code class="docutils literal notranslate"><span class="pre">view_tickets()</span></code></a></li>
 </ul>
@@ -109,8 +110,8 @@ require authentication can check if this user exists.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="app.blueprints.auth.index">
-<span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.index" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="app.blueprints.auth.build_auth_url">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">build_auth_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.build_auth_url" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -153,6 +154,11 @@ the passed in create-ticket.html template which is the form that students use to
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.views.edit_ticket">
 <span class="sig-prename descclassname"><span class="pre">app.blueprints.views.</span></span><span class="sig-name descname"><span class="pre">edit_ticket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.views.edit_ticket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.blueprints.views.index">
+<span class="sig-prename descclassname"><span class="pre">app.blueprints.views.</span></span><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.views.index" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
