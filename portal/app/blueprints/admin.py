@@ -8,6 +8,7 @@ from flask import render_template
 from flask_login import current_user
 
 from app.model import User
+from app.model import Course
 from app.model import Permission
 
 from app.extensions import db
@@ -33,7 +34,7 @@ def view_tutors():
     # NOTE: Cannot use inequality operators < > <= >= on enum from database as only
     #       the enum name is actually persisted.
     #
-    return render_template('admin-tutors.html', tutors=User.get_tutors())
+    return render_template('admin-tutors.html')
 
 @admin.route('/tutors/add', methods=['POST'])
 @permission_required(Permission.Admin)
@@ -94,6 +95,57 @@ def remove_tutor():
         print(f'Failed to remove user: {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_tutors'))
+
+@admin.route('/courses')
+@permission_required(Permission.Admin)
+def view_courses():
+    # get all courses, just for validation in html
+    courses = Course.query.all()
+    return render_template('admin-course.html', courses=courses)
+
+@admin.route('/courses/add', methods=["POST"])
+@permission_required(Permission.Admin)
+def add_course():
+
+    courseDepartment = strip_or_none(request.form.get("courseDepartment"))
+    courseNumber = strip_or_none(request.form.get("courseNumber"))
+    courseName = strip_or_none(request.form.get("courseName"))
+    displayOnIndex = request.form.get("displayOnIndex")
+    print("COURSE DEPARTMENT: " + str(courseDepartment))
+    print("COURSE NUMBER: " + str(courseNumber))
+    print("COURSE NAME: " + str(courseName))
+    print("DISPLAY ON INDEX: " + str(displayOnIndex))
+
+    # set up regex
+    # m = re.match("(^[A-Z]{2,4})\\s?(\\d{4})$", courseNumber)
+
+    # set on display
+    if displayOnIndex is not None:
+        displayOnIndex = True
+    else:
+        displayOnIndex = False
+
+    # validate the input coming in. store everything in DB the same
+    if str_empty(courseDepartment):
+        flash('Could not create course, course department must not be empty!', category='error')
+    elif str_empty(courseNumber):
+        flash('Could not create course, course number must not be empty!', category='error')
+    elif str_empty(courseName):
+        flash('Could not create course, course name must not be empty!', category='error')
+    else:
+
+        tmpCourse = Course.query.filter_by(number=courseNumber, course_name=courseName).first()
+        if tmpCourse is None:
+            newCourse = Course(courseDepartment, courseNumber, courseName, displayOnIndex)
+            db.session.add(newCourse)
+            db.session.commit()
+            flash('Course created successfully!', category='success')
+            # TODO: return redirect for admin console home?
+        else:
+            flash('Course already exists in database!', category='error')
+            print("COURSE ALREADY IN DB!")
+
+    return redirect(url_for('admin.view_courses'))
 
 def attempt_create_super_user(email: str, permission: Permission):
     """

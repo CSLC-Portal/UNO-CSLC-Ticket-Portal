@@ -33,7 +33,7 @@ REDIRECT_PATH = os.getenv('AAD_REDIRECT_PATH')
 @auth.route("/")
 def index():
     session["flow"] = _build_auth_code_flow()
-    return render_template('index.html', user=current_user, auth_url=session["flow"]["auth_uri"])
+    return render_template('index.html', auth_url=session["flow"]["auth_uri"])
 
 @auth.route(REDIRECT_PATH)
 def authorized():

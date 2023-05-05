@@ -33,6 +33,28 @@ footer {
     background-color: #292929;
     text-align: right;
     min-width: 360px;
+    vertical-align: baseline;
+}
+
+ul.nav {
+    height: 45px;
+    vertical-align: baseline;
+}
+
+.nav-link {
+    display: block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    float: right;
+}
+
+.Login {
+    color: white;
+    text-decoration: none;
+    padding-right: 5px;
+    top: 5px;
+    position: relative;
 }
 
 .uno-logo {
@@ -114,15 +136,6 @@ a.logo-text:link {
     }
 }
 
-
-.Login {
-    color: white;
-    margin-top: 10px;
-    margin-left: -100px;
-    position: absolute;
-    text-decoration: none;
-}
-
 h1 {
     margin-top: 60px;
     text-align: center;
@@ -136,6 +149,19 @@ h2 {
     text-align: center;
     color: grey;
     font-size: 25px;
+}
+
+h3 {
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+h4 {
+    text-align: center;
+    color: white;
+    font-size: 18px;
 }
 
 .solid {
@@ -155,22 +181,6 @@ h2 {
     margin-top: 9px;
     color: white;
     margin-right: 500px;
-    text-decoration: none;
-}
-
-.Admin {
-    color: white;
-    margin-left: 950px;
-    margin-top: 9px;
-    position: absolute;
-    text-decoration: none;
-}
-
-.Tutor {
-    color: white;
-    margin-top: 9px;
-    position: absolute;
-    margin-left: 1100px;
     text-decoration: none;
 }
 

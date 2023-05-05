@@ -22,18 +22,57 @@
                         alt="University of Nebraska at Omaha Logo" class="uno-logo" />
                 </td>
                 <td class="right-end">
-                    <a class="logo-text" href='/'>Computer Science Learning Center</a>
+                    <a class="logo-text" href="{{ url_for('auth.index') }}">Computer Science Learning Center</a>
                 </td>
             </tr>
         </table>
     </div>
     <div class="nav-section">
         {% if not user.is_authenticated %}
-        <a class="Login" href='{{ auth_url }}'>Sign In</a>
+        <ul>
+            <li>
+            <a class="Login" href='{{ auth_url }}'>Sign In</a>
+            </li>
+        </ul>
         {% else %}
-        <a class="Login" href="/logout">Logout</a>
+        <ul>
+            <li class="nav-link">
+            <a class="Login" href="{{ url_for('auth.logout') }}">Logout</a>
+            </li>
+
+            {% if user.permission >= Permission.Tutor %}
+            <li class="nav-link">
+                <div class="Tutor dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Tutor
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <!-- TODO: EDIT TUTOR
+                        <li><a class="dropdown-item" href="tutor.html">Edit Tutor Information</a></li>
+                    -->
+                        <li><a class="dropdown-item" href="{{ url_for('views.view_tickets') }}">View Tickets</a></li>
+                    </ul>
+                </div>
+            </li>
+            {% endif %}
+
+            {% if user.permission >= Permission.Admin %}
+            <li class="nav-link">
+                <div class="Admin">
+                    <button class="btn btn-secondary shadow-none dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Admin
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <!-- TODO: ADMIN CONSOLE, REPORTS
+                            <li><a class="dropdown-item" href="reports.html">Reports</a></li>
+                        -->
+                        <li><a class="dropdown-item" href="{{ url_for('admin.console') }}">Administration Console</a></li>
+                    </ul>
+                </div>
+            </li>
+            {% endif %}
+        </ul>
         {% endif %}
-        <!-- this is where other links will go -->
     </div>
 
     <!-- Alert -->

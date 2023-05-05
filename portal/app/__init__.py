@@ -92,8 +92,8 @@ def _create_db_models(app: Flask):
             print('Successfully connected to database server!')
             return
 
-        except Exception:
-            print(f'Failed to create database tables, will attempt to reconnect in {cooldown:.2f} seconds...', file=stderr)
+        except Exception as e:
+            print(f'Failed to create database tables "{e}", will attempt to reconnect in {cooldown:.2f} seconds...', file=stderr)
             killswitch -= 1
             sleep(cooldown)
             continue

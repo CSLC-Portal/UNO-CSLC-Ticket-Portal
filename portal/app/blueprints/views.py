@@ -17,11 +17,17 @@ from app.model import Ticket
 from app.model import Mode
 from app.model import Status
 from app.model import Permission
+from app.model import User
+from app.model import Course
+
+from datetime import datetime
+from datetime import timedelta
 
 from app.extensions import db
 from werkzeug.datastructures import ImmutableMultiDict
 
 import sys
+import re
 
 views = Blueprint('views', __name__)
 
@@ -49,7 +55,7 @@ def create_ticket():
     """
     if request.method == 'GET':
         # Render create-ticket template if GET request or if there was an error in submission data
-        return render_template('create-ticket.html', Mode=Mode, user=current_user)
+        return render_template('create-ticket.html')
 
     ticket = _attempt_create_ticket(request.form)
 
@@ -84,12 +90,7 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    tickets = Ticket.query.all()
-
-    openTickets = Ticket.query.filter(Ticket.status == Status.Open)  # and (datetime.now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-    claimedTickets = Ticket.query.filter(Ticket.status == Status.Claimed)
-    closedTickets = Ticket.query.filter(Ticket.status == Status.Closed)
-    loopNum = max(closedTickets.count(), max(openTickets.count(), claimedTickets.count()))
+    tickets = Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
 
     # Get the user permission level here BEFORE attempting to load view-tickets page
     user_level = current_user.permission
@@ -97,9 +98,7 @@ def view_tickets():
         flash('Insufficient permission level to view tickets', category='error')
         return redirect(url_for('auth.index'))
 
-    # get the tutors to display for edit ticket modal if the user presses it
-    return render_template('view_tickets.html', openTickets=list(openTickets), claimedTickets=list(claimedTickets), closedTickets=list(closedTickets),
-                           loopNum=loopNum, Status=Status, user=current_user, tickets=tickets)
+    return render_template('view_tickets.html', tickets=tickets)
 
 @views.route('/update-ticket', methods=["POST"])
 @permission_required(Permission.Tutor)
