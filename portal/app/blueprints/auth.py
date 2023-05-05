@@ -11,7 +11,6 @@ from flask import render_template
 from flask_login import login_user
 from flask_login import login_required
 from flask_login import logout_user
-from flask_login import current_user
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm.exc import MultipleResultsFound
@@ -29,11 +28,6 @@ AUTHORITY = os.getenv('AAD_AUTHORITY', 'https://login.microsoftonline.com/common
 CLIENT_ID = os.getenv('AAD_CLIENT_ID')
 CLIENT_SECRET = os.getenv('AAD_CLIENT_SECRET')
 REDIRECT_PATH = os.getenv('AAD_REDIRECT_PATH')
-
-@auth.route("/")
-def index():
-    session["flow"] = _build_auth_code_flow()
-    return render_template('index.html', auth_url=session["flow"]["auth_uri"])
 
 @auth.route(REDIRECT_PATH)
 def authorized():
@@ -61,18 +55,17 @@ def authorized():
         flash('Could not sign-in, unknown error.', category='error')
         print(f'{e}', file=stderr)
 
-    return redirect(url_for("auth.index"))
+    return redirect(url_for("views.index"))
 
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(f'{AUTHORITY}/oauth2/v2.0/logout?post_logout_redirect_uri={url_for("auth.index", _external=True)}')
+    return redirect(f'{AUTHORITY}/oauth2/v2.0/logout?post_logout_redirect_uri={url_for("views.index", _external=True)}')
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    session["flow"] = _build_auth_code_flow()
-    return redirect(session["flow"]["auth_uri"])
+    return redirect(build_auth_url())
 
 @login_manager.user_loader
 def user_loader(id: str):
@@ -82,6 +75,10 @@ def user_loader(id: str):
     #       in which case this function should just call _user_from_claims
     #
     return User.query.get(int(id))
+
+def build_auth_url():
+    session["flow"] = _build_auth_code_flow()
+    return session["flow"]["auth_uri"]
 
 def _user_from_claims(token_claims: str):
     """

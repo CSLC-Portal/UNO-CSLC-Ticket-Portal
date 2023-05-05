@@ -8,7 +8,7 @@ from flask import url_for
 from flask_login import login_required
 from flask_login import current_user
 
-PERMISSION_REQUIRED_REDIRECT = 'auth.index'
+PERMISSION_REQUIRED_REDIRECT = 'views.index'
 
 def strip_or_none(s: str):
     return s.strip() if s is not None else None

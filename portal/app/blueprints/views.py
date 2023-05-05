@@ -31,6 +31,10 @@ import re
 
 views = Blueprint('views', __name__)
 
+@views.route("/")
+def index():
+    return render_template('index.html')
+
 @views.route('/create-ticket', methods=['POST', 'GET'])
 @login_required
 def create_ticket():
@@ -74,7 +78,7 @@ def create_ticket():
 
         else:
             flash('Ticket created successfully!', category='success')
-            return redirect(url_for('auth.index'))
+            return redirect(url_for('views.index'))
 
     return redirect(url_for('views.create_ticket'))
 
@@ -96,7 +100,7 @@ def view_tickets():
     user_level = current_user.permission
     if (user_level < Permission.Tutor):
         flash('Insufficient permission level to view tickets', category='error')
-        return redirect(url_for('auth.index'))
+        return redirect(url_for('views.index'))
 
     return render_template('view_tickets.html', tickets=tickets)
 

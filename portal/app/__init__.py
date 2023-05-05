@@ -4,14 +4,13 @@ from .extensions import db
 from .extensions import sess
 from .extensions import login_manager
 from flask_login import current_user
-from . import default_config
-
-from .blueprints.admin import attempt_create_super_user
 from sqlalchemy.exc import IntegrityError
+
 from .model import Mode
 from .model import Status
 from .model import Permission
-from .model import User
+
+from . import default_config
 
 from time import sleep
 from sys import stderr
@@ -37,14 +36,7 @@ def create_app():
     _create_db_models(app)
     _register_blueprints(app)
     _add_default_admin(app)
-
-    app.jinja_env.globals['user'] = current_user
-    app.jinja_env.globals['Mode'] = Mode
-    app.jinja_env.globals['Status'] = Status
-    app.jinja_env.globals['Permission'] = Permission
-
-    from . import model
-    app.jinja_env.globals['model'] = model
+    _setup_jinja_globals(app)
     return app
 
 def _setup_env(app: Flask):
@@ -110,6 +102,7 @@ def _add_default_admin(app: Flask):
 
     with app.app_context():
         try:
+            from .blueprints.admin import attempt_create_super_user
             attempt_create_super_user(admin_email, Permission.Admin)
 
         except IntegrityError as e:
@@ -118,3 +111,15 @@ def _add_default_admin(app: Flask):
 
         except Exception as e:
             print(e, file=stderr)
+
+def _setup_jinja_globals(app: Flask):
+    app.jinja_env.globals['user'] = current_user
+    app.jinja_env.globals['Mode'] = Mode
+    app.jinja_env.globals['Status'] = Status
+    app.jinja_env.globals['Permission'] = Permission
+
+    from .blueprints.auth import build_auth_url
+    app.jinja_env.globals['build_auth_url'] = build_auth_url
+
+    from . import model
+    app.jinja_env.globals['model'] = model
