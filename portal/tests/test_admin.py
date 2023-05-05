@@ -103,6 +103,7 @@ def test_admin_add_tutor(admin_client: FlaskClient, app: Flask):
         assert not user.is_complete()
         assert user.email == 'new@user.com'
         assert user.permission == Permission.Tutor
+        assert user.tutor_is_active
 
     with admin_client.session_transaction() as session:
         flashes = session['_flashes']
@@ -128,6 +129,7 @@ def test_admin_add_admin(admin_client: FlaskClient, app: Flask):
         assert not user.is_complete()
         assert user.email == 'new@user.com'
         assert user.permission == Permission.Admin
+        assert user.tutor_is_active
 
     with admin_client.session_transaction() as session:
         flashes = session['_flashes']
@@ -160,6 +162,7 @@ def test_admin_add_tutor_existing_user(admin_client: FlaskClient, create_auth_cl
         assert user.is_complete()
         assert user.email == 'new@user.com'
         assert user.permission == Permission.Tutor
+        assert user.tutor_is_active
 
     with admin_client.session_transaction() as session:
         flashes = session['_flashes']
@@ -193,6 +196,7 @@ def test_admin_add_admin_existing_user(admin_client: FlaskClient, create_auth_cl
         assert user.is_complete()
         assert user.email == 'new@user.com'
         assert user.permission == Permission.Admin
+        assert user.tutor_is_active
 
     with admin_client.session_transaction() as session:
         flashes = session['_flashes']
@@ -225,6 +229,7 @@ def test_admin_remove_tutor(admin_client: FlaskClient, create_super_user, app: F
     with app.app_context():
         assert User.get_tutors().count() == 1
         assert User.query.count() == 2
+        assert not User.get_students().first().tutor_is_active
 
 def test_admin_remove_admin(admin_client: FlaskClient, create_super_user, app: Flask):
     create_super_user(email='admin2@email.com', oid='xxxx')
@@ -249,6 +254,7 @@ def test_admin_remove_admin(admin_client: FlaskClient, create_super_user, app: F
     with app.app_context():
         assert User.get_tutors().count() == 1
         assert User.query.count() == 2
+        assert not User.get_students().first().tutor_is_active
 
 def test_admin_remove_self(admin_client: FlaskClient, app: Flask):
     with app.app_context():

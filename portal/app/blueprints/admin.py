@@ -47,6 +47,7 @@ def add_tutor():
         if permission_val:
             permission = Permission(int(permission_val))
 
+        # TODO: Should display error message if user is already set at the permission level
         attempt_create_super_user(email, permission)
 
     except ValueError:
@@ -74,6 +75,7 @@ def remove_tutor():
         user: User = User.query.get(user_id)
 
         if user and user != current_user:
+            # TODO: Should display error message if user has permission level of Student
             _attempt_delete_super_user(user)
             flash('User successfully removed!', category='success')
 
@@ -110,10 +112,11 @@ def attempt_create_super_user(email: str, permission: Permission):
     user: User = User.query.filter_by(email=email).one_or_none()
 
     if user is None:
-        pseudo_user = User(None, permission, email, None, False, False)
+        pseudo_user = User(None, permission, email, None, True, False)
         db.session.add(pseudo_user)
 
     else:
+        user.tutor_is_active = True
         user.permission = permission
 
     db.session.commit()
@@ -133,6 +136,7 @@ def _attempt_delete_super_user(user: User):
 
     else:
         # print(f'{user}\'s permissions changing to {Permission.Student}...')
+        user.tutor_is_active = False
         user.permission = Permission.Student
 
     db.session.commit()
