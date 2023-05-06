@@ -51,8 +51,8 @@
     <tbody>
         {% for professor in professors %}
         <tr scope="row">
-            <td>{{ professor.first_name }}</td>
-            <td>{{ professor.last_name }}</td>
+            <td>{{ professor.first_name.capitalize() }}</td>
+            <td>{{ professor.last_name.capitalize() }}</td>
             <td>{{ professor.sections }}</td>
             <td>{{ remove_professor_button(course) }}</td>
 
