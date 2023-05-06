@@ -505,14 +505,6 @@ def add_section():
                     print("START TIME: " + str(secStartTime))
                     print("END TIME: " + str(secEndTime))
 
-                # TODO: need to grab section mode too since they're all radios
-                # if sectionMode == "TotallyOnline":
-                #     sectionMode = SectionMode.TotallyOnline
-                # elif sectionMode == "Remote":
-                #     sectionMode = SectionMode.Remote
-                # elif sectionMode == "InPerson":
-                #     sectionMode = SectionMode.InPerson
-
                 newSection = Sections(sectionNum, daysOfWeek, secStartTime, secEndTime, sectionMode, course, semester, professor)
                 db.session.add(newSection)
                 db.session.commit()
@@ -526,5 +518,3 @@ def add_section():
     courses = Courses.query.all()
     professors = Professors.query.all()
     return render_template('admin-sections.html', sections=sections, semesters=semesters, courses=courses, professors=professors, SectionMode=SectionMode)
-
-# def _validate_input(mon, tue, wed, thu, fri, mode):
