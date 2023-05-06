@@ -181,7 +181,7 @@
 </li>
       <li><a href="app.html#app.model.Course">Course (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Sections.course_id">course_id (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Section.course_id">course_id (app.model.Section attribute)</a>
 </li>
       <li><a href="app.html#app.model.Course.course_name">course_name (app.model.Course attribute)</a>
 </li>
@@ -201,7 +201,7 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.Sections.days_of_week">days_of_week (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Section.days_of_week">days_of_week (app.model.Section attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -222,10 +222,10 @@
       <li><a href="app.html#app.model.Message.end_date">end_date (app.model.Message attribute)</a>
 
       <ul>
-        <li><a href="app.html#app.model.Semesters.end_date">(app.model.Semesters attribute)</a>
+        <li><a href="app.html#app.model.Semester.end_date">(app.model.Semester attribute)</a>
 </li>
       </ul></li>
-      <li><a href="app.html#app.model.Sections.end_time">end_time (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Section.end_time">end_time (app.model.Section attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -276,9 +276,9 @@
 </li>
         <li><a href="app.html#app.model.Professor.id">(app.model.Professor attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Sections.id">(app.model.Sections attribute)</a>
+        <li><a href="app.html#app.model.Section.id">(app.model.Section attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Semesters.id">(app.model.Semesters attribute)</a>
+        <li><a href="app.html#app.model.Semester.id">(app.model.Semester attribute)</a>
 </li>
         <li><a href="app.html#app.model.Ticket.id">(app.model.Ticket attribute)</a>
 </li>
@@ -402,8 +402,6 @@
 </li>
       <li><a href="app.html#app.model.Permission">Permission (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Course.pretty_print">pretty_print() (app.model.Course method)</a>
-</li>
       <li><a href="app.html#app.model.ProblemType.problem_type">problem_type (app.model.ProblemType attribute)</a>
 
       <ul>
@@ -416,7 +414,7 @@
 </li>
       <li><a href="app.html#app.model.Professor">Professor (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Sections.professor_id">professor_id (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Section.professor_id">professor_id (app.model.Section attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -437,9 +435,9 @@
 </li>
         <li><a href="app.html#app.model.Professor.query">(app.model.Professor attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Sections.query">(app.model.Sections attribute)</a>
+        <li><a href="app.html#app.model.Section.query">(app.model.Section attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Semesters.query">(app.model.Semesters attribute)</a>
+        <li><a href="app.html#app.model.Semester.query">(app.model.Semester attribute)</a>
 </li>
         <li><a href="app.html#app.model.Ticket.query">(app.model.Ticket attribute)</a>
 </li>
@@ -468,15 +466,17 @@
 </li>
       <li><a href="app.html#app.model.Config.sat_start">sat_start (app.model.Config attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Semesters.season">season (app.model.Semesters attribute)</a>
+      <li><a href="app.html#app.model.Semester.season">season (app.model.Semester attribute)</a>
 </li>
       <li><a href="app.html#app.model.Season">Season (class in app.model)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.section">section (app.model.Ticket attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Sections.section_mode">section_mode (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Section">Section (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Sections.section_number">section_number (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Section.section_mode">section_mode (app.model.Section attribute)</a>
+</li>
+      <li><a href="app.html#app.model.Section.section_number">section_number (app.model.Section attribute)</a>
 </li>
       <li><a href="app.html#app.model.SectionMode">SectionMode (class in app.model)</a>
 </li>
@@ -485,14 +485,12 @@
       <ul>
         <li><a href="app.html#app.model.Professor.sections">(app.model.Professor attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Semesters.sections">(app.model.Semesters attribute)</a>
+        <li><a href="app.html#app.model.Semester.sections">(app.model.Semester attribute)</a>
 </li>
       </ul></li>
-      <li><a href="app.html#app.model.Sections">Sections (class in app.model)</a>
+      <li><a href="app.html#app.model.Semester">Semester (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Sections.semester_id">semester_id (app.model.Sections attribute)</a>
-</li>
-      <li><a href="app.html#app.model.Semesters">Semesters (class in app.model)</a>
+      <li><a href="app.html#app.model.Section.semester_id">semester_id (app.model.Section attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -503,10 +501,10 @@
       <li><a href="app.html#app.model.Message.start_date">start_date (app.model.Message attribute)</a>
 
       <ul>
-        <li><a href="app.html#app.model.Semesters.start_date">(app.model.Semesters attribute)</a>
+        <li><a href="app.html#app.model.Semester.start_date">(app.model.Semester attribute)</a>
 </li>
       </ul></li>
-      <li><a href="app.html#app.model.Sections.start_time">start_time (app.model.Sections attribute)</a>
+      <li><a href="app.html#app.model.Section.start_time">start_time (app.model.Section attribute)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.status">status (app.model.Ticket attribute)</a>
 </li>
@@ -657,7 +655,7 @@
 <h2 id="Y">Y</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.Semesters.year">year (app.model.Semesters attribute)</a>
+      <li><a href="app.html#app.model.Semester.year">year (app.model.Semester attribute)</a>
 </li>
   </ul></td>
 </tr></table>

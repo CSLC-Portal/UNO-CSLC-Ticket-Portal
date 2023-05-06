@@ -76,7 +76,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Course.id"><code class="docutils literal notranslate"><span class="pre">Course.id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Course.number"><code class="docutils literal notranslate"><span class="pre">Course.number</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Course.on_display"><code class="docutils literal notranslate"><span class="pre">Course.on_display</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Course.pretty_print"><code class="docutils literal notranslate"><span class="pre">Course.pretty_print()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Course.query"><code class="docutils literal notranslate"><span class="pre">Course.query</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Course.sections"><code class="docutils literal notranslate"><span class="pre">Course.sections</span></code></a></li>
 </ul>
@@ -121,33 +120,33 @@
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Season.Summer"><code class="docutils literal notranslate"><span class="pre">Season.Summer</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#app.model.Section"><code class="docutils literal notranslate"><span class="pre">Section</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Section.course_id"><code class="docutils literal notranslate"><span class="pre">Section.course_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Section.days_of_week"><code class="docutils literal notranslate"><span class="pre">Section.days_of_week</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Section.end_time"><code class="docutils literal notranslate"><span class="pre">Section.end_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Section.id"><code class="docutils literal notranslate"><span class="pre">Section.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Section.professor_id"><code class="docutils literal notranslate"><span class="pre">Section.professor_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Section.query"><code class="docutils literal notranslate"><span class="pre">Section.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Section.section_mode"><code class="docutils literal notranslate"><span class="pre">Section.section_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Section.section_number"><code class="docutils literal notranslate"><span class="pre">Section.section_number</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Section.semester_id"><code class="docutils literal notranslate"><span class="pre">Section.semester_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Section.start_time"><code class="docutils literal notranslate"><span class="pre">Section.start_time</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#app.model.SectionMode"><code class="docutils literal notranslate"><span class="pre">SectionMode</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.SectionMode.InPerson"><code class="docutils literal notranslate"><span class="pre">SectionMode.InPerson</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.SectionMode.Remote"><code class="docutils literal notranslate"><span class="pre">SectionMode.Remote</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.SectionMode.TotallyOnline"><code class="docutils literal notranslate"><span class="pre">SectionMode.TotallyOnline</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#app.model.Sections"><code class="docutils literal notranslate"><span class="pre">Sections</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Sections.course_id"><code class="docutils literal notranslate"><span class="pre">Sections.course_id</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Sections.days_of_week"><code class="docutils literal notranslate"><span class="pre">Sections.days_of_week</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Sections.end_time"><code class="docutils literal notranslate"><span class="pre">Sections.end_time</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Sections.id"><code class="docutils literal notranslate"><span class="pre">Sections.id</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Sections.professor_id"><code class="docutils literal notranslate"><span class="pre">Sections.professor_id</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Sections.query"><code class="docutils literal notranslate"><span class="pre">Sections.query</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Sections.section_mode"><code class="docutils literal notranslate"><span class="pre">Sections.section_mode</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Sections.section_number"><code class="docutils literal notranslate"><span class="pre">Sections.section_number</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Sections.semester_id"><code class="docutils literal notranslate"><span class="pre">Sections.semester_id</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Sections.start_time"><code class="docutils literal notranslate"><span class="pre">Sections.start_time</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#app.model.Semesters"><code class="docutils literal notranslate"><span class="pre">Semesters</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Semesters.end_date"><code class="docutils literal notranslate"><span class="pre">Semesters.end_date</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Semesters.id"><code class="docutils literal notranslate"><span class="pre">Semesters.id</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Semesters.query"><code class="docutils literal notranslate"><span class="pre">Semesters.query</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Semesters.season"><code class="docutils literal notranslate"><span class="pre">Semesters.season</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Semesters.sections"><code class="docutils literal notranslate"><span class="pre">Semesters.sections</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Semesters.start_date"><code class="docutils literal notranslate"><span class="pre">Semesters.start_date</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Semesters.year"><code class="docutils literal notranslate"><span class="pre">Semesters.year</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#app.model.Semester"><code class="docutils literal notranslate"><span class="pre">Semester</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Semester.end_date"><code class="docutils literal notranslate"><span class="pre">Semester.end_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Semester.id"><code class="docutils literal notranslate"><span class="pre">Semester.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Semester.query"><code class="docutils literal notranslate"><span class="pre">Semester.query</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Semester.season"><code class="docutils literal notranslate"><span class="pre">Semester.season</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Semester.sections"><code class="docutils literal notranslate"><span class="pre">Semester.sections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Semester.start_date"><code class="docutils literal notranslate"><span class="pre">Semester.start_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#app.model.Semester.year"><code class="docutils literal notranslate"><span class="pre">Semester.year</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#app.model.Status"><code class="docutils literal notranslate"><span class="pre">Status</span></code></a><ul>
@@ -422,11 +421,6 @@ courses that are in this table are defined and populated by admins (and possibly
 <dd><p>T/F if course should be displayed in available courses. This way admin does not need to keep adding/deleting a course.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="app.model.Course.pretty_print">
-<span class="sig-name descname"><span class="pre">pretty_print</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Course.pretty_print" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="app.model.Course.query">
 <span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.model.Course.query" title="Permalink to this definition"></a></dt>
@@ -637,6 +631,81 @@ The available season options are the seasons for college semesters: Spring, Summ
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="app.model.Section">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secNumIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">daysIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modeIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">courseIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semesterIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profIn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Section" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>The Sections class is the model for storing the different sections of courses that are available for assistence within the tutoring center.
+Different sections could be taught by different professors. Different sections are also taught at different times of the year. An example of
+a section would be ‘850’ in the following course listing: “CSCI 4970-850”.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Section.course_id">
+<span class="sig-name descname"><span class="pre">course_id</span></span><a class="headerlink" href="#app.model.Section.course_id" title="Permalink to this definition"></a></dt>
+<dd><p>The corresponding course a section is associated with.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Section.days_of_week">
+<span class="sig-name descname"><span class="pre">days_of_week</span></span><a class="headerlink" href="#app.model.Section.days_of_week" title="Permalink to this definition"></a></dt>
+<dd><p>The days of the week for a particular course section. E.g. M, T, W, T, F.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Section.end_time">
+<span class="sig-name descname"><span class="pre">end_time</span></span><a class="headerlink" href="#app.model.Section.end_time" title="Permalink to this definition"></a></dt>
+<dd><p>The end time for the course section.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Section.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.model.Section.id" title="Permalink to this definition"></a></dt>
+<dd><p>Autonumber primary key for the Sections table.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Section.professor_id">
+<span class="sig-name descname"><span class="pre">professor_id</span></span><a class="headerlink" href="#app.model.Section.professor_id" title="Permalink to this definition"></a></dt>
+<dd><p>Specific professor that teaches a particular session.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Section.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.model.Section.query" title="Permalink to this definition"></a></dt>
+<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
+customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The query interface is considered legacy in SQLAlchemy. Prefer using
+<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Section.section_mode">
+<span class="sig-name descname"><span class="pre">section_mode</span></span><a class="headerlink" href="#app.model.Section.section_mode" title="Permalink to this definition"></a></dt>
+<dd><p>The method of teaching that this section will be taught in. E.g., Remote, In person, etc.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Section.section_number">
+<span class="sig-name descname"><span class="pre">section_number</span></span><a class="headerlink" href="#app.model.Section.section_number" title="Permalink to this definition"></a></dt>
+<dd><p>The section numebr associated with a course number. E.g., 001, 850, etc.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Section.semester_id">
+<span class="sig-name descname"><span class="pre">semester_id</span></span><a class="headerlink" href="#app.model.Section.semester_id" title="Permalink to this definition"></a></dt>
+<dd><p>The semester in which a section is offered during.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.model.Section.start_time">
+<span class="sig-name descname"><span class="pre">start_time</span></span><a class="headerlink" href="#app.model.Section.start_time" title="Permalink to this definition"></a></dt>
+<dd><p>The start time for the course section.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="app.model.SectionMode">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">SectionMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.SectionMode" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#app.model.ToStrEnum" title="app.model.ToStrEnum"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToStrEnum</span></code></a></p>
@@ -661,103 +730,28 @@ This leaves room for other possible additions of different modes that sections o
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="app.model.Sections">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Sections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secNumIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">daysIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modeIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">courseIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semesterIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profIn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Sections" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
-<p>The Sections class is the model for storing the different sections of courses that are available for assistence within the tutoring center.
-Different sections could be taught by different professors. Different sections are also taught at different times of the year. An example of
-a section would be ‘850’ in the following course listing: “CSCI 4970-850”.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Sections.course_id">
-<span class="sig-name descname"><span class="pre">course_id</span></span><a class="headerlink" href="#app.model.Sections.course_id" title="Permalink to this definition"></a></dt>
-<dd><p>The corresponding course a section is associated with.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Sections.days_of_week">
-<span class="sig-name descname"><span class="pre">days_of_week</span></span><a class="headerlink" href="#app.model.Sections.days_of_week" title="Permalink to this definition"></a></dt>
-<dd><p>The days of the week for a particular course section. E.g. M, T, W, T, F.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Sections.end_time">
-<span class="sig-name descname"><span class="pre">end_time</span></span><a class="headerlink" href="#app.model.Sections.end_time" title="Permalink to this definition"></a></dt>
-<dd><p>The end time for the course section.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Sections.id">
-<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.model.Sections.id" title="Permalink to this definition"></a></dt>
-<dd><p>Autonumber primary key for the Sections table.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Sections.professor_id">
-<span class="sig-name descname"><span class="pre">professor_id</span></span><a class="headerlink" href="#app.model.Sections.professor_id" title="Permalink to this definition"></a></dt>
-<dd><p>Specific professor that teaches a particular session.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Sections.query">
-<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.model.Sections.query" title="Permalink to this definition"></a></dt>
-<dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
-customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The query interface is considered legacy in SQLAlchemy. Prefer using
-<code class="docutils literal notranslate"><span class="pre">session.execute(select())</span></code> instead.</p>
-</div>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Sections.section_mode">
-<span class="sig-name descname"><span class="pre">section_mode</span></span><a class="headerlink" href="#app.model.Sections.section_mode" title="Permalink to this definition"></a></dt>
-<dd><p>The method of teaching that this section will be taught in. E.g., Remote, In person, etc.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Sections.section_number">
-<span class="sig-name descname"><span class="pre">section_number</span></span><a class="headerlink" href="#app.model.Sections.section_number" title="Permalink to this definition"></a></dt>
-<dd><p>The section numebr associated with a course number. E.g., 001, 850, etc.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Sections.semester_id">
-<span class="sig-name descname"><span class="pre">semester_id</span></span><a class="headerlink" href="#app.model.Sections.semester_id" title="Permalink to this definition"></a></dt>
-<dd><p>The semester in which a section is offered during.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Sections.start_time">
-<span class="sig-name descname"><span class="pre">start_time</span></span><a class="headerlink" href="#app.model.Sections.start_time" title="Permalink to this definition"></a></dt>
-<dd><p>The start time for the course section.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="app.model.Semesters">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Semesters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yearIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endIn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Semesters" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="app.model.Semester">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.model.</span></span><span class="sig-name descname"><span class="pre">Semester</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yearIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startIn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endIn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.model.Semester" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
 <p>The Semesters class is used to model the different pieces of information that represent a college Semester. Each semester has
 a year, season, start date, and an end date. For example: Spring 2023 (which has a start date of Jan 26, and an end date of May 15).
 Semesters are used in conjunction with course sections and classes that occur within semesters. Semesters might also be used with
 generating reports, as it provides a time frame for the admins to look at CSLC ticket data by semester.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Semesters.end_date">
-<span class="sig-name descname"><span class="pre">end_date</span></span><a class="headerlink" href="#app.model.Semesters.end_date" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="app.model.Semester.end_date">
+<span class="sig-name descname"><span class="pre">end_date</span></span><a class="headerlink" href="#app.model.Semester.end_date" title="Permalink to this definition"></a></dt>
 <dd><p>The end date, or last day, of a semester.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Semesters.id">
-<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.model.Semesters.id" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="app.model.Semester.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#app.model.Semester.id" title="Permalink to this definition"></a></dt>
 <dd><p>Autonumber primary key for the Semesters table.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Semesters.query">
-<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.model.Semesters.query" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="app.model.Semester.query">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">t.ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Query</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.model.Semester.query" title="Permalink to this definition"></a></dt>
 <dd><p>A SQLAlchemy query for a model. Equivalent to <code class="docutils literal notranslate"><span class="pre">db.session.query(Model)</span></code>. Can be
 customized per-model by overriding <code class="xref py py-attr docutils literal notranslate"><span class="pre">query_class</span></code>.</p>
 <div class="admonition warning">
@@ -768,25 +762,25 @@ customized per-model by overriding <code class="xref py py-attr docutils literal
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Semesters.season">
-<span class="sig-name descname"><span class="pre">season</span></span><a class="headerlink" href="#app.model.Semesters.season" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="app.model.Semester.season">
+<span class="sig-name descname"><span class="pre">season</span></span><a class="headerlink" href="#app.model.Semester.season" title="Permalink to this definition"></a></dt>
 <dd><p>The season of the semester. E.g., Fall</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Semesters.sections">
-<span class="sig-name descname"><span class="pre">sections</span></span><a class="headerlink" href="#app.model.Semesters.sections" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="app.model.Semester.sections">
+<span class="sig-name descname"><span class="pre">sections</span></span><a class="headerlink" href="#app.model.Semester.sections" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Semesters.start_date">
-<span class="sig-name descname"><span class="pre">start_date</span></span><a class="headerlink" href="#app.model.Semesters.start_date" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="app.model.Semester.start_date">
+<span class="sig-name descname"><span class="pre">start_date</span></span><a class="headerlink" href="#app.model.Semester.start_date" title="Permalink to this definition"></a></dt>
 <dd><p>The start date, or first day, of a semester.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Semesters.year">
-<span class="sig-name descname"><span class="pre">year</span></span><a class="headerlink" href="#app.model.Semesters.year" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="app.model.Semester.year">
+<span class="sig-name descname"><span class="pre">year</span></span><a class="headerlink" href="#app.model.Semester.year" title="Permalink to this definition"></a></dt>
 <dd><p>The year of the semester. E.g., 2023.</p>
 </dd></dl>
 
