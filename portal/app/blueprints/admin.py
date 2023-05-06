@@ -10,6 +10,10 @@ from flask_login import current_user
 from app.model import User
 from app.model import Course
 from app.model import Permission
+from app.model import Semester
+from app.model import Professor
+from app.model import Section
+from app.model import SectionMode
 
 from app.extensions import db
 from sqlalchemy.exc import IntegrityError
@@ -18,6 +22,7 @@ from app.util import str_empty
 from app.util import strip_or_none
 from app.util import permission_required
 
+from datetime import datetime
 import sys
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
@@ -30,10 +35,6 @@ def console():
 @admin.route('/tutors')
 @permission_required(Permission.Admin)
 def view_tutors():
-
-    # NOTE: Cannot use inequality operators < > <= >= on enum from database as only
-    #       the enum name is actually persisted.
-    #
     return render_template('admin-tutors.html')
 
 @admin.route('/tutors/add', methods=['POST'])
@@ -111,10 +112,6 @@ def add_course():
     courseNumber = strip_or_none(request.form.get("courseNumber"))
     courseName = strip_or_none(request.form.get("courseName"))
     displayOnIndex = request.form.get("displayOnIndex")
-    print("COURSE DEPARTMENT: " + str(courseDepartment))
-    print("COURSE NUMBER: " + str(courseNumber))
-    print("COURSE NAME: " + str(courseName))
-    print("DISPLAY ON INDEX: " + str(displayOnIndex))
 
     # set up regex
     # m = re.match("(^[A-Z]{2,4})\\s?(\\d{4})$", courseNumber)
@@ -146,6 +143,158 @@ def add_course():
             print("COURSE ALREADY IN DB!")
 
     return redirect(url_for('admin.view_courses'))
+
+@admin.route('/semesters')
+@permission_required(Permission.Admin)
+def view_semesters():
+    # get all semesters
+    semesters = Semester.query.all()
+    return render_template('admin-semester.html', semesters=semesters)
+
+@admin.route('/semesters/add', methods=["POST"])
+@permission_required(Permission.Admin)
+def add_semester():
+
+    year = strip_or_none(request.form.get("yearInput"))
+    season = strip_or_none(request.form.get("seasonInput"))
+    startDate = strip_or_none(request.form.get("startDate"))
+    endDate = strip_or_none(request.form.get("endDate"))
+
+    # validate input coming in
+    if str_empty(year):
+        flash('Could not create semester, year must not be empty!', category='error')
+    elif str_empty(season):
+        flash('Could not create semester, season must not be empty!', category='error')
+    elif str_empty(startDate):
+        flash('Could not create semester, start date must not be empty!', category='error')
+    elif str_empty(endDate):
+        flash('Could not create semester, end date must not be empty!', category='error')
+    elif len(year) != 4:
+        flash('Could not create semester, please enter valid year in the format YYYY!', category='error')
+    else:
+        # check if semester already exists in DB, impossible to have two summer 2023 semesters fo example
+        tmpSemester = Semester.query.filter_by(season=season, year=year).first()
+
+        if tmpSemester is None:
+            # create semester and add it to DB, need to cast dates from string to date objects
+            start = datetime.strptime(startDate, "%Y-%m-%d").date()
+            end = datetime.strptime(endDate, "%Y-%m-%d").date()
+            newSemester = Semester(year, season, start, end)
+            db.session.add(newSemester)
+            db.session.commit()
+            flash('Semester created successfully!', category='success')
+
+        else:
+            flash("Semester '" + season + " " + year + "' already exists in database!", category='error')
+
+    return redirect(url_for('admin.view_semesters'))
+
+@admin.route('/professors')
+@permission_required(Permission.Admin)
+def view_professors():
+    # get all professors
+    professors = Professor.query.all()
+    return render_template('admin-professor.html', professors=professors)
+
+@admin.route('/professors/add', methods=["POST"])
+@permission_required(Permission.Admin)
+def add_professor():
+
+    firstName = strip_or_none(request.form.get("firstNameInput"))
+    lastName = strip_or_none(request.form.get("lastNameInput"))
+
+    # validate input coming in
+    if str_empty(firstName):
+        flash('Could not add professor, first name must not be empty!', category='error')
+    elif str_empty(lastName):
+        flash('Could not add professor, last name must not be empty!', category='error')
+    else:
+        # check if professor already exists in DB, store all lower so checks against caps doesn't happen
+        tmpProfessor = Professor.query.filter_by(first_name=firstName.lower(), last_name=lastName.lower()).first()
+        if tmpProfessor is None:
+            # create professor and add it to DB, store as lower
+            newProfessor = Professor(firstName.lower(), lastName.lower())
+            db.session.add(newProfessor)
+            db.session.commit()
+            flash('Professor added successfully!', category='success')
+
+        else:
+            flash("Professor '" + firstName.title() + " " + lastName.title() + "' already exists in database!", category='error')
+
+    return redirect(url_for('admin.view_professors'))
+
+@admin.route('/sections')
+@permission_required(Permission.Admin)
+def view_sections():
+    # get all sections
+    sections = Section.query.all()
+    semesters = Semester.query.all()
+    courses = Course.query.all()
+    professors = Professor.query.all()
+    return render_template('admin-sections.html', sections=sections, semesters=semesters, courses=courses, professors=professors, SectionMode=SectionMode)
+
+@admin.route('/sections/add', methods=["POST"])
+@permission_required(Permission.Admin)
+def add_section():
+
+    semester = strip_or_none(request.form.get("semesterInput"))
+    course = strip_or_none(request.form.get("courseInput"))
+    sectionNum = strip_or_none(request.form.get("sectionNumberInput"))
+    sectionMode = strip_or_none(request.form.get("mode"))
+    monInput = strip_or_none(request.form.get("mondayTime"))
+    tueInput = strip_or_none(request.form.get("tuesdayTime"))
+    wedInput = strip_or_none(request.form.get("wednesdayTime"))
+    thuInput = strip_or_none(request.form.get("thursdayTime"))
+    friInput = strip_or_none(request.form.get("fridayTime"))
+    secStartTime = strip_or_none(request.form.get("sectionStartTime"))
+    secEndTime = strip_or_none(request.form.get("sectionEndTime"))
+    professor = strip_or_none(request.form.get("professorInput"))
+
+    # validate input coming in
+    if monInput is None and tueInput is None and wedInput is None and thuInput is None and friInput is None and sectionMode != "TotallyOnline":
+        flash('Could not create section, must provide atleast one day of the week for section if mode is ' + str(sectionMode) + '!', category='error')
+    elif (sectionMode == "Remote" or sectionMode == "InPerson") and (secStartTime == "" or secEndTime == ""):
+        flash('Could not create section, must provide both start and end time for section if mode is ' + str(sectionMode) + '!', category='error')
+    else:
+        # check if section already exists in DB
+        tmpSection = Section.query.filter_by(section_number=sectionNum, course_id=course).first()
+        if tmpSection is None:
+            # create section and add it to DB
+            # need to assemble days of week string to set in DB
+            daysOfWeek = ""
+            if sectionMode != "TotallyOnline":
+                if monInput is not None:
+                    daysOfWeek = daysOfWeek + "Mon"
+                if tueInput is not None:
+                    daysOfWeek = daysOfWeek + "Tue"
+                if wedInput is not None:
+                    daysOfWeek = daysOfWeek + "Wed"
+                if thuInput is not None:
+                    daysOfWeek = daysOfWeek + "Thu"
+                if friInput is not None:
+                    daysOfWeek = daysOfWeek + "Fri"
+
+            # need to assemble python time object to set in db
+            try:
+                if secStartTime is not None:
+                    secStartTime = datetime.strptime(secStartTime, '%H:%M').time()
+                    print("IT IS NONE: " + str(secStartTime))
+                if secEndTime is not None:
+                    secEndTime = datetime.strptime(secEndTime, '%H:%M').time()
+                    print(secStartTime)
+            except ValueError:
+                # start and end dates are empty strings because mode = totally online. set time to 00:00
+                secStartTime = datetime.strptime("00:00", '%H:%M').time()
+                secEndTime = datetime.strptime("00:00", '%H:%M').time()
+
+            newSection = Section(sectionNum, daysOfWeek, secStartTime, secEndTime, sectionMode, course, semester, professor)
+            db.session.add(newSection)
+            db.session.commit()
+            flash('Section added successfully!', category='success')
+        else:
+            flash("Section " + sectionNum + " for the course '" + course.course_name + "' already exists in DB!", category='error')
+
+    return redirect(url_for('admin.view_sections'))
 
 def attempt_create_super_user(email: str, permission: Permission):
     """

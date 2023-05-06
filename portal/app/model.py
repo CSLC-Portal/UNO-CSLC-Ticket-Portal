@@ -73,7 +73,7 @@ class Season(ToStrEnum):
     Summer = 3
     Fall = 4
 
-class SectionMode(enum.Enum):
+class SectionMode(ToStrEnum):
     """
     The SectionMode class is designed to mimic an enum for different types of modes that a aprticular section of a course could have.
     For example, one course section number 850 might be totally online, while another section number 001 might be in person.
@@ -259,7 +259,7 @@ class Course(db.Model):
     number = Column(String(25), nullable=False, doc='The course number for a class. E.g., 4970')
     course_name = Column(String(50), nullable=False, doc='The name of the course itself. E.g., Operating Systems, Java II, etc.')
     on_display = Column(Boolean, doc="T/F if course should be displayed in available courses. This way admin does not need to keep adding/deleting a course.")
-    sections = db.relationship('Sections', backref='course')
+    sections = db.relationship('Section', backref='course')
     # TODO: add in tutors relationship and tickets relationship
 
     def __init__(self, depIn, numIn, nameIn, displayIn):
@@ -271,10 +271,10 @@ class Course(db.Model):
     def __repr__(self):
         return f'{self.department} {self.number}, {self.course_name}, {self.on_display}, Sections: {self.sections}'
 
-    def pretty_print(self):
+    def __str__(self):
         return f'{self.department} {self.number}: {self.course_name}'
 
-class Sections(db.Model):
+class Section(db.Model):
     """
     The Sections class is the model for storing the different sections of courses that are available for assistence within the tutoring center.
     Different sections could be taught by different professors. Different sections are also taught at different times of the year. An example of
@@ -316,7 +316,7 @@ class Professor(db.Model):
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Professors table.')
     first_name = Column(String(50), nullable=False, doc='First name of professor.')
     last_name = Column(String(50), nullable=False, doc='Last name of professor.')
-    sections = db.relationship('Sections', backref='professor')
+    sections = db.relationship('Section', backref='professor')
 
     def __init__(self, firstIn, lastIn):
         self.first_name = firstIn
@@ -325,7 +325,7 @@ class Professor(db.Model):
     def __repr__(self):
         return f'{self.first_name} {self.last_name}, Sections: {self.sections}'
 
-class Semesters(db.Model):
+class Semester(db.Model):
     """
     The Semesters class is used to model the different pieces of information that represent a college Semester. Each semester has
     a year, season, start date, and an end date. For example: Spring 2023 (which has a start date of Jan 26, and an end date of May 15).
@@ -339,7 +339,7 @@ class Semesters(db.Model):
     season = Column(Enum(Season), nullable=False, doc='The season of the semester. E.g., Fall')
     start_date = Column(Date, nullable=False, doc='The start date, or first day, of a semester.')
     end_date = Column(Date, nullable=False, doc='The end date, or last day, of a semester.')
-    sections = db.relationship('Sections', backref='semester')
+    sections = db.relationship('Section', backref='semester')
 
     def __init__(self, yearIn, seasonIn, startIn, endIn):
         self.year = yearIn

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Admin Add Course{% endblock %}
 {% block content %}
-<form action="{{ url_for('views.add_course') }}" method="POST">
+<form action="{{ url_for('admin.add_course') }}" method="POST">
     <div class="form-group">
         <label for="courseDepartment"><strong>Course Department</strong></label>
         <input type="text" class="form-control" id="courseDepartment" placeholder="E.g. CSCI, IST, CIST" name="courseDepartment" required>
