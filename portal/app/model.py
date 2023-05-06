@@ -43,6 +43,17 @@ class Season(enum.Enum):
     Summer = 3
     Fall = 4
 
+
+class SectionMode(enum.Enum):
+    """
+    The SectionMode class is designed to mimic an enum for different types of modes that a aprticular section of a course could have.
+    For example, one course section number 850 might be totally online, while another section number 001 might be in person.
+    This leaves room for other possible additions of different modes that sections of courses may have.
+    """
+    InPerson = 1
+    Remote = 2
+    TotallyOnline = 3
+
 class Ticket(db.Model):
     """
     The Ticket class is the main Model for the ticket objects that get created when students create and submit thier tickets for help.
@@ -169,6 +180,9 @@ class Courses(db.Model):
     def __repr__(self):
         return f'{self.department} {self.number}, {self.course_name}, {self.on_display}, Sections: {self.sections}'
 
+    def pretty_print(self):
+        return f'{self.department} {self.number}: {self.course_name}'
+
 class Sections(db.Model):
     """
     The Sections class is the model for storing the different sections of courses that are available for assistence within the tutoring center.
@@ -179,15 +193,28 @@ class Sections(db.Model):
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Sections table.')
     section_number = Column(Integer, doc='The section numebr associated with a course number. E.g., 001, 850, etc.')
-    time = Column(String(50), doc='The course meeting time. E.g. MW 1:00PM')
+    days_of_week = Column(String(25), doc='The days of the week for a particular course section. E.g. M, T, W, T, F.')
+    start_time = Column(Time(True), doc='The start time for the course section.')
+    end_time = Column(Time(True), doc='The end time for the course section.')
+    section_mode = Column(Enum(SectionMode), doc='The method of teaching that this section will be taught in. E.g., Remote, In person, etc.')
     course_id = Column(Integer, db.ForeignKey('Courses.id'), doc='The corresponding course a section is associated with.')
     semester_id = Column(Integer, db.ForeignKey('Semesters.id'), doc='The semester in which a section is offered during.')
     professor_id = Column(Integer, db.ForeignKey('Professors.id'), doc='Specific professor that teaches a particular session.')
     # TODO: potentially add relationship to semesters, professors, and tickets
 
-    def __init__(self, secIn, timeIn):
-        self.section_number = secIn
-        self.time = timeIn
+    def __init__(self, secNumIn, daysIn, startIn, endIn, modeIn, courseIn, semesterIn, profIn):
+        self.section_number = secNumIn
+        self.days_of_week = daysIn
+        self.start_time = startIn
+        self.end_time = endIn
+        self.section_mode = modeIn
+        self.course_id = courseIn
+        self.semester_id = semesterIn
+        self.professor_id = profIn
+
+    def __repr__(self):
+        return f'COURSE: {self.course_id}, SECTION: {self.section_number} - {self.section_mode} - {self.semester_id} - ({self.days_of_week} {self.start_time} \
+                          to {self.end_time}) - PROF: {self.professor_id}'
 
 class Professors(db.Model):
     """

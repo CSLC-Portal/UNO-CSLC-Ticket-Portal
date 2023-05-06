@@ -5,20 +5,16 @@
 
     <strong>Semester</strong>
     <select class="form-control" id="semesterInput" name="semesterInput" required>
-        <option>Semester 1</option>
-        <option>Semester 2</option>
-        <option>Semester 3</option>
-        <option>Semester 4</option>
-        <option>Semester 5</option>
+        {% for semester in semesters %}
+            <option value="{{ semester.id }}">{{ semester.season }} {{ semester.year }}</option>
+        {% endfor %}
     </select>
 
     <strong>Course</strong>
     <select class="form-control" id="courseInput" name="courseInput" required>
-        <option>IST 1234: Super Cool Course</option>
-        <option>IST 1111: NEW Course</option>
-        <option>CSCI 4444: Hard Course</option>
-        <option>CIST 1300: Test Course</option>
-        <option>CIST 1111: test</option>
+        {% for course in courses %}
+            <option value="{{ course.id }}">{{ course.pretty_print() }}</option>
+        {% endfor %}
     </select>
 
     <div class="form-group">
@@ -27,7 +23,7 @@
     </div>
 
     <strong>Section Mode</strong><br>
-    <input type="radio" id="inPersonMode" name="mode" value="InPerson">
+    <input type="radio" id="inPersonMode" name="mode" value="InPerson" required>
     <label for="inPersonMode">In Person</label>
     <input type="radio" id="remoteMode" name="mode" value="Remote">
     <label for="remoteMode">Remote</label>
@@ -51,17 +47,15 @@
     <label for="fridayTime">Friday</label><br>
 
     <label for="sectionStartTime">Start Time</label>
-    <input type="time" id="sectionStartTime" name="sectionStartTime" step="300"><br>
+    <input type="time" id="sectionStartTime" name="sectionStartTime"><br>
     <label for="sectionEndTime">End Time</label>
-    <input type="time" id="sectionEndTime" name="sectionEndTime" step="300"><br>
+    <input type="time" id="sectionEndTime" name="sectionEndTime"><br>
 
     <strong>Professor</strong>
     <select class="form-control" id="professorInput" name="professorInput">
-        <option>Billy Bob</option>
-        <option>Dilly Bob</option>
-        <option>Nilly Bob</option>
-        <option>Jilly Bob</option>
-        <option>Willy Bob</option>
+        {% for professor in professors %}
+            <option value="{{ professor.id }}">{{ professor.first_name }} {{ professor.last_name }}</option>
+        {% endfor %}
     </select><br>
 
 
@@ -70,8 +64,8 @@
 </form>
 
 <h1>All added Sections:</h1>
-{% for professor in professors %}
-    {{ professor.__repr__().title() }}<br>
+{% for section in sections %}
+    {{ section.__repr__() }}<br>
 {% endfor %}
 
 

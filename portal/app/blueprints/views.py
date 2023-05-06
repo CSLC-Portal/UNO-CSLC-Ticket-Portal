@@ -18,8 +18,9 @@ from app.model import Courses
 from app.model import Semesters
 from app.model import Professors
 from app.model import Sections
+from app.model import SectionMode
 
-from datetime import datetime, date
+from datetime import datetime, date, time
 from datetime import timedelta
 
 from app.extensions import db
@@ -440,6 +441,7 @@ def add_section():
         semester = _strip_or_none(request.form.get("semesterInput"))
         course = _strip_or_none(request.form.get("courseInput"))
         sectionNum = _strip_or_none(request.form.get("sectionNumberInput"))
+        sectionMode = _strip_or_none(request.form.get("mode"))
         monInput = _strip_or_none(request.form.get("mondayTime"))
         tueInput = _strip_or_none(request.form.get("tuesdayTime"))
         wedInput = _strip_or_none(request.form.get("wednesdayTime"))
@@ -451,6 +453,7 @@ def add_section():
         print("SEMESTER: " + semester)
         print("COURSE: " + course)
         print("SECTION NUM: " + sectionNum)
+        print("SECTION MODE: " + str(sectionMode))
         print("MONDAY: " + str(monInput))
         print("TUESDAY: " + str(tueInput))
         print("WEDNESDAY: " + str(wedInput))
@@ -461,10 +464,67 @@ def add_section():
         print("PROFESSOR: " + professor)
 
         # validate input coming in
-        if monInput is None and tueInput is None and wedInput is None and thuInput is None and friInput is None:
-            flash('Could not create section, must provide atleast one day of the week for section time!', category='error')
-        # TODO: add in condition for TOTONLINE courses, and need to edit html so times aren't required for it
+        if monInput is None and tueInput is None and wedInput is None and thuInput is None and friInput is None and sectionMode != "TotallyOnline":
+            flash('Could not create section, must provide atleast one day of the week for section if mode is ' + str(sectionMode) + '!', category='error')
+        elif (sectionMode == "Remote" or sectionMode == "InPerson") and (secStartTime == "" or secEndTime == ""):
+            flash('Could not create section, must provide both start and end time for section if mode is ' + str(sectionMode) + '!', category='error')
+        else:
+            # check if section already exists in DB
+            tmpSection = Sections.query.filter_by(section_number=sectionNum, course_id=course).first()
+            if tmpSection is None:
+                # create section and add it to DB
+                # need to assemble days of week string to set in DB
+                daysOfWeek = ""
+                if sectionMode != "TotallyOnline":
+                    if monInput is not None:
+                        daysOfWeek = daysOfWeek + "Mon"
+                    if tueInput is not None:
+                        daysOfWeek = daysOfWeek + "Tue"
+                    if wedInput is not None:
+                        daysOfWeek = daysOfWeek + "Wed"
+                    if thuInput is not None:
+                        daysOfWeek = daysOfWeek + "Thu"
+                    if friInput is not None:
+                        daysOfWeek = daysOfWeek + "Fri"
+
+                # need to assemble python time object to set in db
+                try:
+                    if secStartTime is not None:
+                        secStartTime = datetime.strptime(secStartTime, '%H:%M').time()
+                        print("IT IS NONE: " + str(secStartTime))
+                    if secEndTime is not None:
+                        secEndTime = datetime.strptime(secEndTime, '%H:%M').time()
+                        print(secStartTime)
+                except ValueError:
+                    # start and end dates are empty strings because mode = totally online. set time to 00:00
+                    print("Start and end dates are empy strings because it is totaly online course.")
+                    print("START TIME: " + str(secStartTime))
+                    print("END TIME: " + str(secEndTime))
+                    secStartTime = datetime.strptime("00:00", '%H:%M').time()
+                    secEndTime = datetime.strptime("00:00", '%H:%M').time()
+                    print("START TIME: " + str(secStartTime))
+                    print("END TIME: " + str(secEndTime))
+
+                # TODO: need to grab section mode too since they're all radios
+                # if sectionMode == "TotallyOnline":
+                #     sectionMode = SectionMode.TotallyOnline
+                # elif sectionMode == "Remote":
+                #     sectionMode = SectionMode.Remote
+                # elif sectionMode == "InPerson":
+                #     sectionMode = SectionMode.InPerson
+
+                newSection = Sections(sectionNum, daysOfWeek, secStartTime, secEndTime, sectionMode, course, semester, professor)
+                db.session.add(newSection)
+                db.session.commit()
+                flash('Section added successfully!', category='success')
+            else:
+                flash("Section " + sectionNum + " for the course '" + course.course_name + "' already exists in DB!", category='error')
 
     # get all sections
     sections = Sections.query.all()
-    return render_template('admin-sections.html', sections=sections)
+    semesters = Semesters.query.all()
+    courses = Courses.query.all()
+    professors = Professors.query.all()
+    return render_template('admin-sections.html', sections=sections, semesters=semesters, courses=courses, professors=professors, SectionMode=SectionMode)
+
+# def _validate_input(mon, tue, wed, thu, fri, mode):
