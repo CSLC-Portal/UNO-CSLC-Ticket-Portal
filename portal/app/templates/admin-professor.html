@@ -39,7 +39,7 @@
 </button>
 {%- endmacro %}
 
-{% call professors_table('All Courses') %}
+{% call professors_table('All Professors') %}
     <thead>
         <tr>
             <th scope="col">First Name</th>
@@ -54,7 +54,7 @@
             <td>{{ professor.first_name.capitalize() }}</td>
             <td>{{ professor.last_name.capitalize() }}</td>
             <td>{{ professor.sections }}</td>
-            <td>{{ remove_professor_button(course) }}</td>
+            <td>{{ remove_professor_button(professor) }}</td>
 
         </tr>
         {% endfor %}

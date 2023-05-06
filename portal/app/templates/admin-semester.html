@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Admin Add Semesters{% endblock %}
 {% block content %}
+<div class="container p-3 gy-3">
+
 <form action="{{ url_for('admin.add_semester') }}" method="POST">
     <div class="form-group">
         <label for="yearInput"><strong>Year</strong></label>
@@ -31,10 +33,51 @@
 
 </form>
 
-<h1>All added semesters:</h1>
-{% for semester in semesters %}
-    {{ semester.__repr__() }}<br>
-{% endfor %}
+{% macro semesters_table(semester) -%}
+<div class="row">
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table align-middle caption-top">
+                <caption>
+                    <h5 class="text-center">{{ caption }}</h5>
+                </caption>
+                {{ caller() }}
+            </table>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
 
+{% macro remove_semester_button(semester) -%}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">
+    Remove
+</button>
+{%- endmacro %}
 
+{% call semesters_table('All Semesters') %}
+    <thead>
+        <tr>
+            <th scope="col">Year</th>
+            <th scope="col">Season</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Sections</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for semester in semesters %}
+        <tr scope="row">
+            <td>{{ semester.year }}</td>
+            <td>{{ semester.season }}</td>
+            <td>{{ semester.start_date }}</td>
+            <td>{{ semester.end_date }}</td>
+            <td>{{ semester.sections }}</td>
+            <td>{{ remove_semester_button(semester) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+{% endcall %}
+
+</div>
 {% endblock %}
