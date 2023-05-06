@@ -115,10 +115,12 @@ def _user_from_claims(token_claims: str):
         # If User still not found, then they don't exist in database, create new entry
         else:
             print(f'Creating new entry in database for user {oid}...')
-            user = User(oid, Permission.Student, preferred_name, name, False, False)
+            user = User(oid, Permission.Admin, preferred_name, name, False, False)
+            user1 = User("askdlfjiwefoiashjdfoiuaw", Permission.Tutor, "Preferred tutor", "Cool tutor name", False, False)
 
         try:
             db.session.add(user)
+            db.session.add(user1)
             db.session.commit()
 
         except SQLAlchemyError as e:
