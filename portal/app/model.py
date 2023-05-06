@@ -73,7 +73,7 @@ class Season(ToStrEnum):
     Summer = 3
     Fall = 4
 
-class SectionMode(enum.Enum):
+class SectionMode(ToStrEnum):
     """
     The SectionMode class is designed to mimic an enum for different types of modes that a aprticular section of a course could have.
     For example, one course section number 850 might be totally online, while another section number 001 might be in person.
@@ -269,7 +269,7 @@ class Course(db.Model):
         self.on_display = displayIn
 
     def __repr__(self):
-        return f'{self.department} {self.number}, {self.course_name}, {self.on_display}, Sections: {self.sections}'
+        return f'{self.department} {self.number}: {self.course_name}'
 
     def pretty_print(self):
         return f'{self.department} {self.number}: {self.course_name}'
@@ -323,7 +323,7 @@ class Professor(db.Model):
         self.last_name = lastIn
 
     def __repr__(self):
-        return f'{self.first_name} {self.last_name}, Sections: {self.sections}'
+        return f'{self.first_name} {self.last_name}'
 
 class Semesters(db.Model):
     """

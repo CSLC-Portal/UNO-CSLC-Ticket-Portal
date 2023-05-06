@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Admin Add Sections{% endblock %}
 {% block content %}
+<div class="container p-3 gy-3">
+
 <form action="{{ url_for('admin.add_section') }}" method="POST">
 
     <strong>Semester</strong>
@@ -63,10 +65,54 @@
 
 </form>
 
-<h1>All added Sections:</h1>
-{% for section in sections %}
-    {{ section.__repr__() }}<br>
-{% endfor %}
+{% macro sections_table(caption) -%}
+<div class="row">
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table align-middle caption-top">
+                <caption>
+                    <h5 class="text-center">{{ caption }}</h5>
+                </caption>
+                {{ caller() }}
+            </table>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro remove_section_button(section) -%}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">
+    Remove
+</button>
+{%- endmacro %}
+
+{% call sections_table('All Sections') %}
+    <thead>
+        <tr>
+            <th scope="col">Section Number</th>
+            <th scope="col">Course</th>
+            <th scope="col">Professor</th>
+            <th scope="col">Schedule</th>
+            <th scope="col">Semester</th>
+            <th scope="col">Mode</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for section in sections %}
+        <tr scope="row">
+            <td>{{ section.section_number }}</td>
+            <td>{{ section.course }}</td>
+            <td>{{ section.professor }}</td>
+            <td>{{ section.days_of_week }} {{ section.start_time }} {{ section.end_time }}</td>
+            <td>{{ section.semester_id }}</td>
+            <td>{{ section.section_mode }}</td>
+            <td>{{ remove_section_button(section) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+{% endcall %}
 
 
+</div>
 {% endblock %}
