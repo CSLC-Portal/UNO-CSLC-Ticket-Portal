@@ -304,8 +304,7 @@ class Sections(db.Model):
         self.professor_id = profIn
 
     def __repr__(self):
-        return f'COURSE: {self.course_id}, SECTION: {self.section_number} - {self.section_mode} - {self.semester_id} - ({self.days_of_week} {self.start_time} \
-                          to {self.end_time}) - PROF: {self.professor_id}'
+        return f'{self.section_number}'
 
 class Professor(db.Model):
     """
