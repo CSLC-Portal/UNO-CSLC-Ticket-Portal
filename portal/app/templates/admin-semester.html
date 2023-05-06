@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Admin Add Semesters{% endblock %}
 {% block content %}
-<form action="{{ url_for('views.add_semester') }}" method="POST">
+<form action="{{ url_for('admin.add_semester') }}" method="POST">
     <div class="form-group">
         <label for="yearInput"><strong>Year</strong></label>
         <input type="number" class="form-control" id="yearInput" placeholder="E.g. 2023" name="yearInput" required>
