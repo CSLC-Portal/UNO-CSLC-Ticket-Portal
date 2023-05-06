@@ -9,16 +9,20 @@ from flask_login import login_required
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
-from app import model as m
+from app.util import strip_or_none
+from app.util import str_empty
+from app.util import permission_required
+
 from app.model import Ticket
 from app.model import Mode
 from app.model import Status
 from app.model import User
-from app.model import Courses
+from app.model import Course
 from app.model import Semesters
-from app.model import Professors
+from app.model import Professor
 from app.model import Sections
 from app.model import SectionMode
+from app.model import Permission
 
 from datetime import datetime, date, time
 from datetime import timedelta
@@ -30,6 +34,10 @@ import sys
 import re
 
 views = Blueprint('views', __name__)
+
+@views.route("/")
+def index():
+    return render_template('index.html')
 
 @views.route('/create-ticket', methods=['POST', 'GET'])
 @login_required
@@ -55,7 +63,7 @@ def create_ticket():
     """
     if request.method == 'GET':
         # Render create-ticket template if GET request or if there was an error in submission data
-        return render_template('create-ticket.html', Mode=Mode, user=current_user)
+        return render_template('create-ticket.html')
 
     ticket = _attempt_create_ticket(request.form)
 
@@ -74,12 +82,12 @@ def create_ticket():
 
         else:
             flash('Ticket created successfully!', category='success')
-            return redirect(url_for('auth.index'))
+            return redirect(url_for('views.index'))
 
     return redirect(url_for('views.create_ticket'))
 
 @views.route('/view-tickets')
-@login_required
+@permission_required(Permission.Tutor)
 def view_tickets():
     """
     Serves the HTTP route /view-tickets. This function queries the Tickets database and passes the result query
@@ -90,137 +98,66 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    tickets = m.Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
+    tickets = Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
 
     # Get the user permission level here BEFORE attempting to load view-tickets page
-    user_level = current_user.permission_level
-    if (user_level < 2):
+    user_level = current_user.permission
+    if (user_level < Permission.Tutor):
         flash('Insufficient permission level to view tickets', category='error')
-        return redirect(url_for('auth.index'))
+        return redirect(url_for('views.index'))
 
-    return render_template('view_tickets.html', Status=Status, user=current_user, tickets=tickets)
+    return render_template('view_tickets.html', tickets=tickets)
 
-@views.route('/update-ticket', methods=["GET", "POST"])
-@login_required
+@views.route('/update-ticket', methods=["POST"])
+@permission_required(Permission.Tutor)
 def update_ticket():
     """
     This function handles the HTTP request when a tutor hits the claim, close, or reopen buttons on tickets
     :return: Render template to the original view-ticket.html page.
     """
     # get the tutors to display for edit ticket modal if the user presses it
-    tutors = m.User.query.filter(m.User.permission_level >= 1)
-    tickets = m.Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-    tutor = current_user
     ticketID = request.form.get("ticketID")
+    ticket: Ticket = Ticket.query.get(ticketID)
 
-    print("RECIEVED TICKET ID: " + str(ticketID))
-    print("VALUE OF ACTION: " + str(request.form.get("action")))
-    # retrieve ticket by primary key using get()
-    current_ticket = m.Ticket.query.get(ticketID)
+    # TODO: Check to make state is valid before changing it!!
 
-    if request.form.get("action") == "Claim":
-        # edit status of ticket to Claimed, assign tutor, set time claimed
-        current_ticket.tutor_id = tutor.id
-        current_ticket.status = m.Status.Claimed
-        current_ticket.time_claimed = _now()
-        print("TIME TICKET CLAIMED: " + str(_now()))
+    if ticket is None:
+        flash('Could not update ticket status. Ticket not found in database.', category='error')
+
+    elif request.form.get("action") == "Claim":
+        ticket.claim(current_user)
         db.session.commit()
+        flash('Ticket claimed!', category='info')
 
-        print("TUTOR ID THAT CLAIMED TICKET: " + str(current_ticket.tutor_id))
     elif request.form.get("action") == "Close":
-        # edit status of ticket to CLOSED and set time closed on ticket
-        current_ticket.status = m.Status.Closed
-        current_ticket.time_closed = _now()
-        print("TIME TICKET CLOSED: " + str(_now()))
-        # calculate session duration from time claimed to time closed
-        duration = _calc_session_duration(current_ticket.time_claimed, current_ticket.time_closed, current_ticket.session_duration)
-        print("DURATION: " + str(duration))
-        # TODO: get the duration calculation accounting for business days/hours too
-        current_ticket.session_duration = duration
+        ticket.close()
         db.session.commit()
-    elif request.form.get("action") == "ReOpen":
-        # edit status of ticket back to OPEN
-        current_ticket.status = m.Status.Open
+        flash('Ticket closed!', category='info')
+
+    elif request.form.get("action") == "Open":
+        ticket.reopen()
         db.session.commit()
+        flash('Ticket opened!', category='info')
 
-    return render_template('view_tickets.html', Status=Status, user=current_user, tutors=tutors, tickets=tickets)
+    else:
+        flash('Did not change ticket status. Unknown action.', category='error')
 
-@views.route('/edit-ticket', methods=["GET", "POST"])
-@login_required
+    return redirect(url_for('views.view_tickets'))
+
+@views.route('/edit-ticket', methods=["POST"])
+@permission_required(Permission.Tutor)
 def edit_ticket():
-    # query all tickets after possible updates and send back to view tickets page
-    tickets = m.Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-
     # get ticket id back + current ticket
     ticketID = request.form.get("ticketIDModal")
-    current_ticket = m.Ticket.query.get(ticketID)
+    ticket = Ticket.query.get(ticketID)
 
-    # get the tutors to display for edit ticket modal if the user presses it
-    tutors = m.User.query.filter(m.User.permission_level >= 1)
+    if ticket is not None:
+        _attempt_edit_ticket(ticket)
 
-    # get info back from popup modal form
-    if request.method == "POST":
-        course = request.form.get("courseField")
-        section = request.form.get("sectionField")
-        assignment = request.form.get("assignmentNameField")
-        question = request.form.get("specificQuestionField")
-        problem = request.form.get("problemTypeField")
-        primaryTutor = request.form.get("primaryTutorInput")
-        tutorNotes = request.form.get("tutorNotes")
-        wasSuccessful = request.form.get("successfulSession")
-        print("Following info coming back from edit-ticket: ")
+    else:
+        flash('Could not edit ticket. Ticket not found in database.', category='error')
 
-        print("current ticket ID: " + str(ticketID))
-        print("course: " + str(course))
-        print("section: " + str(section))
-        print("assignment: " + str(assignment))
-        print("question: " + str(question))
-        print("problem: " + str(problem))
-        print("primaryTutor: " + str(primaryTutor))
-        print("tutorNotes: " + str(tutorNotes))
-        print("wasSuccessful: " + str(wasSuccessful))
-
-        # check for change in values from edit
-        if course is not None:
-            # new info for course came back, update it for current ticket
-            current_ticket.course = course
-            db.session.commit()
-        if section is not None:
-            # new info for section came back, update it for current ticket
-            current_ticket.section = section
-            db.session.commit()
-        if assignment != current_ticket.assignment_name:
-            # new info for assignment came back, update it for current ticket
-            current_ticket.assignment_name = assignment
-            db.session.commit()
-        if question != current_ticket.specific_question:
-            # new info for question came back, update it for current ticket
-            current_ticket.specific_question = question
-            db.session.commit()
-        if problem is not None:
-            # new info for problem came back, update it for current ticket
-            current_ticket.problem_type = problem
-            db.session.commit()
-        if primaryTutor is not None:
-            # new info for primary tutor came back, update it for current ticket
-
-            # newTutor = m.User.query.filter(m.User.user_name == primaryTutor).first()
-            print("Chaning primary tutor to: " + str(primaryTutor))
-            current_ticket.tutor_id = primaryTutor
-            db.session.commit()
-        if tutorNotes is not None:
-            # new info for tutor notes came back, update it for current ticket
-            current_ticket.tutor_notes = tutorNotes
-            db.session.commit()
-        if wasSuccessful is not None:
-            # new info for tutor notes came back, update it for current ticket
-            current_ticket.successful_session = True
-            db.session.commit()
-        else:
-            current_ticket.successful_session = False
-            db.session.commit()
-
-    return render_template('view_tickets.html', Status=Status, user=current_user, tutors=tutors, tickets=tickets)
+    return redirect(url_for('views.view_tickets'))
 
 # TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):
@@ -234,24 +171,24 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
 
         returns a Ticket object if values are valid, None otherwise.
     """
-    email = _strip_or_none(form.get("email"))
-    name = _strip_or_none(form.get("fullname"))
-    course = _strip_or_none(form.get("course"))
-    section = _strip_or_none(form.get("section"))
-    assignment = _strip_or_none(form.get("assignment"))
-    question = _strip_or_none(form.get("question"))
-    problem = _strip_or_none(form.get("problem"))
+    email = strip_or_none(form.get("email"))
+    name = strip_or_none(form.get("fullname"))
+    course = strip_or_none(form.get("course"))
+    section = strip_or_none(form.get("section"))
+    assignment = strip_or_none(form.get("assignment"))
+    question = strip_or_none(form.get("question"))
+    problem = strip_or_none(form.get("problem"))
 
-    if _str_empty(email):
+    if str_empty(email):
         flash('Could not submit ticket, email must not be empty!', category='error')
 
-    elif _str_empty(name):
+    elif str_empty(name):
         flash('Could not submit ticket, name must not be empty!', category='error')
 
-    elif _str_empty(assignment):
+    elif str_empty(assignment):
         flash('Could not submit ticket, assignment name must not be empty!', category='error')
 
-    elif _str_empty(question):
+    elif str_empty(question):
         flash('Could not submit ticket, question must not be empty!', category='error')
 
     # TODO: Check if course is a valid from a list of options
@@ -259,7 +196,7 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
     # TODO: Check if problem type is valid from a list of options
 
     else:
-        mode_val = _strip_or_none(form.get("mode"))
+        mode_val = strip_or_none(form.get("mode"))
         mode = None
 
         try:
@@ -278,34 +215,55 @@ def _strip_or_none(s: str):
 def _str_empty(s: str):
     return s is not None and not s
 
-def _calc_session_duration(start_time, end_time, current_session_duration):
-    # print("START TIME IN: " + str(start_time))
-    # print("END TIME IN: " + str(end_time))
-    # print("CURRENT TIME IN: " + str(current_session_duration))
+def _attempt_edit_ticket(ticket: Ticket):
+    # get info back from popup modal form
+    course = request.form.get("courseField")
+    section = request.form.get("sectionField")
+    assignment = request.form.get("assignmentNameField")
+    question = request.form.get("specificQuestionField")
+    problem = request.form.get("problemTypeField")
+    primaryTutor = request.form.get("primaryTutorInput")
+    tutorNotes = request.form.get("tutorNotes")
+    wasSuccessful = request.form.get("successfulSession")
 
-    diff = timedelta(seconds=0)
-    if start_time is not None:
-        diff = end_time - start_time
+    # check for change in values from edit
+    if course is not None:
+        # new info for course came back, update it for current ticket
+        ticket.course = course
 
-    # check if there is already time logged on the ticket, if so add that too
-    if current_session_duration is not None:
-        # python datetime and timedelta conversions
-        tmp = current_session_duration
-        diff = diff + timedelta(hours=tmp.hour, minutes=tmp.minute, seconds=tmp.second, microseconds=tmp.microsecond)
+    if section is not None:
+        # new info for section came back, update it for current ticket
+        ticket.section = section
 
-    # convert timedelta() object back into datetime.datetime object to set into db
-    epoch = datetime(1970, 1, 1, 0, 0, 0)
-    result = epoch + diff
+    if assignment != ticket.assignment_name:
+        # new info for assignment came back, update it for current ticket
+        ticket.assignment_name = assignment
 
-    # chop off epoch year, month, and date. Just want HH:MM:SS (time) worked on ticket - date doesn't matter
-    return result.time()
+    if question != ticket.specific_question:
+        # new info for question came back, update it for current ticket
+        ticket.specific_question = question
 
-def _now():
-    """
-    Gets the current time in UTC.
-    :return: Current time in Coordinated Universal Time (UTC)
-    """
-    return datetime.now()
+    if problem is not None:
+        # new info for problem came back, update it for current ticket
+        ticket.problem_type = problem
+
+    if primaryTutor is not None:
+        # new info for primary tutor came back, update it for current ticket
+        ticket.tutor_id = primaryTutor
+
+    if tutorNotes is not None:
+        # new info for tutor notes came back, update it for current ticket
+        ticket.tutor_notes = tutorNotes
+
+    if wasSuccessful is not None:
+        # new info for tutor notes came back, update it for current ticket
+        ticket.successful_session = True
+
+    else:
+        ticket.successful_session = False
+
+    db.session.commit()
+
 
 @views.route('/admin-course', methods=["GET", "POST"])
 @login_required
@@ -340,9 +298,9 @@ def add_course():
         else:
             # check if course already exists in DB, get all unison input
 
-            tmpCourse = Courses.query.filter_by(department=courseDepartment.upper(), number=courseNumber).first()
+            tmpCourse = Course.query.filter_by(department=courseDepartment.upper(), number=courseNumber).first()
             if tmpCourse is None:
-                newCourse = Courses(courseDepartment.upper(), courseNumber, courseName, displayOnIndex)
+                newCourse = Course(courseDepartment.upper(), courseNumber, courseName, displayOnIndex)
                 db.session.add(newCourse)
                 db.session.commit()
                 flash('Course created successfully!', category='success')
@@ -352,7 +310,7 @@ def add_course():
                 print("COURSE ALREADY IN DB!")
 
     # get all courses
-    courses = Courses.query.all()
+    courses = Course.query.all()
     return render_template('admin-course.html', courses=courses)
 
 @views.route('/admin-semester', methods=["GET", "POST"])
@@ -419,10 +377,10 @@ def add_professor():
             flash('Could not add professor, last name must not be empty!', category='error')
         else:
             # check if professor already exists in DB, store all lower so checks against caps doesn't happen
-            tmpProfessor = Professors.query.filter_by(first_name=firstName.lower(), last_name=lastName.lower()).first()
+            tmpProfessor = Professor.query.filter_by(first_name=firstName.lower(), last_name=lastName.lower()).first()
             if tmpProfessor is None:
                 # create professor and add it to DB, store as lower
-                newProfessor = Professors(firstName.lower(), lastName.lower())
+                newProfessor = Professor(firstName.lower(), lastName.lower())
                 db.session.add(newProfessor)
                 db.session.commit()
                 flash('Professor added successfully!', category='success')
@@ -430,7 +388,7 @@ def add_professor():
                 flash("Professor '" + firstName.title() + " " + lastName.title() + "' already exists in database!", category='error')
 
     # get all professors
-    professors = Professors.query.all()
+    professors = Professor.query.all()
     return render_template('admin-professor.html', professors=professors)
 
 @views.route('/admin-sections', methods=["GET", "POST"])
@@ -515,6 +473,6 @@ def add_section():
     # get all sections
     sections = Sections.query.all()
     semesters = Semesters.query.all()
-    courses = Courses.query.all()
-    professors = Professors.query.all()
+    courses = Course.query.all()
+    professors = Professor.query.all()
     return render_template('admin-sections.html', sections=sections, semesters=semesters, courses=courses, professors=professors, SectionMode=SectionMode)
