@@ -311,7 +311,7 @@ def test_admin_add_invalid_permission(admin_client: FlaskClient, app: Flask):
         assert category == 'error'
         assert message == 'Could not add user, must select a valid mode!'
 
-def test_admin_remove_no_data(admin_client: FlaskClient, create_super_user, app: Flask):
+def test_admin_remove_no_data(admin_client: FlaskClient, app: Flask):
     response = admin_client.post('/admin/tutors/remove')
 
     # Expect redirect back to create ticket page
@@ -329,7 +329,7 @@ def test_admin_remove_no_data(admin_client: FlaskClient, create_super_user, app:
     with app.app_context():
         assert User.get_tutors().count() == 1
 
-def test_admin_remove_invalid_id(admin_client: FlaskClient, create_super_user, app: Flask):
+def test_admin_remove_invalid_id(admin_client: FlaskClient, app: Flask):
     response = admin_client.post('/admin/tutors/remove', data={ 'userID': '69' })
 
     # Expect redirect back to create ticket page
