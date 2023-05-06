@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Admin Add Professors{% endblock %}
 {% block content %}
+<div class="container p-3 gy-3">
+
 <form action="{{ url_for('admin.add_professor') }}" method="POST">
     <div class="form-group">
         <label for="firstNameInput"><strong>First Name</strong></label>
@@ -16,10 +18,48 @@
 
 </form>
 
-<h1>All added Professors:</h1>
-{% for professor in professors %}
-    {{ professor.__repr__().title() }}<br>
-{% endfor %}
+{% macro professors_table(professor) -%}
+<div class="row">
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table align-middle caption-top">
+                <caption>
+                    <h5 class="text-center">{{ caption }}</h5>
+                </caption>
+                {{ caller() }}
+            </table>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
 
+{% macro remove_professor_button(course) -%}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">
+    Remove
+</button>
+{%- endmacro %}
 
+{% call professors_table('All Professors') %}
+    <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Sections</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for professor in professors %}
+        <tr scope="row">
+            <td>{{ professor.first_name.capitalize() }}</td>
+            <td>{{ professor.last_name.capitalize() }}</td>
+            <td>{{ professor.sections }}</td>
+            <td>{{ remove_professor_button(professor) }}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+{% endcall %}
+
+</div>
 {% endblock %}

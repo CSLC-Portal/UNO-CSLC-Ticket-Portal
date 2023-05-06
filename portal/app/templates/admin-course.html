@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Admin Add Course{% endblock %}
 {% block content %}
+<div class="container p-3 gy-3">
+
 <form action="{{ url_for('admin.add_course') }}" method="POST">
     <div class="form-group">
         <label for="courseDepartment"><strong>Course Department</strong></label>
@@ -24,10 +26,49 @@
 
 </form>
 
-<h1>All added courses:</h1>
-{% for course in courses %}
-    {{ course.__repr__() }}<br>
-{% endfor %}
 
+{% macro courses_table(caption) -%}
+<div class="row">
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table align-middle caption-top">
+                <caption>
+                    <h5 class="text-center">{{ caption }}</h5>
+                </caption>
+                {{ caller() }}
+            </table>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
 
+{% macro remove_course_button(course) -%}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">
+    Remove
+</button>
+{%- endmacro %}
+
+{% call courses_table('All Courses') %}
+    <thead>
+        <tr>
+            <th scope="col">Department/Number</th>
+            <th scope="col">Name</th>
+            <th scope="col">Display on Home</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for course in courses %}
+        <tr scope="row">
+            <td>{{ course.department }} {{ course.number }}</td>
+            <td>{{ course.course_name }}</td>
+            <td>{{ course.on_display }}</td>
+            <td>{{ remove_course_button(course) }}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+{% endcall %}
+
+</div>
 {% endblock %}

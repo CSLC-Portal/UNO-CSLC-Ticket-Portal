@@ -10,10 +10,12 @@ from flask_login import current_user
 from app.model import User
 from app.model import Course
 from app.model import Permission
-from app.model import Semester
-from app.model import Professor
 from app.model import Section
+from app.model import Professor
+from app.model import Semester
 from app.model import SectionMode
+
+from datetime import datetime
 
 from app.extensions import db
 from sqlalchemy.exc import IntegrityError
@@ -21,8 +23,8 @@ from sqlalchemy.exc import IntegrityError
 from app.util import str_empty
 from app.util import strip_or_none
 from app.util import permission_required
+from app.util import build_days_of_week_string
 
-from datetime import datetime
 import sys
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
@@ -112,9 +114,10 @@ def add_course():
     courseNumber = strip_or_none(request.form.get("courseNumber"))
     courseName = strip_or_none(request.form.get("courseName"))
     displayOnIndex = request.form.get("displayOnIndex")
-
-    # set up regex
-    # m = re.match("(^[A-Z]{2,4})\\s?(\\d{4})$", courseNumber)
+    print("COURSE DEPARTMENT: " + str(courseDepartment))
+    print("COURSE NUMBER: " + str(courseNumber))
+    print("COURSE NAME: " + str(courseName))
+    print("DISPLAY ON INDEX: " + str(displayOnIndex))
 
     # set on display
     if displayOnIndex is not None:
@@ -147,7 +150,7 @@ def add_course():
 @admin.route('/semesters')
 @permission_required(Permission.Admin)
 def view_semesters():
-    # get all semesters
+    # get all courses, just for validation in html
     semesters = Semester.query.all()
     return render_template('admin-semester.html', semesters=semesters)
 
@@ -159,6 +162,10 @@ def add_semester():
     season = strip_or_none(request.form.get("seasonInput"))
     startDate = strip_or_none(request.form.get("startDate"))
     endDate = strip_or_none(request.form.get("endDate"))
+    print("YEAR: " + str(year))
+    print("SEASON: " + str(season))
+    print("START DATE: " + startDate)
+    print("END DATE: " + endDate)
 
     # validate input coming in
     if str_empty(year):
@@ -174,7 +181,6 @@ def add_semester():
     else:
         # check if semester already exists in DB, impossible to have two summer 2023 semesters fo example
         tmpSemester = Semester.query.filter_by(season=season, year=year).first()
-
         if tmpSemester is None:
             # create semester and add it to DB, need to cast dates from string to date objects
             start = datetime.strptime(startDate, "%Y-%m-%d").date()
@@ -183,16 +189,19 @@ def add_semester():
             db.session.add(newSemester)
             db.session.commit()
             flash('Semester created successfully!', category='success')
-
         else:
             flash("Semester '" + season + " " + year + "' already exists in database!", category='error')
+            print("SEMESTER ALREADY IN DB!")
+
+    num = Semester.query.count()
+    print("NUM SEMESTERS: " + str(num))
 
     return redirect(url_for('admin.view_semesters'))
 
 @admin.route('/professors')
 @permission_required(Permission.Admin)
 def view_professors():
-    # get all professors
+    # get all courses, just for validation in html
     professors = Professor.query.all()
     return render_template('admin-professor.html', professors=professors)
 
@@ -202,6 +211,8 @@ def add_professor():
 
     firstName = strip_or_none(request.form.get("firstNameInput"))
     lastName = strip_or_none(request.form.get("lastNameInput"))
+    print("FIRST NAME: " + str(firstName))
+    print("LAST NAME: " + str(lastName))
 
     # validate input coming in
     if str_empty(firstName):
@@ -217,7 +228,6 @@ def add_professor():
             db.session.add(newProfessor)
             db.session.commit()
             flash('Professor added successfully!', category='success')
-
         else:
             flash("Professor '" + firstName.title() + " " + lastName.title() + "' already exists in database!", category='error')
 
@@ -226,12 +236,12 @@ def add_professor():
 @admin.route('/sections')
 @permission_required(Permission.Admin)
 def view_sections():
-    # get all sections
+    # get all courses, just for validation in html
     sections = Section.query.all()
     semesters = Semester.query.all()
     courses = Course.query.all()
     professors = Professor.query.all()
-    return render_template('admin-sections.html', sections=sections, semesters=semesters, courses=courses, professors=professors, SectionMode=SectionMode)
+    return render_template('admin-sections.html', sections=sections, semesters=semesters, courses=courses, professors=professors)
 
 @admin.route('/sections/add', methods=["POST"])
 @permission_required(Permission.Admin)
@@ -249,6 +259,18 @@ def add_section():
     secStartTime = strip_or_none(request.form.get("sectionStartTime"))
     secEndTime = strip_or_none(request.form.get("sectionEndTime"))
     professor = strip_or_none(request.form.get("professorInput"))
+    print("SEMESTER: " + semester)
+    print("COURSE: " + course)
+    print("SECTION NUM: " + sectionNum)
+    print("SECTION MODE: " + str(sectionMode))
+    print("MONDAY: " + str(monInput))
+    print("TUESDAY: " + str(tueInput))
+    print("WEDNESDAY: " + str(wedInput))
+    print("THURSDAY: " + str(thuInput))
+    print("FRIDAY: " + str(friInput))
+    print("SEC START: " + secStartTime)
+    print("SEC END: " + secEndTime)
+    print("PROFESSOR: " + professor)
 
     # validate input coming in
     if monInput is None and tueInput is None and wedInput is None and thuInput is None and friInput is None and sectionMode != "TotallyOnline":
@@ -263,16 +285,7 @@ def add_section():
             # need to assemble days of week string to set in DB
             daysOfWeek = ""
             if sectionMode != "TotallyOnline":
-                if monInput is not None:
-                    daysOfWeek = daysOfWeek + "Mon"
-                if tueInput is not None:
-                    daysOfWeek = daysOfWeek + "Tue"
-                if wedInput is not None:
-                    daysOfWeek = daysOfWeek + "Wed"
-                if thuInput is not None:
-                    daysOfWeek = daysOfWeek + "Thu"
-                if friInput is not None:
-                    daysOfWeek = daysOfWeek + "Fri"
+                daysOfWeek = build_days_of_week_string(monInput, tueInput, wedInput, thuInput, friInput)
 
             # need to assemble python time object to set in db
             try:
@@ -284,8 +297,13 @@ def add_section():
                     print(secStartTime)
             except ValueError:
                 # start and end dates are empty strings because mode = totally online. set time to 00:00
+                print("Start and end dates are empy strings because it is totaly online course.")
+                print("START TIME: " + str(secStartTime))
+                print("END TIME: " + str(secEndTime))
                 secStartTime = datetime.strptime("00:00", '%H:%M').time()
                 secEndTime = datetime.strptime("00:00", '%H:%M').time()
+                print("START TIME: " + str(secStartTime))
+                print("END TIME: " + str(secEndTime))
 
             newSection = Section(sectionNum, daysOfWeek, secStartTime, secEndTime, sectionMode, course, semester, professor)
             db.session.add(newSection)
