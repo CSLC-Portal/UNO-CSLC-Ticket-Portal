@@ -99,6 +99,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="tests.html#tests.MockConfidentialClientApplication.acquire_token_by_auth_code_flow">acquire_token_by_auth_code_flow() (tests.MockConfidentialClientApplication method)</a>
 </li>
+      <li><a href="app.blueprints.html#app.blueprints.views.add_course">add_course() (in module app.blueprints.views)</a>
+</li>
+      <li><a href="app.blueprints.html#app.blueprints.views.add_professor">add_professor() (in module app.blueprints.views)</a>
+</li>
+      <li><a href="app.blueprints.html#app.blueprints.views.add_section">add_section() (in module app.blueprints.views)</a>
+</li>
+      <li><a href="app.blueprints.html#app.blueprints.views.add_semester">add_semester() (in module app.blueprints.views)</a>
+</li>
       <li><a href="app.html#app.model.Permission.Admin">Admin (app.model.Permission attribute)</a>
 </li>
       <li><a href="tests.html#tests.conftest.admin_client">admin_client() (in module tests.conftest)</a>
@@ -112,6 +120,8 @@
         <li><a href="app.blueprints.html#module-app.blueprints">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     app.blueprints.auth
 
@@ -119,8 +129,6 @@
         <li><a href="app.blueprints.html#module-app.blueprints.auth">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     app.blueprints.views
 
@@ -181,7 +189,7 @@
 </li>
       <li><a href="app.html#app.model.Course">Course (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Section.course_id">course_id (app.model.Section attribute)</a>
+      <li><a href="app.html#app.model.Sections.course_id">course_id (app.model.Sections attribute)</a>
 </li>
       <li><a href="app.html#app.model.Course.course_name">course_name (app.model.Course attribute)</a>
 </li>
@@ -201,6 +209,10 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="app.html#app.model.Sections.days_of_week">days_of_week (app.model.Sections attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.html#app.model.Course.department">department (app.model.Course attribute)</a>
 </li>
   </ul></td>
@@ -218,9 +230,11 @@
       <li><a href="app.html#app.model.Message.end_date">end_date (app.model.Message attribute)</a>
 
       <ul>
-        <li><a href="app.html#app.model.Semester.end_date">(app.model.Semester attribute)</a>
+        <li><a href="app.html#app.model.Semesters.end_date">(app.model.Semesters attribute)</a>
 </li>
       </ul></li>
+      <li><a href="app.html#app.model.Sections.end_time">end_time (app.model.Sections attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -270,9 +284,9 @@
 </li>
         <li><a href="app.html#app.model.Professor.id">(app.model.Professor attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Section.id">(app.model.Section attribute)</a>
+        <li><a href="app.html#app.model.Sections.id">(app.model.Sections attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Semester.id">(app.model.Semester attribute)</a>
+        <li><a href="app.html#app.model.Semesters.id">(app.model.Semesters attribute)</a>
 </li>
         <li><a href="app.html#app.model.Ticket.id">(app.model.Ticket attribute)</a>
 </li>
@@ -284,7 +298,11 @@
       <li><a href="app.blueprints.html#app.blueprints.views.index">index() (in module app.blueprints.views)</a>
 </li>
       <li><a href="app.html#app.model.Mode.InPerson">InPerson (app.model.Mode attribute)</a>
+
+      <ul>
+        <li><a href="app.html#app.model.SectionMode.InPerson">(app.model.SectionMode attribute)</a>
 </li>
+      </ul></li>
       <li><a href="app.html#app.model.User.is_complete">is_complete() (app.model.User method)</a>
 </li>
   </ul></td>
@@ -392,6 +410,8 @@
 </li>
       <li><a href="app.html#app.model.Permission">Permission (class in app.model)</a>
 </li>
+      <li><a href="app.html#app.model.Course.pretty_print">pretty_print() (app.model.Course method)</a>
+</li>
       <li><a href="app.html#app.model.ProblemType.problem_type">problem_type (app.model.ProblemType attribute)</a>
 
       <ul>
@@ -404,7 +424,7 @@
 </li>
       <li><a href="app.html#app.model.Professor">Professor (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Section.professor_id">professor_id (app.model.Section attribute)</a>
+      <li><a href="app.html#app.model.Sections.professor_id">professor_id (app.model.Sections attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -425,9 +445,9 @@
 </li>
         <li><a href="app.html#app.model.Professor.query">(app.model.Professor attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Section.query">(app.model.Section attribute)</a>
+        <li><a href="app.html#app.model.Sections.query">(app.model.Sections attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Semester.query">(app.model.Semester attribute)</a>
+        <li><a href="app.html#app.model.Semesters.query">(app.model.Semesters attribute)</a>
 </li>
         <li><a href="app.html#app.model.Ticket.query">(app.model.Ticket attribute)</a>
 </li>
@@ -439,6 +459,10 @@
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="app.html#app.model.SectionMode.Remote">Remote (app.model.SectionMode attribute)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="app.html#app.model.Ticket.reopen">reopen() (app.model.Ticket method)</a>
 </li>
@@ -452,27 +476,31 @@
 </li>
       <li><a href="app.html#app.model.Config.sat_start">sat_start (app.model.Config attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Semester.season">season (app.model.Semester attribute)</a>
+      <li><a href="app.html#app.model.Semesters.season">season (app.model.Semesters attribute)</a>
 </li>
       <li><a href="app.html#app.model.Season">Season (class in app.model)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.section">section (app.model.Ticket attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Section">Section (class in app.model)</a>
+      <li><a href="app.html#app.model.Sections.section_mode">section_mode (app.model.Sections attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Section.section_number">section_number (app.model.Section attribute)</a>
+      <li><a href="app.html#app.model.Sections.section_number">section_number (app.model.Sections attribute)</a>
+</li>
+      <li><a href="app.html#app.model.SectionMode">SectionMode (class in app.model)</a>
 </li>
       <li><a href="app.html#app.model.Course.sections">sections (app.model.Course attribute)</a>
 
       <ul>
         <li><a href="app.html#app.model.Professor.sections">(app.model.Professor attribute)</a>
 </li>
-        <li><a href="app.html#app.model.Semester.sections">(app.model.Semester attribute)</a>
+        <li><a href="app.html#app.model.Semesters.sections">(app.model.Semesters attribute)</a>
 </li>
       </ul></li>
-      <li><a href="app.html#app.model.Semester">Semester (class in app.model)</a>
+      <li><a href="app.html#app.model.Sections">Sections (class in app.model)</a>
 </li>
-      <li><a href="app.html#app.model.Section.semester_id">semester_id (app.model.Section attribute)</a>
+      <li><a href="app.html#app.model.Sections.semester_id">semester_id (app.model.Sections attribute)</a>
+</li>
+      <li><a href="app.html#app.model.Semesters">Semesters (class in app.model)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -483,9 +511,11 @@
       <li><a href="app.html#app.model.Message.start_date">start_date (app.model.Message attribute)</a>
 
       <ul>
-        <li><a href="app.html#app.model.Semester.start_date">(app.model.Semester attribute)</a>
+        <li><a href="app.html#app.model.Semesters.start_date">(app.model.Semesters attribute)</a>
 </li>
       </ul></li>
+      <li><a href="app.html#app.model.Sections.start_time">start_time (app.model.Sections attribute)</a>
+</li>
       <li><a href="app.html#app.model.Ticket.status">status (app.model.Ticket attribute)</a>
 </li>
       <li><a href="app.html#app.model.Status">Status (class in app.model)</a>
@@ -565,8 +595,6 @@
 </li>
       <li><a href="app.html#app.model.User.tickets">tickets (app.model.User attribute)</a>
 </li>
-      <li><a href="app.html#app.model.Section.time">time (app.model.Section attribute)</a>
-</li>
       <li><a href="app.html#app.model.Ticket.time_claimed">time_claimed (app.model.Ticket attribute)</a>
 </li>
       <li><a href="app.html#app.model.Ticket.time_closed">time_closed (app.model.Ticket attribute)</a>
@@ -574,6 +602,8 @@
       <li><a href="app.html#app.model.Ticket.time_created">time_created (app.model.Ticket attribute)</a>
 </li>
       <li><a href="app.html#app.model.ToStrEnum">ToStrEnum (class in app.model)</a>
+</li>
+      <li><a href="app.html#app.model.SectionMode.TotallyOnline">TotallyOnline (app.model.SectionMode attribute)</a>
 </li>
       <li><a href="app.html#app.model.Config.tue_end">tue_end (app.model.Config attribute)</a>
 </li>
@@ -635,7 +665,7 @@
 <h2 id="Y">Y</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="app.html#app.model.Semester.year">year (app.model.Semester attribute)</a>
+      <li><a href="app.html#app.model.Semesters.year">year (app.model.Semesters attribute)</a>
 </li>
   </ul></td>
 </tr></table>
