@@ -23,6 +23,7 @@ from sqlalchemy.exc import IntegrityError
 from app.util import str_empty
 from app.util import strip_or_none
 from app.util import permission_required
+from app.util import build_days_of_week_string
 
 import sys
 
@@ -334,16 +335,7 @@ def add_section():
             # need to assemble days of week string to set in DB
             daysOfWeek = ""
             if sectionMode != "TotallyOnline":
-                if monInput is not None:
-                    daysOfWeek = daysOfWeek + "Mon"
-                if tueInput is not None:
-                    daysOfWeek = daysOfWeek + "Tue"
-                if wedInput is not None:
-                    daysOfWeek = daysOfWeek + "Wed"
-                if thuInput is not None:
-                    daysOfWeek = daysOfWeek + "Thu"
-                if friInput is not None:
-                    daysOfWeek = daysOfWeek + "Fri"
+                daysOfWeek = build_days_of_week_string(monInput, tueInput, wedInput, thuInput, friInput)
 
             # need to assemble python time object to set in db
             try:
