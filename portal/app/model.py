@@ -174,7 +174,7 @@ class Ticket(db.Model):
 
     def close(self):
         self.status = Status.Closed
-        self.time_closed = datetime.now()
+        self.time_closed = datetime.datetime.now()
 
     def reopen(self):
         self.status = Status.Open
