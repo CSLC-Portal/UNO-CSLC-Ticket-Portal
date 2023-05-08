@@ -32,8 +32,7 @@ views = Blueprint('views', __name__)
 @views.route("/")
 def index():
     messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
-    #config = Config.query.one()
-    return render_template('index.html',  messages=messages)
+    return render_template('index.html', messages=messages)
 
 @views.route('/create-ticket', methods=['POST', 'GET'])
 @login_required
