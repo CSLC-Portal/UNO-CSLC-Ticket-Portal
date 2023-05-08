@@ -102,8 +102,8 @@ def _add_default_admin(app: Flask):
 
     with app.app_context():
         try:
-            from .blueprints.admin import attempt_create_super_user
-            attempt_create_super_user(admin_email, Permission.Owner)
+            from .blueprints.admin import create_pseudo_super_user
+            create_pseudo_super_user(admin_email, Permission.Owner)
 
         except IntegrityError as e:
             db.session.rollback()

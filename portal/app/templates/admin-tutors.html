@@ -130,14 +130,14 @@
         </thead>
         <tbody>
             {% for user in pending %}
-            <tr scope="row">
+            <tr style="height:4em" scope="row">
                 <td>{{ user.email }}</td>
                 <td>
                     <span class="badge rounded-pill bg-warning">Pending</span>
                 </td>
                 <td>
                     {{ user.permission }}
-                    <span> {{ edit_user_button(user, 'permission') }} </span>
+                    {{ edit_user_button(user, 'permission') }}
                 </td>
                 <td>{{ remove_user_button(user) }}</td>
             </tr>
@@ -161,7 +161,7 @@
     </thead>
     <tbody>
         {% for user in model.User.get_tutors() %}
-        <tr scope="row">
+        <tr style="height:4em" scope="row">
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
             <td>
@@ -183,8 +183,6 @@
             <td>
                 {% if user != current_user %}
                     {{ remove_user_button(user) }}
-                {% else %}
-                    <span class="badge rounded-pill bg-black">You</span>
                 {% endif %}
             </td>
         </tr>

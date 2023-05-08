@@ -47,11 +47,25 @@ def add_tutor():
         if permission_val:
             permission = Permission(int(permission_val))
 
-        if permission and current_user.permission <= permission:
+        user: User = User.query.filter_by(email=email).one_or_none()
+
+        if str_empty(email):
+            flash('Email must not be empty!', category='error')
+
+        elif permission and current_user.permission <= permission:
             flash('Cannot add user of higher or equal permission level as yourself!', category='error')
 
+        elif user and user.permission > Permission.Student:
+            flash('User already exists in the role hierarchy!', category='error')
+
+        elif user and user.permission == Permission.Student:
+            user.tutor_is_active = True
+            user.permission = permission
+            db.session.commit()
+            flash('New user successfully added!', category='success')
+
         else:
-            attempt_create_super_user(email, permission)
+            create_pseudo_super_user(email, permission)
             flash('New user successfully added!', category='success')
 
     except ValueError:
@@ -191,7 +205,7 @@ def add_course():
 
     return redirect(url_for('admin.view_courses'))
 
-def attempt_create_super_user(email: str, permission: Permission):
+def create_pseudo_super_user(email: str, permission: Permission):
     """
     If the user doesn't exist, creates and inserts an 'incomplete' user into the database given an email and permission level.
     When the user signs in using their email, the remaining info will be automatically updated in the database.
@@ -199,24 +213,8 @@ def attempt_create_super_user(email: str, permission: Permission):
     If the user exist, the the permission level is updated for the user.
     """
 
-    # TODO: Need to make custom exception class for printing out exception!!!
-
-    if str_empty(email):
-        raise Exception('Email must not be empty')
-
-    user: User = User.query.filter_by(email=email).one_or_none()
-
-    if user is None:
-        pseudo_user = User(None, permission, email, None, True, False)
-        db.session.add(pseudo_user)
-
-    elif user.permission == Permission.Student:
-        user.tutor_is_active = True
-        user.permission = permission
-
-    else:
-        raise Exception('User already exists in the role hierarchy')
-
+    pseudo_user = User(None, permission, email, None, True, False)
+    db.session.add(pseudo_user)
     db.session.commit()
 
 def _attempt_delete_super_user(user: User):

@@ -251,7 +251,8 @@ def test_admin_add_self(create_super_user, app: Flask):
 
         (category, message) = flashes[0]
         assert category == 'error'
-        assert message == 'Could not add user, unknown reason!'
+        assert message == 'User already exists in the role hierarchy!'
+
 
     with app.app_context():
         assert User.get_tutors().count() == 1
@@ -309,7 +310,7 @@ def test_admin_add_existing_super_user(admin_client: FlaskClient, create_super_u
 
         (category, message) = flashes[0]
         assert category == 'error'
-        assert message == 'Could not add user, unknown reason!'
+        assert message == 'User already exists in the role hierarchy!'
 
     with app.app_context():
         assert User.get_tutors().count() == 2
@@ -349,7 +350,7 @@ def test_admin_add_invalid_email(admin_client: FlaskClient, app: Flask):
 
         (category, message) = flashes[0]
         assert category == 'error'
-        assert message == 'Could not add user, unknown reason!'
+        assert message == 'Email must not be empty!'
 
 def test_admin_add_invalid_permission(admin_client: FlaskClient, app: Flask):
     # Invalid permission value
