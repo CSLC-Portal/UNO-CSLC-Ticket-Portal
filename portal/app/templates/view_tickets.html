@@ -30,7 +30,7 @@
                         <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Claim">Claim</button>
                         <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Close">Close</button>
                         <!-- Button trigger edit ticket modal -->
-                        <button type="button" class="btn btn-danger btn-tickets" data-toggle="modal" data-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false"> View </button>
+                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false"> View </button>
                     </form>
                 </div>
                 </div>
@@ -61,7 +61,7 @@
                         <input type="hidden" name="ticketID" value="{{ ticket.id }}">
                         <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Close">Close</button>
                         <!-- Button trigger edit ticket modal -->
-                        <button type="button" class="btn btn-danger btn-tickets" data-toggle="modal" data-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false"> View </button>
+                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false"> View </button>
                     </form>
                 </div>
                 </div>
@@ -92,7 +92,7 @@
                         <input type="hidden" name="ticketID" value="{{ ticket.id }}">
                         <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Open">Open</button>
                         <!-- Button trigger edit ticket modal -->
-                        <button type="button" class="btn btn-danger btn-tickets" data-toggle="modal" data-target="#edit{{ ticket.id }}" data-backdrop="static" data-keyboard="false"> View </button>
+                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false"> View </button>
                     </form>
                 </div>
                 </div>
@@ -175,7 +175,7 @@
             <label for="successfulSession"><strong>Was Successful</strong></label>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary" name="SaveChanges">Save changes</button>
         </div>
       </form>
