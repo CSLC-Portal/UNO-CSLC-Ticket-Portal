@@ -37,7 +37,6 @@ def create_app():
     _create_db_models(app)
     _register_blueprints(app)
     _add_default_admin(app)
-    #_add_default_hours(app)
     _setup_jinja_globals(app)
     return app
 
@@ -113,14 +112,6 @@ def _add_default_admin(app: Flask):
 
         except Exception as e:
             print(e, file=stderr)
-
-"""
-def _add_default_hours(app: Flask):
-    with app.app_context():
-        default_config = Config()
-        db.session.add(default_config)
-        db.session.commit()
-        """
 
 def _setup_jinja_globals(app: Flask):
     app.jinja_env.globals['user'] = current_user

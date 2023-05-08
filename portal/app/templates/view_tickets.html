@@ -75,7 +75,7 @@
                     Closed Tickets
                 </h5>
                 {% for ticket in tickets %}
-                {% if ticket.status == Status.Closed %}\
+                {% if ticket.status == Status.Closed %}
                 <div class="card text-white bg-secondary mb-3 centered" style="max-width: 18rem;">
                 <div class="card-header" style="text-align:left;">
                     <h3>{{ ticket.student_name }}</h3>
