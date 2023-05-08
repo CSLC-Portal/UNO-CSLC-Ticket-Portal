@@ -59,8 +59,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Config.query"><code class="docutils literal notranslate"><span class="pre">Config.query</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Config.sat_end"><code class="docutils literal notranslate"><span class="pre">Config.sat_end</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Config.sat_start"><code class="docutils literal notranslate"><span class="pre">Config.sat_start</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Config.sun_end"><code class="docutils literal notranslate"><span class="pre">Config.sun_end</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Config.sun_start"><code class="docutils literal notranslate"><span class="pre">Config.sun_start</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Config.thur_end"><code class="docutils literal notranslate"><span class="pre">Config.thur_end</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Config.thur_start"><code class="docutils literal notranslate"><span class="pre">Config.thur_start</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Config.tue_end"><code class="docutils literal notranslate"><span class="pre">Config.tue_end</span></code></a></li>
@@ -95,7 +93,6 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#app.model.Permission"><code class="docutils literal notranslate"><span class="pre">Permission</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Permission.Admin"><code class="docutils literal notranslate"><span class="pre">Permission.Admin</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#app.model.Permission.Owner"><code class="docutils literal notranslate"><span class="pre">Permission.Owner</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Permission.Student"><code class="docutils literal notranslate"><span class="pre">Permission.Student</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#app.model.Permission.Tutor"><code class="docutils literal notranslate"><span class="pre">Permission.Tutor</span></code></a></li>
 </ul>
@@ -322,18 +319,6 @@ customized per-model by overriding <code class="xref py py-attr docutils literal
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Config.sun_end">
-<span class="sig-name descname"><span class="pre">sun_end</span></span><a class="headerlink" href="#app.model.Config.sun_end" title="Permalink to this definition"></a></dt>
-<dd><p>End time for Sundays</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Config.sun_start">
-<span class="sig-name descname"><span class="pre">sun_start</span></span><a class="headerlink" href="#app.model.Config.sun_start" title="Permalink to this definition"></a></dt>
-<dd><p>Start time for Sundays</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="app.model.Config.thur_end">
 <span class="sig-name descname"><span class="pre">thur_end</span></span><a class="headerlink" href="#app.model.Config.thur_end" title="Permalink to this definition"></a></dt>
 <dd><p>End time for Thursdays</p>
@@ -505,11 +490,6 @@ The available permission levels are either: student, tutor, or admin</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="app.model.Permission.Admin">
 <span class="sig-name descname"><span class="pre">Admin</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#app.model.Permission.Admin" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.model.Permission.Owner">
-<span class="sig-name descname"><span class="pre">Owner</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#app.model.Permission.Owner" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
