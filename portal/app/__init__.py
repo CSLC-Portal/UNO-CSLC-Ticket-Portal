@@ -94,16 +94,16 @@ def _create_db_models(app: Flask):
     sys.exit(-1)
 
 def _add_default_admin(app: Flask):
-    admin_email = os.getenv('FLASK_DEFAULT_ADMIN_EMAIL')
+    admin_email = os.getenv('FLASK_DEFAULT_OWNER_EMAIL')
 
     if admin_email is None:
-        print('FLASK_DEFAULT_ADMIN_EMAIL not set. Considering setting this to add a default administrator')
+        print('FLASK_DEFAULT_OWNER_EMAIL not set. Considering setting this to add a default administrator')
         return
 
     with app.app_context():
         try:
             from .blueprints.admin import attempt_create_super_user
-            attempt_create_super_user(admin_email, Permission.Admin)
+            attempt_create_super_user(admin_email, Permission.Owner)
 
         except IntegrityError as e:
             db.session.rollback()
@@ -113,7 +113,7 @@ def _add_default_admin(app: Flask):
             print(e, file=stderr)
 
 def _setup_jinja_globals(app: Flask):
-    app.jinja_env.globals['user'] = current_user
+    app.jinja_env.globals['current_user'] = current_user
     app.jinja_env.globals['Mode'] = Mode
     app.jinja_env.globals['Status'] = Status
     app.jinja_env.globals['Permission'] = Permission

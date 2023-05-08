@@ -105,7 +105,11 @@ def tutor_client(create_super_user):
 
 @pytest.fixture
 def admin_client(create_super_user):
-    return create_super_user(email='admin@email.com')
+    return create_super_user(email='admin@email.com', permission=Permission.Admin)
+
+@pytest.fixture
+def owner_client(create_super_user):
+    return create_super_user(email='owner@email.com', permission=Permission.Owner)
 
 @pytest.fixture(scope="session", autouse=True)
 def cleanup(request):

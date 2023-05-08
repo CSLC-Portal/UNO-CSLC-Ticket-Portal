@@ -239,11 +239,7 @@ def _attempt_edit_ticket(ticket: Ticket):
         # new info for tutor notes came back, update it for current ticket
         ticket.tutor_notes = tutorNotes
 
-    if wasSuccessful is not None:
-        # new info for tutor notes came back, update it for current ticket
-        ticket.successful_session = True
-
-    else:
-        ticket.successful_session = False
+    # new info for tutor notes came back, update it for current ticket
+    ticket.successful_session = wasSuccessful is not None
 
     db.session.commit()
