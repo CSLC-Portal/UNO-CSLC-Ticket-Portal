@@ -39,7 +39,6 @@ def view_tutors():
 @admin.route('/tutors/add', methods=['POST'])
 @permission_required(Permission.Admin)
 def add_tutor():
-
     email = strip_or_none(request.form.get("email"))
     permission_val = strip_or_none(request.form.get("permission"))
     permission = None
@@ -48,22 +47,37 @@ def add_tutor():
         if permission_val:
             permission = Permission(int(permission_val))
 
-        # TODO: Should display error message if user is already set at the permission level
-        attempt_create_super_user(email, permission)
+        user: User = User.query.filter_by(email=email).one_or_none()
+
+        if str_empty(email):
+            flash('Email must not be empty!', category='error')
+
+        elif permission and current_user.permission <= permission:
+            flash('Cannot add user of higher or equal permission level as yourself!', category='error')
+
+        elif user and user.permission > Permission.Student:
+            flash('User already exists in the role hierarchy!', category='error')
+
+        elif user and user.permission == Permission.Student:
+            user.tutor_is_active = True
+            user.permission = permission
+            db.session.commit()
+            flash('New user successfully added!', category='success')
+
+        else:
+            create_pseudo_super_user(email, permission)
+            flash('New user successfully added!', category='success')
 
     except ValueError:
         flash('Could not add user, must select a valid mode!', category='error')
 
     except IntegrityError:
         db.session.rollback()
-        flash('Could not add user, invalid data', category='error')
+        flash('Could not add user, invalid data!', category='error')
 
     except Exception as e:
-        flash('Could not add user, unknown reason', category='error')
-        print(f'Failed to create pseudo user: {e}', file=sys.stderr)
-
-    else:
-        flash('New user successfully added!', category='success')
+        flash('Could not add user, unknown reason!', category='error')
+        print(f'Could not add user, {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_tutors'))
 
@@ -75,16 +89,18 @@ def remove_tutor():
     try:
         user: User = User.query.get(user_id)
 
-        if user and user != current_user:
-            # TODO: Should display error message if user has permission level of Student
-            _attempt_delete_super_user(user)
-            flash('User successfully removed!', category='success')
+        if not user:
+            flash('Could not remove user, user does not exist!', category='error')
 
         elif user == current_user:
             flash('You cannot remove yourself from the role hierarchy!', category='error')
 
+        elif current_user.permission <= user.permission:
+            flash('Cannot remove user of higher or equal permission level as yourself!', category='error')
+
         else:
-            flash('Could not remove user, user does not exist!', category='error')
+            _attempt_delete_super_user(user)
+            flash('User successfully removed!', category='success')
 
     except IntegrityError:
         db.session.rollback()
@@ -93,6 +109,48 @@ def remove_tutor():
     except Exception as e:
         flash('Could not remove user, unknown reason', category='error')
         print(f'Failed to remove user: {e}', file=sys.stderr)
+
+    return redirect(url_for('admin.view_tutors'))
+
+@admin.route('/tutors/edit', methods=['POST'])
+@permission_required(Permission.Admin)
+def edit_tutor():
+    user_id = strip_or_none(request.form.get("userID"))
+    permission_val = strip_or_none(request.form.get("permission"))
+    active = request.form.get("active") is not None
+
+    try:
+        user: User = User.query.get(user_id)
+
+        new_permission = None
+        if permission_val:
+            new_permission = Permission(int(permission_val))
+
+        if not user:
+            flash('Could not update user, user does not exist!', category='error')
+
+        elif user == current_user:
+            flash('You cannot update yourself!', category='error')
+
+        elif current_user.permission <= user.permission:
+            flash('Cannot update user of higher or equal permission level as yourself!', category='error')
+
+        elif new_permission and current_user.permission <= new_permission:
+            flash('Cannot promote user to higher or equal permission level as yourself!', category='error')
+
+        else:
+            _attempt_edit_user(user, active, new_permission)
+            flash('User successfully updated!', category='success')
+
+    except ValueError:
+        flash('Could not update user, input values invalid!', category='error')
+
+    except IntegrityError:
+        flash('Could not update user, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not update user, unknown reason!', category='error')
+        print(f'Could not update user, {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_tutors'))
 
@@ -147,7 +205,7 @@ def add_course():
 
     return redirect(url_for('admin.view_courses'))
 
-def attempt_create_super_user(email: str, permission: Permission):
+def create_pseudo_super_user(email: str, permission: Permission):
     """
     If the user doesn't exist, creates and inserts an 'incomplete' user into the database given an email and permission level.
     When the user signs in using their email, the remaining info will be automatically updated in the database.
@@ -155,22 +213,8 @@ def attempt_create_super_user(email: str, permission: Permission):
     If the user exist, the the permission level is updated for the user.
     """
 
-    if str_empty(email):
-        # NOTE: Don't want to create custom exception class right now
-        #       Most of this should be handled by flask-wtf anyways in the future
-        #
-        raise Exception('Email must not be empty')
-
-    user: User = User.query.filter_by(email=email).one_or_none()
-
-    if user is None:
-        pseudo_user = User(None, permission, email, None, True, False)
-        db.session.add(pseudo_user)
-
-    else:
-        user.tutor_is_active = True
-        user.permission = permission
-
+    pseudo_user = User(None, permission, email, None, True, False)
+    db.session.add(pseudo_user)
     db.session.commit()
 
 def _attempt_delete_super_user(user: User):
@@ -192,3 +236,15 @@ def _attempt_delete_super_user(user: User):
         user.permission = Permission.Student
 
     db.session.commit()
+
+def _attempt_edit_user(user: User, active, permission=None):
+    try:
+        if permission:
+            user.permission = permission
+
+        user.tutor_is_active = active
+        db.session.commit()
+
+    except IntegrityError as e:
+        db.session.rollback()
+        raise e
