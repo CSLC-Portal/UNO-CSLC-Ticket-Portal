@@ -14,6 +14,7 @@ from app.model import Section
 from app.model import Professor
 from app.model import Semester
 from app.model import SectionMode
+from app.model import Season
 
 from datetime import datetime
 
@@ -273,6 +274,7 @@ def edit_course():
                     course.number = newNum
                 if newName != course.course_name:
                     course.course_name = newName
+                db.session.commit()
                 flash("Course updated successfully!", category='success')
             else:
                 flash('Could not update course, would cause duplicate courses in DB!', category='error')
@@ -388,6 +390,69 @@ def remove_semester():
     except Exception as e:
         flash('Could not remove semester, unknown reason', category='error')
         print(f'Failed to remove semester: {e}', file=sys.stderr)
+
+    return redirect(url_for('admin.view_semesters'))
+
+@admin.route('/semesters/edit', methods=['POST'])
+@permission_required(Permission.Admin)
+def edit_semester():
+    semester_id = strip_or_none(request.form.get("semesterID"))
+    newYear = strip_or_none(request.form.get("yearUpdate"))
+    newSeason = strip_or_none(request.form.get("seasonUpdate"))
+    start = strip_or_none(request.form.get("updateStartDate"))
+    end = strip_or_none(request.form.get("updateEndDate"))
+    newStart = datetime.strptime(start, "%Y-%m-%d").date()
+    newEnd = datetime.strptime(end, "%Y-%m-%d").date()
+
+    print("NEW SEMESTER: " + str(semester_id))
+    print("NEW YEAR: " + str(newYear))
+    print("NEW SEASON: " + str(newSeason))
+    print("NEW START: " + str(newStart))
+    print("NEW END: " + str(newEnd))
+    try:
+        semester: Semester = Semester.query.get(semester_id)
+        print(str(semester.season == Season[newSeason]))
+
+        if semester.year == int(newYear) and semester.season == Season[newSeason] and semester.start_date == newStart and semester.end_date == newEnd:
+            flash('No updates to semester, attributes remain the same.', category='message')
+        elif not semester:
+            flash('Could not update semester, semester does not exist!', category='error')
+        elif str_empty(newYear):
+            flash('Could not update semester, year cannot be empty!', category='error')
+        elif str_empty(newSeason):
+            flash('Could not update semester, season cannot be empty!', category='error')
+        elif str_empty(start):
+            flash('Could not update semester, start date cannot be empty!', category='error')
+        elif str_empty(end):
+            flash('Could not update semester, end date cannot be empty!', category='error')
+        else:
+            tmpSemester = Semester.query.filter_by(season=newSeason, year=newYear).first()
+            if tmpSemester is None:
+                if newYear != semester.year:
+                    semester.year = int(newYear)
+                if Season[newSeason] != semester.season:
+                    semester.season = Season[newSeason]
+                if newStart != semester.start_date:
+                    semester.start_date = newStart
+                if newEnd != semester.end_date:
+                    semester.end_date = newEnd
+                db.session.commit()
+                flash("Semester updated successfully!", category='success')
+            elif tmpSemester is not None and (semester.start_date != newStart or semester.end_date != newEnd):
+                semester.start_date = newStart
+                semester.end_date = newEnd
+                db.session.commit()
+                flash("Semester updated successfully!", category='success')
+            else:
+                flash('Could not update semester, would cause duplicate semesters in DB!', category='error')
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not update semester, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not update semester, unknown reason', category='error')
+        print(f'Failed to update semester: {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_semesters'))
 
