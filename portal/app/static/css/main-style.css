@@ -11,9 +11,12 @@ footer {
     height: 50px;
     background-color: #292929;
     text-align: right;
-    min-width: 360px;
+   /* min-width: 360px; */
     width: 100%;
+    bottom: 0;
+    position: absolute;
 }
+
 
 .logo-section {
     right: 0px;
@@ -23,7 +26,7 @@ footer {
     text-align: center;
     background-color: black;
     list-style-type: none;
-    min-width: 360px;
+    /*min-width: 360px; */
 }
 
 .nav-section {
@@ -47,6 +50,21 @@ ul.nav {
     text-align: center;
     text-decoration: none;
     float: right;
+}
+
+.Admin {
+    color: white;
+    left: 900px;
+    top: 5px;
+    position: absolute;
+    text-decoration: none;
+}
+.Tutor {
+    color: white;
+    left: 950px;
+    top: 5px;
+    position: absolute;
+    text-decoration: none;
 }
 
 .Login {
@@ -83,6 +101,7 @@ a.logo-text:link {
     color: white;
     text-decoration: none;
 }
+
 
 @media all and (min-width: 800px) {
     .logo-text {
