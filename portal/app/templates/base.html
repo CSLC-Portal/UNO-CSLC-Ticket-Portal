@@ -37,7 +37,7 @@
             <a class="Login" href="/logout">Logout</a>
             </li>
 
-            {% if user.permission_level >= 0 %}
+            {% if user.permission_level >= 2 %}
             <li class="nav-link">
                 <div class="Tutor">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -53,7 +53,7 @@
             </li>
             {% endif %}
 
-            {% if user.permission_level >= 0 %}
+            {% if user.permission_level >= 3 %}
             <li class="nav-link">
                 <div class="Admin">
                     <button class="btn btn-secondary shadow-none dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

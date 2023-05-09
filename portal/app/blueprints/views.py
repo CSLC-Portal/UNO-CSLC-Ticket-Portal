@@ -91,7 +91,7 @@ def view_tickets():
 
     # Get the user permission level here BEFORE attempting to load view-tickets page
     user_level = current_user.permission_level
-    if (user_level < 0):
+    if (user_level < 2):
         flash('Insufficient permission level to view tickets', category='error')
         return redirect(url_for('auth.index'))
 

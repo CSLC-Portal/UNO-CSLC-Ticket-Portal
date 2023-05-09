@@ -35,6 +35,7 @@
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
             <div>Ticket Created: {{ ticket.time_created.strftime('%x %I:%M:%S %p') }}</div>
+            <div>Ticket Closed: {{ ticket.time_closed.strftime('%x %I:%M:%S %p') }}</div>
             <div >Student Email: {{ ticket.student_email }}</div>
             <div >Student Name: {{ ticket.student_name }}</div>
             <div >Course: {{ ticket.course }}</div>
