@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Admin Console{% endblock %}
+{% block content %}
+
+<h1>Tickets</h1>
+
+<form action="{{ url_for('admin.download_report') }}" method="POST">
+    <div class="form-group">
+        <label for="creationDate"><strong>Start Date</strong></label>
+        <input type="date" class="form-control" id="creationDate" placeholder="yyyy-mm-dd" name="creationDate" required>
+        <label for="closedDate"><strong>End Date</strong></label>
+        <input type="date" class="form-control" id="closedDate" placeholder="yyyy-mm-dd" name="closedDate" required>
+        <label for="course"><strong>Course</strong></label>
+        <input type="text" class="form-control" id="course" placeholder="CSCI 1400" name="course">
+    </div>
+
+
+    <button type="submit" class="btn btn-primary" name="SaveChanges">Filter</button>
+
+</form>
+
+<br>
+<form action="{{ url_for('admin.download_csv') }}" method="POST">
+
+
+    <button type="submit" class="btn btn-primary" name="downloadReport">Download report</button>
+
+</form>
+
+
+<h1>All tickets from Query:</h1>
+<li class="list-group-item" style="width: 60rem; left: 30%">Tickets: {{ lengthTickets}}</li>
+{% for ticket in sub %}
+<div class="card" style="width: 60rem; left: 30%">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <div>Ticket Created: {{ ticket.time_created.strftime('%x %I:%M:%S %p') }}</div>
+            <div >Student Email: {{ ticket.student_email }}</div>
+            <div >Student Name: {{ ticket.student_name }}</div>
+            <div >Course: {{ ticket.course }}</div>
+            <div>Assignment Name: {{ ticket.assignment_name }}</div>
+            <div> Specific Question: {{ ticket.specific_question }}</div>
+            <div>Session Duration: {{ ticket.session_duration }}</div>
+            <div>Successful Session: {{ ticket.successful_session }}</div>
+        </li>
+    </ul>
+  </div>
+
+{% endfor %}
+
+
+{% endblock %}
