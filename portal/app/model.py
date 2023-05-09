@@ -219,7 +219,7 @@ class Message(db.Model):
         self.end_date = endIn
 
     def __repr__(self):
-        return f'{self.message} ({self.start_date})'
+        return f'({self.start_date} - {self.end_date})'
 
 class ProblemType(db.Model):
     """
