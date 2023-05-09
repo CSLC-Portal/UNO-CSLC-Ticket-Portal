@@ -259,7 +259,7 @@ class Course(db.Model):
     number = Column(String(25), nullable=False, doc='The course number for a class. E.g., 4970')
     course_name = Column(String(50), nullable=False, doc='The name of the course itself. E.g., Operating Systems, Java II, etc.')
     on_display = Column(Boolean, doc="T/F if course should be displayed in available courses. This way admin does not need to keep adding/deleting a course.")
-    sections = db.relationship('Section', backref='course')
+    sections = db.relationship('Section', backref='course', cascade="all, delete")
     # TODO: add in tutors relationship and tickets relationship
 
     def __init__(self, depIn, numIn, nameIn, displayIn):
@@ -306,6 +306,9 @@ class Section(db.Model):
     def __repr__(self):
         return f'COURSE: {self.course_id}, SECTION: {self.section_number} - {self.section_mode} - {self.semester_id} - ({self.days_of_week} {self.start_time} \
             to {self.end_time}) - PROF: {self.professor_id}'
+
+    def __str__(self):
+        return f'{self.section_number} - {self.section_mode}'
 
 class Professor(db.Model):
     """

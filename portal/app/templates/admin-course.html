@@ -43,9 +43,34 @@
 {%- endmacro %}
 
 {% macro remove_course_button(course) -%}
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove-{{ course.id }}">
     Remove
 </button>
+{%- endmacro %}
+
+{% macro remove_course_modal(course) %}
+<div class="modal fade " id="prompt-remove-{{ course.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="title-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fs-5" id="title-label">Remove Course</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove <strong>{{ course.department }}{{ course.number }}: {{ course.course_name }}</strong>
+                This action will also remove the section(s): <strong>{{ course.sections }}</strong>
+            </div>
+            <form action="{{ url_for('admin.remove_course') }}" method="post">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <input type="hidden" name="userID" value="{{ course.id }}">
+                    <input type="submit" class="btn btn-primary" value="Yes" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {%- endmacro %}
 
 {% call courses_table('All Courses') %}
@@ -65,6 +90,7 @@
             <td>{{ course.on_display }}</td>
             <td>{{ remove_course_button(course) }}</td>
 
+            {{ remove_course_modal(course) }}
         </tr>
         {% endfor %}
     </tbody>

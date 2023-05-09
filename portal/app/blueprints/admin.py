@@ -147,6 +147,34 @@ def add_course():
 
     return redirect(url_for('admin.view_courses'))
 
+@admin.route('/courses/remove', methods=['POST'])
+@permission_required(Permission.Admin)
+def remove_course():
+
+    course_id = strip_or_none(request.form.get("userID"))
+
+    try:
+        course: Course = Course.query.get(course_id)
+
+        if course:
+            db.session.delete(course)
+            print("DELETED: " + str(course))  # this will automatically delete any sections associated with this course
+            print("Sections associated with course: " + str(len(course.sections)))
+            # db.session.delete(course.sections)
+            flash('Course successfully removed!', category='success')
+        else:
+            flash('Could not remove course, course does not exist!', category='error')
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not remove course, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not remove course, unknown reason', category='error')
+        print(f'Failed to remove course: {e}', file=sys.stderr)
+
+    return redirect(url_for('admin.view_courses'))
+
 @admin.route('/semesters')
 @permission_required(Permission.Admin)
 def view_semesters():
@@ -359,3 +387,4 @@ def _attempt_delete_super_user(user: User):
         user.permission = Permission.Student
 
     db.session.commit()
+
