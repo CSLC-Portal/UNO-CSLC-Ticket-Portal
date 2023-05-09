@@ -394,6 +394,33 @@ def add_section():
 
     return redirect(url_for('admin.view_sections'))
 
+@admin.route('/sections/remove', methods=['POST'])
+@permission_required(Permission.Admin)
+def remove_section():
+
+    section_id = strip_or_none(request.form.get("sectionID"))
+
+    try:
+        section: Section = Section.query.get(section_id)
+
+        if section:
+            db.session.delete(section)
+            print("DELETED SECTION: " + str(section))
+            flash('Section successfully removed!', category='success')
+        else:
+            flash('Could not remove section, section does not exist!', category='error')
+            print(str(section))
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not remove section, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not remove section, unknown reason', category='error')
+        print(f'Failed to remove section: {e}', file=sys.stderr)
+
+    return redirect(url_for('admin.view_sections'))
+
 def attempt_create_super_user(email: str, permission: Permission):
     """
     If the user doesn't exist, creates and inserts an 'incomplete' user into the database given an email and permission level.

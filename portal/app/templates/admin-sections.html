@@ -81,9 +81,33 @@
 {%- endmacro %}
 
 {% macro remove_section_button(section) -%}
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove-{{ section.id }}">
     Remove
 </button>
+{%- endmacro %}
+
+{% macro remove_section_modal(section) %}
+<div class="modal fade " id="prompt-remove-{{ section.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="title-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fs-5" id="title-label">Remove Section</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove <strong>{{ section.section_number }} - {{ section.section_mode }}</strong>
+            </div>
+            <form action="{{ url_for('admin.remove_section') }}" method="post">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <input type="hidden" name="sectionID" value="{{ section.id }}">
+                    <input type="submit" class="btn btn-primary" value="Yes" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {%- endmacro %}
 
 {% call sections_table('All Sections') %}
@@ -108,6 +132,8 @@
             <td>{{ section.semester_id }}</td>
             <td>{{ section.section_mode }}</td>
             <td>{{ remove_section_button(section) }}</td>
+
+            {{ remove_section_modal(section) }}
         </tr>
         {% endfor %}
     </tbody>
