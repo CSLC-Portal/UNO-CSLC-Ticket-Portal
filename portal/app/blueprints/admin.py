@@ -119,7 +119,7 @@ def fix_dde(cell):
             cell = "' " + cell
         cell = cell.rstrip()
     return cell
-  
+
 @admin.route('/tutors')
 @permission_required(Permission.Admin)
 def view_tutors():
