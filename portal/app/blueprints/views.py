@@ -16,8 +16,8 @@ from app.model import Ticket
 from app.model import Mode
 from app.model import Status
 from app.model import User
-from app.model import ProblemTypes
-from app.model import Courses
+from app.model import ProblemType
+from app.model import Course
 from app.model import Permission
 from app.model import Message
 from app.model import Config

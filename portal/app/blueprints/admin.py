@@ -10,7 +10,7 @@ import csv
 import os
 import io
 
-from app.model import ProblemTypes
+from app.model import ProblemType
 from app.model import Ticket
 from app.extensions import db
 import datetime
@@ -52,9 +52,9 @@ def add_problem_type():
         if _str_empty(problemType):
             flash('Could not create problem Type, problem type must not be empty!', category='error')
         else:
-            tmpCourse = ProblemTypes.query.filter_by(problem_type=problemType).first()
+            tmpCourse = ProblemType.query.filter_by(problem_type=problemType).first()
             if tmpCourse is None:
-                newCourse = ProblemTypes(problemType)
+                newCourse = ProblemType(problemType)
                 db.session.add(newCourse)
                 db.session.commit()
                 flash('Problem Type created successfully!', category='success')
@@ -63,7 +63,7 @@ def add_problem_type():
                 flash('Problem Type already exists in database!', category='error')
                 print("Problem Type ALREADY IN DB!")
 
-    problemTypes = ProblemTypes.query.all()
+    problemTypes = ProblemType.query.all()
     return render_template('admin-problem-types.html', problemTypes=problemTypes)
 
 @admin.route('/download', methods=["GET", "POST"])
