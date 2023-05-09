@@ -237,6 +237,49 @@ def remove_course():
 
     return redirect(url_for('admin.view_courses'))
 
+@admin.route('/courses/edit', methods=['POST'])
+@permission_required(Permission.Admin)
+def edit_course():
+    return "EDITING COURSE"
+    # user_id = strip_or_none(request.form.get("userID"))
+    # permission_val = strip_or_none(request.form.get("permission"))
+    # active = request.form.get("active") is not None
+
+    # try:
+    #     user: User = User.query.get(user_id)
+
+    #     new_permission = None
+    #     if permission_val:
+    #         new_permission = Permission(int(permission_val))
+
+    #     if not user:
+    #         flash('Could not update user, user does not exist!', category='error')
+
+    #     elif user == current_user:
+    #         flash('You cannot update yourself!', category='error')
+
+    #     elif current_user.permission <= user.permission:
+    #         flash('Cannot update user of higher or equal permission level as yourself!', category='error')
+
+    #     elif new_permission and current_user.permission <= new_permission:
+    #         flash('Cannot promote user to higher or equal permission level as yourself!', category='error')
+
+    #     else:
+    #         _attempt_edit_user(user, active, new_permission)
+    #         flash('User successfully updated!', category='success')
+
+    # except ValueError:
+    #     flash('Could not update user, input values invalid!', category='error')
+
+    # except IntegrityError:
+    #     flash('Could not update user, invalid data!', category='error')
+
+    # except Exception as e:
+    #     flash('Could not update user, unknown reason!', category='error')
+    #     print(f'Could not update user, {e}', file=sys.stderr)
+
+    # return redirect(url_for('admin.view_tutors'))
+
 @admin.route('/semesters')
 @permission_required(Permission.Admin)
 def view_semesters():

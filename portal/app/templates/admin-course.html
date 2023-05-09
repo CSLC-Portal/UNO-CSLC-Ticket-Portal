@@ -73,6 +73,35 @@
 </div>
 {%- endmacro %}
 
+{% macro edit_course_button(course) -%}
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#prompt-edit-{{ course.id }}">
+    <img src="{{ url_for('static', filename='img/pencil-square.svg') }}" alt="edit" />
+</button>
+{%- endmacro %}
+
+{% macro edit_course_modal(course) -%}
+<div class="modal fade " id="prompt-edit-{{ course.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="title-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fs-5" id="title-label">Update Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('admin.edit_course') }}" method="post">
+                <div class="modal-body">
+                    {{ caller() }}
+                </div>
+                <div class="modal-footer border-0">
+                    <input type="hidden" name="courseID" value="{{ course.id }}">
+                    <input type="submit" class="btn btn-primary" value="Save" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
+
 {% call courses_table('All Courses') %}
     <thead>
         <tr>
@@ -88,8 +117,9 @@
             <td>{{ course.department }} {{ course.number }}</td>
             <td>{{ course.course_name }}</td>
             <td>{{ course.on_display }}</td>
-            <td>{{ remove_course_button(course) }}</td>
+            <td>{{ remove_course_button(course) }} {{ edit_course_button(course) }}</td>
 
+            {{ edit_course_modal(course) }}
             {{ remove_course_modal(course) }}
         </tr>
         {% endfor %}
