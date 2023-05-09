@@ -8,6 +8,8 @@ from flask import url_for
 from flask_login import login_required
 from flask_login import current_user
 
+from .model import Permission
+
 PERMISSION_REQUIRED_REDIRECT = 'views.index'
 
 def strip_or_none(s: str):
@@ -21,7 +23,11 @@ def permission_required(permission):
         @wraps(func)
         @login_required
         def wrapper(*args, **kwargs):
-            if not current_user.tutor_is_active or current_user.permission < permission:
+
+            # Permission is effectively Permission.Student if user is not active
+            effective_permission = current_user.permission if current_user.tutor_is_active else Permission.Student
+
+            if effective_permission < permission:
                 flash('Insufficient privileges to access this page!', category='error')
                 return redirect(url_for(PERMISSION_REQUIRED_REDIRECT))
 

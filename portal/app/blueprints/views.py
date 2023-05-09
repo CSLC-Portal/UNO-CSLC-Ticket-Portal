@@ -5,7 +5,6 @@ from flask import url_for
 from flask import redirect
 from flask import render_template
 
-from flask_login import login_required
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
@@ -35,7 +34,7 @@ def index():
     return render_template('index.html', messages=messages)
 
 @views.route('/create-ticket', methods=['POST', 'GET'])
-@login_required
+@permission_required(Permission.Student)
 def create_ticket():
     """
     Serves the HTTP route /create-ticket. Shows a ticket create form on GET request.
