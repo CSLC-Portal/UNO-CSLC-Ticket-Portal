@@ -151,7 +151,7 @@ def add_course():
 @permission_required(Permission.Admin)
 def remove_course():
 
-    course_id = strip_or_none(request.form.get("userID"))
+    course_id = strip_or_none(request.form.get("courseID"))
 
     try:
         course: Course = Course.query.get(course_id)
@@ -160,7 +160,6 @@ def remove_course():
             db.session.delete(course)
             print("DELETED: " + str(course))  # this will automatically delete any sections associated with this course
             print("Sections associated with course: " + str(len(course.sections)))
-            # db.session.delete(course.sections)
             flash('Course successfully removed!', category='success')
         else:
             flash('Could not remove course, course does not exist!', category='error')
@@ -223,6 +222,32 @@ def add_semester():
 
     num = Semester.query.count()
     print("NUM SEMESTERS: " + str(num))
+
+    return redirect(url_for('admin.view_semesters'))
+
+@admin.route('/semesters/remove', methods=['POST'])
+@permission_required(Permission.Admin)
+def remove_semester():
+
+    semester_id = strip_or_none(request.form.get("semesterID"))
+
+    try:
+        semester: Semester = Semester.query.get(semester_id)
+
+        if semester:
+            db.session.delete(semester)
+            print("DELETED SEMESTER: " + str(semester))
+            flash('Semester successfully removed!', category='success')
+        else:
+            flash('Could not remove semester, course does not exist!', category='error')
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not remove semester, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not remove semester, unknown reason', category='error')
+        print(f'Failed to remove semester: {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_semesters'))
 
@@ -387,4 +412,3 @@ def _attempt_delete_super_user(user: User):
         user.permission = Permission.Student
 
     db.session.commit()
-

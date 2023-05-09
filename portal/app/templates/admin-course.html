@@ -58,13 +58,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to remove <strong>{{ course.department }}{{ course.number }}: {{ course.course_name }}</strong>
+                Are you sure you want to remove <strong>{{ course.department }}{{ course.number }}: {{ course.course_name }}</strong><br>
                 This action will also remove the section(s): <strong>{{ course.sections }}</strong>
             </div>
             <form action="{{ url_for('admin.remove_course') }}" method="post">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                    <input type="hidden" name="userID" value="{{ course.id }}">
+                    <input type="hidden" name="courseID" value="{{ course.id }}">
                     <input type="submit" class="btn btn-primary" value="Yes" />
                 </div>
             </form>

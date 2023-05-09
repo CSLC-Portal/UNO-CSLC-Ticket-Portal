@@ -10,7 +10,7 @@
     </div>
 
     <div class="form-group">
-        <label for="seasonInput"><strong>Course</strong></label>
+        <label for="seasonInput"><strong>Season</strong></label>
         <select class="form-control" id="seasonInput" name="seasonInput">
           <option>Fall</option>
           <option>Spring</option>
@@ -49,9 +49,33 @@
 {%- endmacro %}
 
 {% macro remove_semester_button(semester) -%}
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove-{{ semester.id }}">
     Remove
 </button>
+{%- endmacro %}
+
+{% macro remove_semester_modal(semester) %}
+<div class="modal fade " id="prompt-remove-{{ semester.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="title-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fs-5" id="title-label">Remove Semester</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove <strong>{{ semester.season }} {{ semester.year }}</strong> Semester
+            </div>
+            <form action="{{ url_for('admin.remove_semester') }}" method="post">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <input type="hidden" name="semesterID" value="{{ semester.id }}">
+                    <input type="submit" class="btn btn-primary" value="Yes" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {%- endmacro %}
 
 {% call semesters_table('All Semesters') %}
@@ -74,6 +98,8 @@
             <td>{{ semester.end_date }}</td>
             <td>{{ semester.sections }}</td>
             <td>{{ remove_semester_button(semester) }}</td>
+
+            {{ remove_semester_modal(semester) }}
         </tr>
         {% endfor %}
     </tbody>
