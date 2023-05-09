@@ -9,6 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from .model import Mode
 from .model import Status
 from .model import Permission
+from .model import Config
 
 from . import default_config
 

@@ -13,7 +13,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from .extensions import db
 from flask_login import UserMixin
 
-from datetime import datetime
+import datetime
 import enum
 
 Base = declarative_base(name='Base')
@@ -182,18 +182,18 @@ class Ticket(db.Model):
     def claim(self, tutor: User):
         self.tutor_id = tutor.id
         self.status = Status.Claimed
-        self.time_claimed = datetime.now()
+        self.time_claimed = datetime.datetime.now()
 
     def close(self):
         self.status = Status.Closed
-        self.time_closed = datetime.now()
+        self.time_closed = datetime.datetime.now()
 
     def reopen(self):
         self.status = Status.Open
 
     def calc_duration_open(self):
         if self.time_claimed is None:
-            return datetime.now() - self.time_created
+            return datetime.datetime.now() - self.time_created
 
         return self.time_claimed - self.time_created
 
@@ -202,7 +202,7 @@ class Ticket(db.Model):
             return 0  # Ticket hasn't been claimed yet
 
         if self.time_closed is None:
-            return datetime.now() - self.time_claimed
+            return datetime.datetime.now() - self.time_claimed
 
         return self.time_closed - self.time_claimed
 
@@ -374,19 +374,17 @@ class Config(db.Model):
 
     # need to have a primary key so just creating ID, will most liekly not be used
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Config table.')
-    zoom_link = Column(String(255), doc='The zoom link for the tutoring center.')
+    zoom_link = Column(String(255), doc='The zoom link for the tutoring center.', default="zoom.us")
     # below are the hours for the tutring center, start/stop time for each day
-    mon_start = Column(DateTime(True), doc='Start time for Mondays')
-    mon_end = Column(DateTime(True), doc='End time for Mondays')
-    tue_start = Column(DateTime(True), doc='Start time for Tuesdays')
-    tue_end = Column(DateTime(True), doc='End time for Tuesdays')
-    wed_start = Column(DateTime(True), doc='Start time for Wednesdays')
-    wed_end = Column(DateTime(True), doc='End time for Wednesdays')
-    thur_start = Column(DateTime(True), doc='Start time for Thursdays')
-    thur_end = Column(DateTime(True), doc='End time for Thursdays')
-    fri_start = Column(DateTime(True), doc='Start time for Fridays')
-    fri_end = Column(DateTime(True), doc='End time for Fridays')
-    sat_start = Column(DateTime(True), doc='Start time for Saturdays')
-    sat_end = Column(DateTime(True), doc='End time for Saturdays')
-    sun_start = Column(DateTime(True), doc='Start time for Sundays')
-    sun_end = Column(DateTime(True), doc='End time for Sundays')
+    mon_start = Column(DateTime(True), doc='Start time for Mondays', default=datetime.time(hour=8, minute=0))
+    mon_end = Column(DateTime(True), doc='End time for Mondays', default=datetime.time(hour=16, minute=0))
+    tue_start = Column(DateTime(True), doc='Start time for Tuesdays', default=datetime.time(hour=8, minute=0))
+    tue_end = Column(DateTime(True), doc='End time for Tuesdays', default=datetime.time(hour=16, minute=0))
+    wed_start = Column(DateTime(True), doc='Start time for Wednesdays', default=datetime.time(hour=8, minute=0))
+    wed_end = Column(DateTime(True), doc='End time for Wednesdays', default=datetime.time(hour=16, minute=0))
+    thur_start = Column(DateTime(True), doc='Start time for Thursdays', default=datetime.time(hour=8, minute=0))
+    thur_end = Column(DateTime(True), doc='End time for Thursdays', default=datetime.time(hour=16, minute=0))
+    fri_start = Column(DateTime(True), doc='Start time for Fridays', default=datetime.time(hour=8, minute=0))
+    fri_end = Column(DateTime(True), doc='End time for Fridays', default=datetime.time(hour=16, minute=0))
+    sat_start = Column(DateTime(True), doc='Start time for Saturdays', default=datetime.time(hour=10, minute=0))
+    sat_end = Column(DateTime(True), doc='End time for Saturdays', default=datetime.time(hour=14, minute=0))
