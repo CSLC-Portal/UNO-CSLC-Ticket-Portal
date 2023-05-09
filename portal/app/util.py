@@ -21,7 +21,7 @@ def permission_required(permission):
         @wraps(func)
         @login_required
         def wrapper(*args, **kwargs):
-            if current_user.permission < permission:
+            if not current_user.tutor_is_active or current_user.permission < permission:
                 flash('Insufficient privileges to access this page!', category='error')
                 return redirect(url_for(PERMISSION_REQUIRED_REDIRECT))
 
