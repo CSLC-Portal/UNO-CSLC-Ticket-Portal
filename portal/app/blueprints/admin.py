@@ -38,7 +38,8 @@ def _strip_or_none(s: str):
 def _str_empty(s: str):
     return s is not None and not s
 
-@admin.route('/problems', methods=["GET", "POST"])
+@admin.route('/problems', methods=["POST"])
+@permission_required(Permission.Admin)
 def add_problem_type():
     if request.method == "POST":
         problemType = _strip_or_none(request.form.get("problemType"))
@@ -62,7 +63,8 @@ def add_problem_type():
     problemTypes = ProblemType.query.all()
     return render_template('admin-problem-types.html', problemTypes=problemTypes)
 
-@admin.route('/download', methods=["GET", "POST"])
+@admin.route('/download', methods=["POST"])
+@permission_required(Permission.Admin)
 def download_report():
 
     createDate = request.form.get("creationDate")
@@ -99,7 +101,8 @@ def download_report():
     return render_template('download-report.html', sub=sub, lengthTickets=lengthTickets)
 
 
-@admin.route('/download_csv', methods=["GET", "POST"])
+@admin.route('/download_csv', methods=["POST"])
+@permission_required(Permission.Admin)
 def download_csv():
     file = io.StringIO()
     writer = csv.writer(file)
