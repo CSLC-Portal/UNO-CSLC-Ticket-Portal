@@ -50,6 +50,7 @@ class Permission(ToStrEnum):
     Student = 1
     Tutor = 2
     Admin = 3
+    Owner = 4
 
     def __lt__(self, other):
         return self.value < other.value
@@ -121,7 +122,8 @@ class User(db.Model, UserMixin):
     def get_tutors():
         # TODO: Cannot use inequality operators < > <= >= on enum from database as only
         #       the enum name is actually persisted. Find a way around this while keeping enum column?
-        return User.query.filter(((User.permission == Permission.Tutor) | (User.permission == Permission.Admin)) & (User.oid != None))
+        return User.query.filter(
+            ((User.permission == Permission.Tutor) | (User.permission == Permission.Admin) | (User.permission == Permission.Owner)) & (User.oid != None))
 
     @staticmethod
     def get_pending():

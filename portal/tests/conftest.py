@@ -4,7 +4,7 @@ from flask import Flask
 
 from flask.testing import FlaskClient
 from app.model import Permission
-from app.blueprints.admin import attempt_create_super_user
+from app.blueprints.admin import create_pseudo_super_user
 
 import pytest
 import os
@@ -93,7 +93,7 @@ def auth_client(create_auth_client):
 def create_super_user(create_auth_client, app: Flask):
     def _factory(name = None, email = None, oid = None, permission = Permission.Admin):
         with app.app_context():
-            attempt_create_super_user(email, permission)
+            create_pseudo_super_user(email, permission)
 
         return create_auth_client(name, email, oid)
 
@@ -105,7 +105,11 @@ def tutor_client(create_super_user):
 
 @pytest.fixture
 def admin_client(create_super_user):
-    return create_super_user(email='admin@email.com')
+    return create_super_user(email='admin@email.com', permission=Permission.Admin)
+
+@pytest.fixture
+def owner_client(create_super_user):
+    return create_super_user(email='owner@email.com', permission=Permission.Owner)
 
 @pytest.fixture(scope="session", autouse=True)
 def cleanup(request):

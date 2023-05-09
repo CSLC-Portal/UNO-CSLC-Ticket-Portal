@@ -40,23 +40,15 @@ def test_admin_add_admin(admin_client: FlaskClient, app: Flask):
     assert b'href="/admin/tutors"' in response.data
 
     with app.app_context():
-        pending: Query = User.get_pending()
-
-        assert pending.count() == 1
-
-        user: User = pending.first()
-        assert not user.is_complete()
-        assert user.email == 'new@user.com'
-        assert user.permission == Permission.Admin
-        assert user.tutor_is_active
+        assert User.get_tutors().count() == 1
 
     with admin_client.session_transaction() as session:
         flashes = session['_flashes']
         assert len(flashes) == 1
 
         (category, message) = flashes[0]
-        assert category == 'success'
-        assert message == 'New user successfully added!'
+        assert category == 'error'
+        assert message == 'Cannot add user of higher or equal permission level as yourself!'
 
 def test_admin_add_tutor_existing_user(admin_client: FlaskClient, create_auth_client, app: Flask):
     # Create another dummy user
@@ -167,13 +159,11 @@ def test_admin_remove_admin(admin_client: FlaskClient, create_super_user, app: F
         assert len(flashes) == 1
 
         (category, message) = flashes[0]
-        assert category == 'success'
-        assert message == 'User successfully removed!'
+        assert category == 'error'
+        assert message == 'Cannot remove user of higher or equal permission level as yourself!'
 
     with app.app_context():
-        assert User.get_tutors().count() == 1
-        assert User.query.count() == 2
-        assert not User.get_students().first().tutor_is_active
+        assert User.get_tutors().count() == 2
 
 def test_admin_remove_self(admin_client: FlaskClient, app: Flask):
     with app.app_context():
@@ -271,7 +261,7 @@ def test_admin_add_no_data(admin_client: FlaskClient, app: Flask):
 
         (category, message) = flashes[0]
         assert category == 'error'
-        assert message == 'Could not add user, invalid data'
+        assert message == 'Could not add user, invalid data!'
 
 def test_admin_add_invalid_email(admin_client: FlaskClient, app: Flask):
     # Empty email string
@@ -290,7 +280,7 @@ def test_admin_add_invalid_email(admin_client: FlaskClient, app: Flask):
 
         (category, message) = flashes[0]
         assert category == 'error'
-        assert message == 'Could not add user, unknown reason'
+        assert message == 'Email must not be empty!'
 
 def test_admin_add_invalid_permission(admin_client: FlaskClient, app: Flask):
     # Invalid permission value
