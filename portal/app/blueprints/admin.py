@@ -239,7 +239,7 @@ def remove_semester():
             print("DELETED SEMESTER: " + str(semester))
             flash('Semester successfully removed!', category='success')
         else:
-            flash('Could not remove semester, course does not exist!', category='error')
+            flash('Could not remove semester, semester does not exist!', category='error')
 
     except IntegrityError:
         db.session.rollback()
@@ -283,6 +283,33 @@ def add_professor():
             flash('Professor added successfully!', category='success')
         else:
             flash("Professor '" + firstName.title() + " " + lastName.title() + "' already exists in database!", category='error')
+
+    return redirect(url_for('admin.view_professors'))
+
+@admin.route('/professors/remove', methods=['POST'])
+@permission_required(Permission.Admin)
+def remove_professor():
+
+    professor_id = strip_or_none(request.form.get("professorID"))
+
+    try:
+        professor: Professor = Professor.query.get(professor_id)
+
+        if professor:
+            db.session.delete(professor)
+            print("DELETED PROFESSOR: " + str(professor))
+            flash('Professor successfully removed!', category='success')
+        else:
+            flash('Could not remove professor, professor does not exist!', category='error')
+            print(str(professor))
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not remove professor, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not remove professor, unknown reason', category='error')
+        print(f'Failed to remove professor: {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_professors'))
 

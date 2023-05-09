@@ -33,10 +33,34 @@
 </div>
 {%- endmacro %}
 
-{% macro remove_professor_button(course) -%}
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">
+{% macro remove_professor_button(professor) -%}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove-{{ professor.id }}">
     Remove
 </button>
+{%- endmacro %}
+
+{% macro remove_professor_modal(professor) %}
+<div class="modal fade " id="prompt-remove-{{ professor.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="title-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fs-5" id="title-label">Remove Professor</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove Professor <strong>{{ professor.first_name.capitalize() }} {{ professor.last_name.capitalize() }}</strong>
+            </div>
+            <form action="{{ url_for('admin.remove_professor') }}" method="post">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <input type="hidden" name="professorID" value="{{ professor.id }}">
+                    <input type="submit" class="btn btn-primary" value="Yes" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {%- endmacro %}
 
 {% call professors_table('All Professors') %}
@@ -56,6 +80,7 @@
             <td>{{ professor.sections }}</td>
             <td>{{ remove_professor_button(professor) }}</td>
 
+            {{ remove_professor_modal(professor) }}
         </tr>
         {% endfor %}
     </tbody>

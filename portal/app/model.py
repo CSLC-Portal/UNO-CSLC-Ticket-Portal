@@ -319,7 +319,7 @@ class Professor(db.Model):
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Professors table.')
     first_name = Column(String(50), nullable=False, doc='First name of professor.')
     last_name = Column(String(50), nullable=False, doc='Last name of professor.')
-    sections = db.relationship('Section', backref='professor')
+    sections = db.relationship('Section', backref='professor', cascade="all, delete")
 
     def __init__(self, firstIn, lastIn):
         self.first_name = firstIn
