@@ -195,7 +195,7 @@ def add_course():
     elif str_empty(courseName):
         flash('Could not create course, course name must not be empty!', category='error')
     else:
-
+        # TODO: change this to query for department and num like CSCI 1234, cannot have duplicate ones of those
         tmpCourse = Course.query.filter_by(number=courseNumber, course_name=courseName).first()
         if tmpCourse is None:
             newCourse = Course(courseDepartment, courseNumber, courseName, displayOnIndex)
@@ -240,45 +240,78 @@ def remove_course():
 @admin.route('/courses/edit', methods=['POST'])
 @permission_required(Permission.Admin)
 def edit_course():
-    return "EDITING COURSE"
-    # user_id = strip_or_none(request.form.get("userID"))
-    # permission_val = strip_or_none(request.form.get("permission"))
-    # active = request.form.get("active") is not None
+    course_id = strip_or_none(request.form.get("courseID"))
+    newDept = strip_or_none(request.form.get("updateCourseDept"))
+    newNum = strip_or_none(request.form.get("updateCourseNum"))
+    newName = strip_or_none(request.form.get("updateCourseName"))
 
-    # try:
-    #     user: User = User.query.get(user_id)
+    print("COURSE TO EDIT: " + str(course_id))
+    print("NEW DEPT: " + str(newDept))
+    print("NEW NUM: " + str(newNum))
+    print("NEW NAME: " + str(newName))
+    try:
+        course: Course = Course.query.get(course_id)
 
-    #     new_permission = None
-    #     if permission_val:
-    #         new_permission = Permission(int(permission_val))
+        # check if everything comes back all equal
+        if course.course_name == newName and course.department == newDept and course.number == newNum:
+            flash('No updates to course, attributes remain the same.', category='message')
+        elif not course:
+            flash('Could not update course, course does not exist!', category='error')
+        elif str_empty(newDept):
+            flash('Could not update course, department cannot be empty!', category='error')
+        elif str_empty(newNum):
+            flash('Could not update course, course number cannot be empty!', category='error')
+        elif str_empty(newName):
+            flash('Could not update course, course name cannot be empty!', category='error')
+        else:
+            tmpCourse = Course.query.filter_by(number=newNum, department=newDept).first()
+            if tmpCourse is None:
+                # check if new updated course will cause deuplicate
+                if newDept != course.department:
+                    course.department = newDept
+                if newNum != course.number:
+                    course.number = newNum
+                if newName != course.course_name:
+                    course.course_name = newName
+                flash("Course updated successfully!", category='success')
+            else:
+                flash('Could not update course, would cause duplicate courses in DB!', category='error')
 
-    #     if not user:
-    #         flash('Could not update user, user does not exist!', category='error')
+    except ValueError:
+        flash('Could not update Course, input values invalid!', category='error')
 
-    #     elif user == current_user:
-    #         flash('You cannot update yourself!', category='error')
+    except IntegrityError:
+        flash('Could not update course, invalid data!', category='error')
 
-    #     elif current_user.permission <= user.permission:
-    #         flash('Cannot update user of higher or equal permission level as yourself!', category='error')
+    except Exception as e:
+        flash('Could not update course, unknown reason!', category='error')
+        print(f'Could not update course, {e}', file=sys.stderr)
 
-    #     elif new_permission and current_user.permission <= new_permission:
-    #         flash('Cannot promote user to higher or equal permission level as yourself!', category='error')
+    return redirect(url_for('admin.view_courses'))
 
-    #     else:
-    #         _attempt_edit_user(user, active, new_permission)
-    #         flash('User successfully updated!', category='success')
-
-    # except ValueError:
-    #     flash('Could not update user, input values invalid!', category='error')
-
-    # except IntegrityError:
-    #     flash('Could not update user, invalid data!', category='error')
-
-    # except Exception as e:
-    #     flash('Could not update user, unknown reason!', category='error')
-    #     print(f'Could not update user, {e}', file=sys.stderr)
-
-    # return redirect(url_for('admin.view_tutors'))
+@admin.route('/courses/toggle-display', methods=['POST'])
+@permission_required(Permission.Admin)
+def toggle_display():
+    course_id = request.form.get("toggleID")
+    print("COURSE TO TOGGLE: " + str(course_id))
+    try:
+        course: Course = Course.query.get(course_id)
+        print("BEFORE: " + str(course.on_display))
+        # reverse whatever value it currently has for display
+        if course.on_display:
+            course.on_display = False
+        else:
+            course.on_display = True
+        db.session.commit()
+        print("AFTER: " + str(course.on_display))
+    except ValueError:
+        flash('Could not toggle course display, input values invalid!', category='error')
+    except IntegrityError:
+        flash('Could not toggle course display, invalid data!', category='error')
+    except Exception as e:
+        flash('Could not toggle course display, unknown reason!', category='error')
+        print(f'Could not toggle course, {e}', file=sys.stderr)
+    return redirect(url_for('admin.view_courses'))
 
 @admin.route('/semesters')
 @permission_required(Permission.Admin)

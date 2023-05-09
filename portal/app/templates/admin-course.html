@@ -90,7 +90,12 @@
             </div>
             <form action="{{ url_for('admin.edit_course') }}" method="post">
                 <div class="modal-body">
-                    {{ caller() }}
+                    <label for="updateCourseDept"><strong>Course Department</strong></label>
+                    <input type="text" class="form-control" id="updateCourseDept" value="{{ course.department }}" name="updateCourseDept">
+                    <label for="updateCourseNum"><strong>Course Number</strong></label>
+                    <input type="text" class="form-control" id="updateCourseNum" value="{{ course.number }}" name="updateCourseNum">
+                    <label for="updateCourseName"><strong>Course Name</strong></label>
+                    <input type="text" class="form-control" id="updateCourseName" value="{{ course.course_name }}" name="updateCourseName">
                 </div>
                 <div class="modal-footer border-0">
                     <input type="hidden" name="courseID" value="{{ course.id }}">
@@ -100,6 +105,16 @@
         </div>
     </div>
 </div>
+{%- endmacro %}
+
+{% macro toggle_display_button(course) -%}
+    <form action="{{ url_for('admin.toggle_display') }}" method="post">
+    {% if course.on_display %}
+        <button style="border:none; background: none;" name="toggleID" value="{{ course.id }}"><span class="badge rounded-pill bg-success">Yes</span></button>
+    {% else %}
+    <button style="border:none; background: none;" name="toggleID" value="{{ course.id }}"><span class="badge rounded-pill bg-secondary">No</span></button>
+    {% endif %}
+</form>
 {%- endmacro %}
 
 {% call courses_table('All Courses') %}
@@ -116,7 +131,7 @@
         <tr scope="row">
             <td>{{ course.department }} {{ course.number }}</td>
             <td>{{ course.course_name }}</td>
-            <td>{{ course.on_display }}</td>
+            <td>{{ toggle_display_button(course) }}</td>
             <td>{{ remove_course_button(course) }} {{ edit_course_button(course) }}</td>
 
             {{ edit_course_modal(course) }}
