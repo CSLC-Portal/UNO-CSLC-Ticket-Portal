@@ -4,10 +4,18 @@ from .extensions import db
 from .extensions import sess
 from .extensions import login_manager
 from flask_login import current_user
+from sqlalchemy.exc import IntegrityError
+
+from .model import Mode
+from .model import Status
+from .model import Permission
+from .model import Config
+
 from . import default_config
 
 from time import sleep
 from sys import stderr
+
 import sys
 import os
 
@@ -28,8 +36,8 @@ def create_app():
 
     _create_db_models(app)
     _register_blueprints(app)
-
-    app.jinja_env.globals['user'] = current_user
+    _add_default_admin(app)
+    _setup_jinja_globals(app)
     return app
 
 def _setup_env(app: Flask):
@@ -77,11 +85,42 @@ def _create_db_models(app: Flask):
             print('Successfully connected to database server!')
             return
 
-        except Exception:
-            print(f'Failed to create database tables, will attempt to reconnect in {cooldown:.2f} seconds...', file=stderr)
+        except Exception as e:
+            print(f'Failed to create database tables "{e}", will attempt to reconnect in {cooldown:.2f} seconds...', file=stderr)
             killswitch -= 1
             sleep(cooldown)
             continue
 
     print('Could not connect to or find database server, ensure it is running!', file=stderr)
     sys.exit(-1)
+
+def _add_default_admin(app: Flask):
+    admin_email = os.getenv('FLASK_DEFAULT_OWNER_EMAIL')
+
+    if admin_email is None:
+        print('FLASK_DEFAULT_OWNER_EMAIL not set. Considering setting this to add a default administrator')
+        return
+
+    with app.app_context():
+        try:
+            from .blueprints.admin import create_pseudo_super_user
+            create_pseudo_super_user(admin_email, Permission.Owner)
+
+        except IntegrityError as e:
+            db.session.rollback()
+            print(f'Failed to create default admin {admin_email}. Reason: {e}', file=stderr)
+
+        except Exception as e:
+            print(e, file=stderr)
+
+def _setup_jinja_globals(app: Flask):
+    app.jinja_env.globals['current_user'] = current_user
+    app.jinja_env.globals['Mode'] = Mode
+    app.jinja_env.globals['Status'] = Status
+    app.jinja_env.globals['Permission'] = Permission
+
+    from .blueprints.auth import build_auth_url
+    app.jinja_env.globals['build_auth_url'] = build_auth_url
+
+    from . import model
+    app.jinja_env.globals['model'] = model

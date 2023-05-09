@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Admin Console{% endblock %}
 {% block content %}
-<form action="{{ url_for('views.add_course') }}" method="POST">
+
+<form action="{{ url_for('admin.add_course') }}" method="POST">
     <div class="form-group">
         <label for="courseDepartment"><strong>Course Department</strong></label>
         <input type="text" class="form-control" id="courseDepartment" placeholder="E.g. CSCI, IST, CIST" name="courseDepartment" required>
@@ -21,13 +22,11 @@
     <label for="successfulSession"><strong>Display on Home Screen</strong></label><br><br>
 
     <button type="submit" class="btn btn-primary" name="SaveChanges">Submit</button>
-
 </form>
 
 <h1>All added courses:</h1>
 {% for course in courses %}
     {{ course.__repr__() }}<br>
 {% endfor %}
-
 
 {% endblock %}

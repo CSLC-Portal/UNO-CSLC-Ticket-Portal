@@ -1,5 +1,10 @@
-from app import create_app, extensions
+from app import create_app
+from app import extensions
 from flask import Flask
+
+from flask.testing import FlaskClient
+from app.model import Permission
+from app.blueprints.admin import create_pseudo_super_user
 
 import pytest
 import os
@@ -43,11 +48,21 @@ def client(app : Flask):
     return app.test_client()
 
 @pytest.fixture
-def create_auth_client(client: Flask):
+def create_auth_client(app : Flask):
     """Provides an factory function for creating an authenticated client."""
 
     # This factory function sets some parameters we can choose in the test
     def _factory(name = None, email = None, oid = None):
+
+        # We make a new client that way we can have multiple, each with their own session
+        # Using client() fixture would result in only one client being used for all create_auth_client()
+        new_client = app.test_client()
+
+        # Save previous values for future tests
+        old_name = MockConfidentialClientApplication.MOCK_NAME
+        old_email = MockConfidentialClientApplication.MOCK_EMAIL
+        old_oid = MockConfidentialClientApplication.MOCK_OID
+
         if name is not None:
             MockConfidentialClientApplication.MOCK_NAME = name
 
@@ -57,9 +72,14 @@ def create_auth_client(client: Flask):
         if oid is not None:
             MockConfidentialClientApplication.MOCK_OID = oid
 
-        client.get(os.getenv('AAD_REDIRECT_PATH'))
+        # Login the client
+        new_client.get(os.getenv('AAD_REDIRECT_PATH'))
 
-        return client
+        # Reapply previous values for future tests
+        MockConfidentialClientApplication.MOCK_NAME = old_name
+        MockConfidentialClientApplication.MOCK_EMAIL = old_email
+        MockConfidentialClientApplication.MOCK_OID = old_oid
+        return new_client
 
     return _factory
 
@@ -68,6 +88,28 @@ def auth_client(create_auth_client):
     """Provides a default authenticated client."""
 
     return create_auth_client()
+
+@pytest.fixture
+def create_super_user(create_auth_client, app: Flask):
+    def _factor(name = None, email = None, oid = None, permission = Permission.Admin):
+        with app.app_context():
+            create_pseudo_super_user(email, permission)
+
+        return create_auth_client(name, email, oid)
+
+    return _factor
+
+@pytest.fixture
+def tutor_client(create_super_user):
+    return create_super_user(email='tutor@email.com', permission=Permission.Tutor)
+
+@pytest.fixture
+def admin_client(create_super_user):
+    return create_super_user(email='admin@email.com', permission=Permission.Admin)
+
+@pytest.fixture
+def owner_client(create_super_user):
+    return create_super_user(email='owner@email.com', permission=Permission.Owner)
 
 @pytest.fixture(scope="session", autouse=True)
 def cleanup(request):

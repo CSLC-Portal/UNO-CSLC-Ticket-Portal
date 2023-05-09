@@ -7,13 +7,13 @@
 <div class="sections">Messages</div>
 <a class="sub-section" href="#">Messages</a>
 <div class="sections">Courses and Sections</div>
-<a class="sub-section" href="#">Courses</a>
+<a class="sub-section" href="{{ url_for('admin.view_courses') }}">Courses</a>
 <a class="sub-section" href="#">Course Sections</a>
 <a class="sub-section" href="#">Semesters</a>
 <a class="sub-section" href="#">Professors</a>
 <div class="sections">Student Problem Types</div>
 <a class="sub-section" href="#">Problem Types</a>
 <div class="sections">Tutor Info</div>
-<a class="sub-section" href="{{ url_for('admin.console') }}">Tutors</a>
+<a class="sub-section" href="{{ url_for('admin.view_tutors') }}">Tutors</a>
 
 {% endblock %}
