@@ -93,22 +93,6 @@ a.logo-text:link {
         position: relative;
         left: 20px;
     }
-
-    table.hours {
-        font-size: 16px;
-    }
-
-    button.create-ticket-button {
-        background-color: #c5c4c4;
-        border: none;
-        border-radius: 4px;
-        width: 230px;
-        height: 50px;
-        font-size: 18px;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-    }
 }
 
 @media all and (max-width: 800px) {
@@ -119,22 +103,18 @@ a.logo-text:link {
         position: relative;
         left: 20px;
     }
+}
 
-    table.hours {
-        font-size: 2vw;
-    }
-
-    button.create-ticket-button {
-        background-color: #c5c4c4;
-        border: none;
-        border-radius: 4px;
-        width: 90%;
-        height: 50px;
-        font-size: 4vw;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-    }
+button.create-ticket-button {
+    background-color: #c5c4c4;
+    border: none;
+    border-radius: 4px;
+    width: 230px;
+    height: 50px;
+    font-size: 18px;
+    color: black;
+    text-align: center;
+    text-decoration: none;
 }
 
 h1 {
