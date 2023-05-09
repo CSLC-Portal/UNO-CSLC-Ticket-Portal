@@ -10,6 +10,16 @@
         </div>
     </div>
 
+    {% macro available_permissions(name, id) -%}
+    <select class="form-select" name="{{ name }}" id="{{ id }}">
+        {% for permission in Permission %}
+            {% if permission > Permission.Student and current_user.permission > permission %}
+                <option value="{{ permission.value }}" selected>{{ permission }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    {%- endmacro%}
+
     <div class="row p-3">
         <form action="{{ url_for('admin.add_tutor') }}" method="post">
             <div class="row g-2">
@@ -23,9 +33,7 @@
                 </div>
                 <div class="col-lg col-12">
                     <label class="form-label visually-hidden" for="permission">Permission</label>
-                    <select class="form-select" name="permission" id="permission">
-                        <option value="{{ Permission.Tutor.value }}" selected>{{ Permission.Tutor }}</option>
-                        <option value="{{ Permission.Admin.value }}">{{ Permission.Admin }}</option>
+                        {{ available_permissions('permission', 'permission') }}
                     </select>
                 </div>
                 <div class="col-lg col-12 d-grid">
@@ -50,7 +58,7 @@
     </div>
     {%- endmacro %}
 
-    {% macro remove_user_button(user) -%}
+    {% macro remove_user_button(user, disabled=False) -%}
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove-{{ user.id }}">
         Remove
     </button>
@@ -62,7 +70,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title fs-5" id="title-label">Remove User</h3>
+                    <h5 class="modal-title fs-5" id="title-label">Remove User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -80,31 +88,69 @@
     </div>
     {%- endmacro %}
 
+    {% macro edit_user_button(user, id) -%}
+    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#prompt-edit-{{ user.id }}-{{ id }}">
+        <img src="{{ url_for('static', filename='img/pencil-square.svg') }}" alt="edit" />
+    </button>
+    {%- endmacro %}
+
+    {% macro edit_user_modal(user, id) %}
+    <div class="modal fade " id="prompt-edit-{{ user.id }}-{{ id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="title-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fs-5" id="title-label">Update User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url_for('admin.edit_tutor') }}" method="post">
+                    <div class="modal-body">
+                        {{ caller() }}
+                    </div>
+                    <div class="modal-footer border-0">
+                        <input type="hidden" name="userID" value="{{ user.id }}">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {%- endmacro %}
+
     {% macro pending_tutors(pending) -%}
-    {% if pending.count() > 0 %}
-    {% call user_table('Pending Tutors') %}
-    <thead>
-        <tr>
-            <th scope="col">Email</th>
-            <th scope="col">Status</th>
-            <th scope="col">Permission</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for user in pending %}
-        <tr scope="row">
-            <td>{{ user.email }}</td>
-            <td>
-                <span class="badge rounded-pill bg-warning">Pending</span>
-            </td>
-            <td>{{ user.permission }}</td>
-            <td>{{ remove_user_button(user) }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-    {% endcall %}
-    {% endif %}
+        {% if pending.count() > 0 %}
+        {% call user_table('Pending Tutors') %}
+        <thead>
+            <tr>
+                <th scope="col">Email</th>
+                <th scope="col">Status</th>
+                <th scope="col">Permission</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in pending %}
+            <tr style="height:4em" scope="row">
+                <td>{{ user.email }}</td>
+                <td>
+                    <span class="badge rounded-pill bg-warning">Pending</span>
+                </td>
+                <td>
+                    {{ user.permission }}
+                    {% if current_user.permission > user.permission %}
+                        {{ edit_user_button(user, 'permission') }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if current_user.permission > user.permission %}
+                        {{ remove_user_button(user) }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% endcall %}
+        {% endif %}
     {%- endmacro %}
 
     {{ pending_tutors(model.User.get_pending()) }}
@@ -121,7 +167,7 @@
     </thead>
     <tbody>
         {% for user in model.User.get_tutors() %}
-        <tr scope="row">
+        <tr style="height:4em" scope="row">
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
             <td>
@@ -130,13 +176,19 @@
                 {% else %}
                     <span class="badge rounded-pill bg-secondary">Inactive</span>
                 {% endif %}
+                {% if user != current_user and current_user.permission > user.permission %}
+                    <span> {{ edit_user_button(user, 'active') }} </span>
+                {% endif %}
             </td>
-            <td>{{ user.permission }}</td>
             <td>
-                {% if user != current_user %}
+                {{ user.permission }}
+                {% if user != current_user and current_user.permission > user.permission %}
+                    <span> {{ edit_user_button(user, 'permission') }} </span>
+                {% endif %}
+            </td>
+            <td>
+                {% if user != current_user and current_user.permission > user.permission %}
                     {{ remove_user_button(user) }}
-                {% else %}
-                    <span class="badge rounded-pill bg-black">You</span>
                 {% endif %}
             </td>
         </tr>
@@ -145,13 +197,36 @@
     {% endcall %}
 
     {% for user in model.User.get_tutors() %}
-        {% if user != current_user %}
+        {% if user != current_user and current_user.permission > user.permission %}
             {{ remove_user_modal(user) }}
+            {% call edit_user_modal(user, 'active') %}
+            <div>
+                <p>Should <strong>{{ user.name }}</strong> be active?</p>
+                <div class="form-check form-switch">
+                {% if user.tutor_is_active %}
+                    <input type="checkbox" class="form-check-input" id="active-{{ user.id }}" name="active" value="active" checked="true"/>
+                {% else %}
+                    <input type="checkbox" class="form-check-input" id="active-{{ user.id }}" name="active" value="active" />
+                {% endif %}
+                    <label for="active-{{ user.id }}" class="form-check-label">Active</label>
+                </div>
+            </div>
+            {% endcall %}
+            {% call edit_user_modal(user, 'permission') %}
+                <div><p><strong>{{ user.name }}'s</strong> permission</p></div>
+                {{ available_permissions('permission', 'permission') }}
+            {% endcall %}
         {% endif %}
     {% endfor %}
 
     {% for user in model.User.get_pending() %}
-        {{ remove_user_modal(user) }}
+        {% if current_user.permission > user.permission %}
+            {{ remove_user_modal(user) }}
+            {% call edit_user_modal(user, 'permission') %}
+                <div><p><strong>{{ user.email }}'s</strong> permission</p></div>
+                {{ available_permissions('permission', 'permission') }}
+            {% endcall %}
+        {% endif %}
     {% endfor %}
 
 </div>
