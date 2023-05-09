@@ -264,6 +264,11 @@ def edit_course():
             flash('Could not update course, course number cannot be empty!', category='error')
         elif str_empty(newName):
             flash('Could not update course, course name cannot be empty!', category='error')
+        elif course.course_name != newName and (course.department == newDept and course.number == newNum):
+            # only update course name
+            course.course_name = newName
+            db.session.commit()
+            flash("Course updated successfully!", category='success')
         else:
             tmpCourse = Course.query.filter_by(number=newNum, department=newDept).first()
             if tmpCourse is None:
