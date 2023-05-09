@@ -158,6 +158,7 @@ def remove_course():
 
         if course:
             db.session.delete(course)
+            db.session.commit()
             print("DELETED: " + str(course))  # this will automatically delete any sections associated with this course
             print("Sections associated with course: " + str(len(course.sections)))
             flash('Course successfully removed!', category='success')
@@ -236,6 +237,7 @@ def remove_semester():
 
         if semester:
             db.session.delete(semester)
+            db.session.commit()
             print("DELETED SEMESTER: " + str(semester))
             flash('Semester successfully removed!', category='success')
         else:
@@ -297,6 +299,7 @@ def remove_professor():
 
         if professor:
             db.session.delete(professor)
+            db.session.commit()
             print("DELETED PROFESSOR: " + str(professor))
             flash('Professor successfully removed!', category='success')
         else:
@@ -405,6 +408,7 @@ def remove_section():
 
         if section:
             db.session.delete(section)
+            db.session.commit()
             print("DELETED SECTION: " + str(section))
             flash('Section successfully removed!', category='success')
         else:
