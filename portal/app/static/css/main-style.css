@@ -34,6 +34,7 @@ footer {
     text-align: right;
     min-width: 360px;
     vertical-align: baseline;
+    padding-right: 10px;
 }
 
 ul.nav {

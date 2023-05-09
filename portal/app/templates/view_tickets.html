@@ -2,7 +2,8 @@
 {% block title %}Open Tickets{% endblock %}
 {% block content %}
 
-<h1>View Tickets Page</h1><br>
+<h1>View Tickets Page</h1>
+<br><br>
 
 <div class="container">
     <div class="row">
@@ -30,7 +31,9 @@
                         <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Claim">Claim</button>
                         <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Close">Close</button>
                         <!-- Button trigger edit ticket modal -->
-                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false"> View </button>
+                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false">
+                            <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
+                        </button>
                     </form>
                 </div>
                 </div>
@@ -61,7 +64,9 @@
                         <input type="hidden" name="ticketID" value="{{ ticket.id }}">
                         <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Close">Close</button>
                         <!-- Button trigger edit ticket modal -->
-                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false"> View </button>
+                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false">
+                            <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
+                        </button>
                     </form>
                 </div>
                 </div>
@@ -92,7 +97,9 @@
                         <input type="hidden" name="ticketID" value="{{ ticket.id }}">
                         <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Open">Open</button>
                         <!-- Button trigger edit ticket modal -->
-                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false"> View </button>
+                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false">
+                            <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
+                        </button>
                     </form>
                 </div>
                 </div>
@@ -102,6 +109,7 @@
         </div>
     </div>
 </div>
+<br>
 
 {% for ticket in tickets %}
 <!-- Modal -->
