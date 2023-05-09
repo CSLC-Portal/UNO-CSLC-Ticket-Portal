@@ -58,7 +58,7 @@
     </div>
     {%- endmacro %}
 
-    {% macro remove_user_button(user) -%}
+    {% macro remove_user_button(user, disabled=False) -%}
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove-{{ user.id }}">
         Remove
     </button>
@@ -137,9 +137,15 @@
                 </td>
                 <td>
                     {{ user.permission }}
-                    {{ edit_user_button(user, 'permission') }}
+                    {% if current_user.permission > user.permission %}
+                        {{ edit_user_button(user, 'permission') }}
+                    {% endif %}
                 </td>
-                <td>{{ remove_user_button(user) }}</td>
+                <td>
+                    {% if current_user.permission > user.permission %}
+                        {{ remove_user_button(user) }}
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -170,18 +176,18 @@
                 {% else %}
                     <span class="badge rounded-pill bg-secondary">Inactive</span>
                 {% endif %}
-                {% if user != current_user %}
+                {% if user != current_user and current_user.permission > user.permission %}
                     <span> {{ edit_user_button(user, 'active') }} </span>
                 {% endif %}
             </td>
             <td>
                 {{ user.permission }}
-                {% if user != current_user %}
+                {% if user != current_user and current_user.permission > user.permission %}
                     <span> {{ edit_user_button(user, 'permission') }} </span>
                 {% endif %}
             </td>
             <td>
-                {% if user != current_user %}
+                {% if user != current_user and current_user.permission > user.permission %}
                     {{ remove_user_button(user) }}
                 {% endif %}
             </td>
@@ -191,7 +197,7 @@
     {% endcall %}
 
     {% for user in model.User.get_tutors() %}
-        {% if user != current_user %}
+        {% if user != current_user and current_user.permission > user.permission %}
             {{ remove_user_modal(user) }}
             {% call edit_user_modal(user, 'active') %}
             <div>
@@ -214,11 +220,13 @@
     {% endfor %}
 
     {% for user in model.User.get_pending() %}
-        {{ remove_user_modal(user) }}
-        {% call edit_user_modal(user, 'permission') %}
-            <div><p><strong>{{ user.email }}'s</strong> permission</p></div>
-            {{ available_permissions('permission', 'permission') }}
-        {% endcall %}
+        {% if current_user.permission > user.permission %}
+            {{ remove_user_modal(user) }}
+            {% call edit_user_modal(user, 'permission') %}
+                <div><p><strong>{{ user.email }}'s</strong> permission</p></div>
+                {{ available_permissions('permission', 'permission') }}
+            {% endcall %}
+        {% endif %}
     {% endfor %}
 
 </div>
