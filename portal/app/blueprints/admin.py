@@ -84,9 +84,9 @@ def download_report():
     lengthTickets = len(ticketList)
 
     for i in range(len(ticketList)):
-        format.append([ticketList[i].student_email, ticketList[i].student_name, ticketList[i].course, ticketList[i].section, ticketList[i].assignment_name, 
+        format.append([ticketList[i].student_email, ticketList[i].student_name, ticketList[i].course, ticketList[i].section, ticketList[i].assignment_name,
                        ticketList[i].specific_question, ticketList[i].problem_type, ticketList[i].time_created, ticketList[i].time_claimed,
-                       ticketList[i].status, ticketList[i].time_closed, ticketList[i].session_duration, ticketList[i].mode, ticketList[i].tutor_notes, 
+                       ticketList[i].status, ticketList[i].time_closed, ticketList[i].session_duration, ticketList[i].mode, ticketList[i].tutor_notes,
                        ticketList[i].tutor_id, ticketList[i].successful_session])
 
     if request.method == "POST":
