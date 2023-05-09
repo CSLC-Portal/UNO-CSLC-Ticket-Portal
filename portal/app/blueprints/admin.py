@@ -1,10 +1,8 @@
 from flask import Blueprint, Response, send_from_directory
 from flask import request
-from flask import Blueprint
 from flask import flash
 from flask import url_for
 from flask import redirect
-from flask import request
 from flask import render_template
 import csv
 import os
@@ -19,8 +17,6 @@ from flask_login import current_user
 from app.model import User
 from app.model import Course
 from app.model import Permission
-
-from app.extensions import db
 from sqlalchemy.exc import IntegrityError
 
 from app.util import str_empty
