@@ -18,6 +18,7 @@ from sys import stderr
 
 import sys
 import os
+import json
 
 # NOTE: DO NOT change the name of 'create_app()', it is used by gunicorn and flask
 def create_app():
@@ -113,11 +114,21 @@ def _add_default_admin(app: Flask):
         except Exception as e:
             print(e, file=stderr)
 
+def _read_in_config_data():
+    # read in app configuration json to display on homepage
+    project_dir = os.path.dirname(os.path.realpath(__file__))
+
+    # with open("../portal/app/appconfig.json", 'r') as f:
+    with open(f'{project_dir}/appconfig.json', 'r') as f:
+        data = json.load(f)
+    return data
+
 def _setup_jinja_globals(app: Flask):
     app.jinja_env.globals['current_user'] = current_user
     app.jinja_env.globals['Mode'] = Mode
     app.jinja_env.globals['Status'] = Status
     app.jinja_env.globals['Permission'] = Permission
+    app.jinja_env.globals['ConfigData'] = _read_in_config_data()
 
     from .blueprints.auth import build_auth_url
     app.jinja_env.globals['build_auth_url'] = build_auth_url
