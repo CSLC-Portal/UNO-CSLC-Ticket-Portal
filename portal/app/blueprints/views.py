@@ -14,13 +14,8 @@ from app.util import permission_required
 
 from app.model import Ticket
 from app.model import Mode
-from app.model import Status
-from app.model import User
-from app.model import ProblemType
-from app.model import Course
 from app.model import Permission
 from app.model import Message
-from app.model import Config
 
 from datetime import datetime
 
@@ -28,7 +23,6 @@ from app.extensions import db
 from werkzeug.datastructures import ImmutableMultiDict
 
 import sys
-import re
 
 views = Blueprint('views', __name__)
 
@@ -96,14 +90,7 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    tickets = Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-
-    # Get the user permission level here BEFORE attempting to load view-tickets page
-    user_level = current_user.permission
-    if (user_level < Permission.Tutor):
-        flash('Insufficient permission level to view tickets', category='error')
-        return redirect(url_for('views.index'))
-
+    tickets = Ticket.query.all()
     return render_template('view_tickets.html', tickets=tickets)
 
 @views.route('/update-ticket', methods=["POST"])
