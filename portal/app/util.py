@@ -34,3 +34,18 @@ def permission_required(permission):
             return func(*args, **kwargs)
         return wrapper
     return decorator
+
+def build_days_of_week_string(mon, tue, wed, thu, fri):
+    daysOfWeek = ""
+    if mon is not None:
+        daysOfWeek = daysOfWeek + "Mon"
+    if tue is not None:
+        daysOfWeek = daysOfWeek + "Tue"
+    if wed is not None:
+        daysOfWeek = daysOfWeek + "Wed"
+    if thu is not None:
+        daysOfWeek = daysOfWeek + "Thu"
+    if fri is not None:
+        daysOfWeek = daysOfWeek + "Fri"
+
+    return daysOfWeek
