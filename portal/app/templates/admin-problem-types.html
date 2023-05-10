@@ -43,8 +43,8 @@
                         <tr style="height:4em" scope="row">
                             <td>{{ problem }}</td>
                             <td class="text-end">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove">
-                                    Remove
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove-{{ problem.id }}">
+                                    Delete
                                 </button>
                             </td>
                         </tr>
@@ -54,6 +54,31 @@
             </div>
         </div>
     </div>
+
+    {% for problem in problemTypes %}
+        <div class="modal fade " id="prompt-remove-{{ problem.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="title-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fs-5" id="title-label">Delete Problem Type</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to remove "<strong>{{ problem }}</strong>"?
+                    </div>
+                    <form action="{{ url_for('admin.remove_problem_type') }}" method="post">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <input type="hidden" name="problemTypeID" value="{{ problem.id }}">
+                            <input type="submit" class="btn btn-primary" value="Yes" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
 </div>
 
 {% endblock %}

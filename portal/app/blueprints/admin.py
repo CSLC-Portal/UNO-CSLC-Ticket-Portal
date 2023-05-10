@@ -52,7 +52,33 @@ def add_problem_type():
         newCourse = ProblemType(problemType)
         db.session.add(newCourse)
         db.session.commit()
-        flash('Problem Type created successfully!', category='success')
+        flash('Problem type created successfully!', category='success')
+
+    return redirect(url_for('admin.view_problem_types'))
+
+@admin.route('/problems/remove', methods=["POST"])
+@permission_required(Permission.Admin)
+def remove_problem_type():
+    problemTypeID = strip_or_none(request.form.get("problemTypeID"))
+
+    try:
+        problemType: ProblemType = ProblemType.query.get(problemTypeID)
+
+        if not problemType:
+            flash('Could not delete problem type, problem type does not exist!', category='error')
+
+        else:
+            db.session.delete(problemType)
+            db.session.commit()
+            flash('Problem type successfully removed!', category='success')
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not remove problem type, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not remove problem type, unknown reason', category='error')
+        print(f'Could not remove problem type: {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_problem_types'))
 
