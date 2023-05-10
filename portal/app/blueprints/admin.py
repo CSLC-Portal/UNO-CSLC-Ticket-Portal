@@ -20,9 +20,11 @@ from app.util import str_empty
 from app.util import strip_or_none
 from app.util import permission_required
 
-import csv
 import sys
 import io
+
+# https://owasp.org/www-community/attacks/CSV_Injection
+from defusedcsv import csv
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -84,12 +86,9 @@ def generate_reports():
         for ticket in tickets:
             # TODO: Will need to query course and section too!
 
-            row = [ ticket.student_email, ticket.student_name, ticket.course, ticket.section, ticket.assignment_name,
-                    ticket.specific_question, ticket.get_problem(), ticket.time_created, ticket.time_claimed, ticket.status,
-                    ticket.time_closed, ticket.mode, ticket.tutor_notes, ticket.tutor_id, ticket.successful_session ]
-
-            map(_bleach, row)
-            csv_writer.writerow(row)
+            csv_writer.writerow([ ticket.student_email, ticket.student_name, ticket.course, ticket.section, ticket.assignment_name,
+                                  ticket.specific_question, ticket.get_problem(), ticket.time_created, ticket.time_claimed, ticket.status,
+                                  ticket.time_closed, ticket.mode, ticket.tutor_notes, ticket.tutor_id, ticket.successful_session ])
 
         payload = out.getvalue()
 
@@ -284,15 +283,6 @@ def create_pseudo_super_user(email: str, permission: Permission):
     pseudo_user = User(None, permission, email, None, True, False)
     db.session.add(pseudo_user)
     db.session.commit()
-
-def _bleach(cell):
-    """Remove potential formula injection attacks"""
-    if cell is not None:
-        cell = str(cell)
-        if cell.startswith(('=', '+', '-', '@')):
-            cell = "' " + cell
-        cell = cell.rstrip()
-    return cell
 
 def _attempt_delete_super_user(user: User):
     """
