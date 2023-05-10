@@ -8,13 +8,9 @@
 }
 
 footer {
-    height: 50px;
+    height: 4em;
     background-color: #292929;
     text-align: right;
-   /* min-width: 360px; */
-    width: 100%;
-    bottom: 0;
-    position: absolute;
 }
 
 

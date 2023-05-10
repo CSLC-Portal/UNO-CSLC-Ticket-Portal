@@ -6,13 +6,11 @@ from app.model import Mode
 
 import pytest
 
-# TODO: Need to test more invalid input (e.g. long strings, etc.) break the database!
-
-def test_create_ticket_post_with_no_auth(create_auth_client, app: Flask):
-
-    auth_client = create_auth_client(name='John Doe', email='test@test.email')
+def test_create_ticket_post_with_no_auth(client: FlaskClient, app: Flask):
 
     test_form_data = {
+        'email':'test@test.email',
+        'fullname':'John Doe',
         'course':'course1',
         'section':'section1',
         'assignment':'assignment1',
@@ -21,7 +19,7 @@ def test_create_ticket_post_with_no_auth(create_auth_client, app: Flask):
         'mode': Mode.InPerson.value
     }
 
-    response = auth_client.post('/create-ticket', data=test_form_data)
+    response = client.post('/create-ticket', data=test_form_data)
 
     with app.app_context():
         assert Ticket.query.count() == 1
@@ -36,7 +34,7 @@ def test_create_ticket_post_with_no_auth(create_auth_client, app: Flask):
         assert ticket.problem_type == 1
         assert ticket.mode == Mode.InPerson
 
-    with auth_client.session_transaction() as session:
+    with client.session_transaction() as session:
         flashes = session['_flashes']
         assert len(flashes) == 1
 
@@ -48,28 +46,29 @@ def test_create_ticket_post_with_no_auth(create_auth_client, app: Flask):
     assert '302' in response.status
     assert b'href="/"' in response.data
 
-def test_create_ticket_no_data(auth_client: FlaskClient, app: Flask):
-    response = auth_client.post('/create-ticket', data={})
+def test_create_ticket_no_data(client: FlaskClient, app: Flask):
+    response = client.post('/create-ticket', data={})
 
-    # We accept tickets as long as they have name and email for now
     with app.app_context():
-        assert Ticket.query.count() == 1
+        assert Ticket.query.count() == 0
 
-    with auth_client.session_transaction() as session:
+    with client.session_transaction() as session:
         flashes = session['_flashes']
         assert len(flashes) == 1
 
         (category, message) = flashes[0]
-        assert category == 'success'
-        assert message == 'Ticket created successfully!'
+        assert category == 'error'
+        assert message == 'Could not submit ticket, invalid data'
 
     # Expect redirect back to create ticket page
     assert '302' in response.status
-    assert b'href="/"' in response.data
+    assert b'href="/create-ticket"' in response.data
 
 @pytest.fixture
-def create_ticket_with_invalid_data(auth_client: FlaskClient, app: Flask):
+def create_ticket_with_invalid_data(client: FlaskClient, app: Flask):
     test_form_data = {
+            'email':'test@test.email',
+            'fullname':'John Doe',
             'course':'course1',
             'section':'section1',
             'assignment':'assignment1',
@@ -82,7 +81,7 @@ def create_ticket_with_invalid_data(auth_client: FlaskClient, app: Flask):
         for key, val in kwargs.items():
             test_form_data[key] = val
 
-        response = auth_client.post('/create-ticket', data=test_form_data)
+        response = client.post('/create-ticket', data=test_form_data)
 
         with app.app_context():
             assert Ticket.query.count() == 0
@@ -91,10 +90,40 @@ def create_ticket_with_invalid_data(auth_client: FlaskClient, app: Flask):
 
     yield _factory
 
-def test_create_ticket_empty_assignment(create_ticket_with_invalid_data, auth_client: FlaskClient):
+def test_create_ticket_empty_email(create_ticket_with_invalid_data, client: FlaskClient):
+    response = create_ticket_with_invalid_data(email='')
+
+    with client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'Could not submit ticket, email must not be empty!'
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/create-ticket"' in response.data
+
+def test_create_ticket_empty_name(create_ticket_with_invalid_data, client: FlaskClient):
+    response = create_ticket_with_invalid_data(fullname='')
+
+    with client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'Could not submit ticket, name must not be empty!'
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/create-ticket"' in response.data
+
+def test_create_ticket_empty_assignment(create_ticket_with_invalid_data, client: FlaskClient):
     response = create_ticket_with_invalid_data(assignment='')
 
-    with auth_client.session_transaction() as session:
+    with client.session_transaction() as session:
         flashes = session['_flashes']
         assert len(flashes) == 1
 
@@ -106,10 +135,10 @@ def test_create_ticket_empty_assignment(create_ticket_with_invalid_data, auth_cl
     assert '302' in response.status
     assert b'href="/create-ticket"' in response.data
 
-def test_create_ticket_empty_question(create_ticket_with_invalid_data, auth_client: FlaskClient):
+def test_create_ticket_empty_question(create_ticket_with_invalid_data, client: FlaskClient):
     response = create_ticket_with_invalid_data(question='')
 
-    with auth_client.session_transaction() as session:
+    with client.session_transaction() as session:
         flashes = session['_flashes']
         assert len(flashes) == 1
 
@@ -121,10 +150,40 @@ def test_create_ticket_empty_question(create_ticket_with_invalid_data, auth_clie
     assert '302' in response.status
     assert b'href="/create-ticket"' in response.data
 
-def test_create_ticket_whitespace_assignment(create_ticket_with_invalid_data, auth_client: FlaskClient):
+def test_create_ticket_whitespace_email(create_ticket_with_invalid_data, client: FlaskClient):
+    response = create_ticket_with_invalid_data(email='      \t')
+
+    with client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'Could not submit ticket, email must not be empty!'
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/create-ticket"' in response.data
+
+def test_create_ticket_whitespace_name(create_ticket_with_invalid_data, client: FlaskClient):
+    response = create_ticket_with_invalid_data(fullname='      \t')
+
+    with client.session_transaction() as session:
+        flashes = session['_flashes']
+        assert len(flashes) == 1
+
+        (category, message) = flashes[0]
+        assert category == 'error'
+        assert message == 'Could not submit ticket, name must not be empty!'
+
+    # Expect redirect back to create ticket page
+    assert '302' in response.status
+    assert b'href="/create-ticket"' in response.data
+
+def test_create_ticket_whitespace_assignment(create_ticket_with_invalid_data, client: FlaskClient):
     response = create_ticket_with_invalid_data(assignment='      \t')
 
-    with auth_client.session_transaction() as session:
+    with client.session_transaction() as session:
         flashes = session['_flashes']
         assert len(flashes) == 1
 
@@ -136,10 +195,10 @@ def test_create_ticket_whitespace_assignment(create_ticket_with_invalid_data, au
     assert '302' in response.status
     assert b'href="/create-ticket"' in response.data
 
-def test_create_ticket_whitespace_question(create_ticket_with_invalid_data, auth_client: FlaskClient):
+def test_create_ticket_whitespace_question(create_ticket_with_invalid_data, client: FlaskClient):
     response = create_ticket_with_invalid_data(question='      \t')
 
-    with auth_client.session_transaction() as session:
+    with client.session_transaction() as session:
         flashes = session['_flashes']
         assert len(flashes) == 1
 
@@ -151,10 +210,10 @@ def test_create_ticket_whitespace_question(create_ticket_with_invalid_data, auth
     assert '302' in response.status
     assert b'href="/create-ticket"' in response.data
 
-def test_create_ticket_invalid_mode(create_ticket_with_invalid_data, auth_client: FlaskClient):
+def test_create_ticket_invalid_mode(create_ticket_with_invalid_data, client: FlaskClient):
     response = create_ticket_with_invalid_data(mode='invalid')
 
-    with auth_client.session_transaction() as session:
+    with client.session_transaction() as session:
         flashes = session['_flashes']
         assert len(flashes) == 1
 

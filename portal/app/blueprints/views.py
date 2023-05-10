@@ -33,7 +33,6 @@ def index():
     return render_template('index.html', messages=messages)
 
 @views.route('/create-ticket', methods=['POST', 'GET'])
-@permission_required(Permission.Student)
 def create_ticket():
     """
     Serves the HTTP route /create-ticket. Shows a ticket create form on GET request.
@@ -157,8 +156,17 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
 
         returns a Ticket object if values are valid, None otherwise.
     """
-    email = strip_or_none(form.get("email"))
-    name = strip_or_none(form.get("fullname"))
+
+    # If the user is logged in, use their name and email
+    if current_user.is_authenticated:
+        email = current_user.email
+        name = current_user.name
+
+    # Otherwise get it from the form
+    else:
+        email = strip_or_none(form.get("email"))
+        name = strip_or_none(form.get("fullname"))
+
     course = strip_or_none(form.get("course"))
     section = strip_or_none(form.get("section"))
     assignment = strip_or_none(form.get("assignment"))
