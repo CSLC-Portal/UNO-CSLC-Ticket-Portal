@@ -63,6 +63,43 @@
 </div>
 {%- endmacro %}
 
+{% macro edit_professor_button(professor) -%}
+<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#prompt-edit-{{ professor.id }}">
+    <img src="{{ url_for('static', filename='img/pencil-square.svg') }}" alt="edit" />
+</button>
+{%- endmacro %}
+
+{% macro edit_professor_modal(professor) -%}
+<div class="modal fade " id="prompt-edit-{{ professor.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="title-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fs-5" id="title-label">Update Professor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('admin.edit_professor') }}" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="fnameUpdate"><strong>First Name</strong></label>
+                        <input type="text" class="form-control" id="fnameUpdate" name="fnameUpdate" value="{{ professor.first_name.capitalize() }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lnameUpdate"><strong>Last Name</strong></label>
+                        <input type="text" class="form-control" id="lnameUpdate" name="lnameUpdate" value="{{ professor.last_name.capitalize() }}">
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <input type="hidden" name="professorID" value="{{ professor.id }}">
+                    <input type="submit" class="btn btn-primary" value="Save" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
+
 {% call professors_table('All Professors') %}
     <thead>
         <tr>
@@ -78,8 +115,9 @@
             <td>{{ professor.first_name.capitalize() }}</td>
             <td>{{ professor.last_name.capitalize() }}</td>
             <td>{{ professor.sections }}</td>
-            <td>{{ remove_professor_button(professor) }}</td>
+            <td>{{ remove_professor_button(professor) }} {{ edit_professor_button(professor) }}</td>
 
+            {{ edit_professor_modal(professor) }}
             {{ remove_professor_modal(professor) }}
         </tr>
         {% endfor %}

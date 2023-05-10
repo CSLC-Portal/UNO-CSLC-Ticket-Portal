@@ -416,7 +416,6 @@ def edit_semester():
     print("NEW END: " + str(newEnd))
     try:
         semester: Semester = Semester.query.get(semester_id)
-        print(str(semester.season == Season[newSeason]))
 
         if semester.year == int(newYear) and semester.season == Season[newSeason] and semester.start_date == newStart and semester.end_date == newEnd:
             flash('No updates to semester, attributes remain the same.', category='message')
@@ -521,6 +520,50 @@ def remove_professor():
     except Exception as e:
         flash('Could not remove professor, unknown reason', category='error')
         print(f'Failed to remove professor: {e}', file=sys.stderr)
+
+    return redirect(url_for('admin.view_professors'))
+
+@admin.route('/professors/edit', methods=['POST'])
+@permission_required(Permission.Admin)
+def edit_professor():
+    professor_id = strip_or_none(request.form.get("professorID"))
+    newFName = strip_or_none(request.form.get("fnameUpdate")).lower()
+    newLName = strip_or_none(request.form.get("lnameUpdate")).lower()
+
+    print("PROFESSOR ID: " + str(professor_id))
+    print("NEW FIRST NAME: " + str(newFName))
+    print("NEW LAST NAME: " + str(newLName))
+
+    try:
+        professor: Professor = Professor.query.get(professor_id)
+        print("PROFESSOR: " + str(professor))
+        if professor.first_name == newFName and professor.last_name == newLName:
+            flash('No updates to professor, attributes remain the same.', category='message')
+        elif not professor:
+            flash('Could not update professor, professor does not exist!', category='error')
+        elif str_empty(newFName):
+            flash('Could not update professor, first name cannot be empty!', category='error')
+        elif str_empty(newLName):
+            flash('Could not update professor, last name cannot be empty!', category='error')
+        else:
+            tmpProfessor = Professor.query.filter_by(first_name=newFName.lower(), last_name=newLName.lower()).first()
+            if tmpProfessor is None:
+                if newFName != professor.first_name:
+                    professor.first_name = newFName.lower()
+                if newLName != professor.last_name:
+                    professor.last_name = newLName.lower()
+                db.session.commit()
+                flash("Professor updated successfully!", category='success')
+            else:
+                flash('Could not update professor, would cause duplicate professors in DB!', category='error')
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not update professor, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not update professor, unknown reason', category='error')
+        print(f'Failed to update professor: {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_professors'))
 
