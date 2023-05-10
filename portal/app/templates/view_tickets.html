@@ -2,11 +2,12 @@
 {% block title %}Open Tickets{% endblock %}
 {% block content %}
 
-<h1>View Tickets Page</h1><br>
+<h1>View Tickets Page</h1>
+<br><br>
 
 <div class="container">
     <div class="row">
-        <div class="col">
+        <div class="col-lg col-sm-12">
             <div class="vstack">
                 <h5>
                     Open Tickets
@@ -34,7 +35,9 @@
                             <!-- Button trigger edit ticket modal -->
                             <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal"
                                 data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static"
-                                data-bs-keyboard="false"> View </button>
+                                data-bs-keyboard="false">
+                                <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -42,7 +45,7 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col">
+        <div class="col-lg col-sm-12">
             <div class="vstack">
                 <h5>
                     Claimed Tickets
@@ -68,7 +71,9 @@
                             <!-- Button trigger edit ticket modal -->
                             <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal"
                                 data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static"
-                                data-bs-keyboard="false"> View </button>
+                                data-bs-keyboard="false">
+                                <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -76,13 +81,13 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col">
+        <div class="col-lg col-sm-12">
             <div class="vstack">
                 <h5>
                     Closed Tickets
                 </h5>
                 {% for ticket in tickets %}
-                {% if ticket.status == Status.Closed %}\
+                {% if ticket.status == Status.Closed %}
                 <div class="card text-white bg-secondary mb-3 centered" style="max-width: 18rem;">
                     <div class="card-header" style="text-align:left;">
                         <h3>{{ ticket.student_name }}</h3>
@@ -102,7 +107,9 @@
                             <!-- Button trigger edit ticket modal -->
                             <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal"
                                 data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static"
-                                data-bs-keyboard="false"> View </button>
+                                data-bs-keyboard="false">
+                                <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -112,6 +119,7 @@
         </div>
     </div>
 </div>
+<br>
 
 {% for ticket in tickets %}
 <!-- Modal -->

@@ -7,69 +7,51 @@
     <br>
     <hr class="solid" />
 
+    <!-- messages -->
+    {% for message in messages %}
+        <h5> {{ message.message }} </h5>
+    {% endfor %}
+
     <h1 style="font-size: 20px">HOURS</h1>
 
     <!-- TODO: Get current hours from database -->
-    <table class="hours">
-        <!-- table rows for messages -->
-        {% for message in messages %}
-        <tr>
-            <td colspan="6">
-                {{ message.message }}
-            </td>
-        </tr>
-        {% endfor %}
-        <tr>
-            <th>
-                MONDAY
-            </th>
-            <th class="center">
-                TUESDAY
-            </th>
-            <th class="center">
-                WEDNESDAY
-            </th>
-            <th class="center">
-                THURSDAY
-            </th>
-            <th class="center">
-                FRIDAY
-            </th>
-            <th>
-                SATURDAY
-            </th>
-        </tr>
-        <tr>
-            <td>
+    <div class="container" style="text-align: center;">
+        <div class="row">
+            <div class="col">
+                <h5>MONDAY</h5>
                 {{ ConfigData['hours']['monday_start'] }} - {{ ConfigData['hours']['monday_end'] }}
-            </td>
-            <td class="center">
+            </div>
+            <div class="col">
+                <h5>TUESDAY</h5>
                 {{ ConfigData['hours']['tuesday_start'] }} - {{ ConfigData['hours']['tuesday_end'] }}
-            </td>
-            <td class="center">
+            </div>
+            <div class="col">
+                <h5>WEDNESDAY</h5>
                 {{ ConfigData['hours']['wednesday_start'] }} - {{ ConfigData['hours']['wednesday_end'] }}
-            </td>
-            <td class="center">
+            </div>
+            <div class="col">
+                <h5>THURSDAY</h5>
                 {{ ConfigData['hours']['thursday_start'] }} - {{ ConfigData['hours']['thursday_end'] }}
-            </td>
-            <td class="center">
+            </div>
+            <div class="col">
+                <h5>FRIDAY</h5>
                 {{ ConfigData['hours']['friday_start'] }} - {{ ConfigData['hours']['friday_end'] }}
-            </td>
-            <td>
+            </div>
+            <div class="col">
+                <h5>SATURDAY</h5>
                 {{ ConfigData['hours']['saturday_start'] }} - {{ ConfigData['hours']['saturday_end'] }}
-            </td>
-        </tr>
-        <!-- table row for create ticket button -->
-        <tr>
-            <td colspan="2"></td>
-            <td colspan="2" style="padding-top:30px;">
+            </div>
+        </div>
+        <!-- row for create ticket button -->
+        <br>
+        <div class="row">
+            <div class="col-12">
                 <button class="create-ticket-button" onclick="window.location.href='/create-ticket'">
                     Open Ticket
                 </button>
-            </td>
-            <td colspan="2"></td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
 
     <hr class="solid" />
     <h1>COURSE AVAILABILITY</h1>

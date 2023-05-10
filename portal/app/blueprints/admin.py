@@ -13,6 +13,7 @@ from flask_login import current_user
 
 from app.model import User
 from app.model import Course
+from app.model import Message
 from app.model import Permission
 from app.model import Section
 from app.model import Professor
@@ -31,6 +32,7 @@ from app.util import permission_required
 from app.util import build_days_of_week_string
 
 import sys
+import datetime
 import io
 
 # https://owasp.org/www-community/attacks/CSV_Injection
@@ -859,6 +861,56 @@ def edit_section():
         print(f'Failed to update section: {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_sections'))
+
+@admin.route('/messages')
+@permission_required(Permission.Admin)
+def view_messages():
+    # get all courses, just for validation in html
+    messages = Message.query.all()
+    return render_template('admin-messages.html', messages=messages)
+
+@admin.route('/messages/add', methods=["POST"])
+@permission_required(Permission.Admin)
+def add_message():
+
+    message = strip_or_none(request.form.get("message"))
+    startDate = datetime.datetime.strptime(request.form.get("startDate"), "%Y-%m-%d")
+    endDate = datetime.datetime.strptime(request.form.get("endDate"), "%Y-%m-%d")
+    print("MESSAGE: " + str(message))
+    print("START DATE: " + str(startDate))
+    print("END DATE: " + str(endDate))
+
+    newMessage = Message(message, startDate, endDate)
+    db.session.add(newMessage)
+    db.session.commit()
+    flash('Message added successfully!', category='success')
+
+    return redirect(url_for('admin.view_messages'))
+
+@admin.route('/messages/remove', methods=["POST"])
+@permission_required(Permission.Admin)
+def remove_message():
+    message_id = strip_or_none(request.form.get("messageID"))
+    try:
+        message: Message = Message.query.get(message_id)
+
+        if not message:
+            flash('Could not remove message, message does not exist!', category='error')
+
+        else:
+            db.session.delete(message)
+            db.session.commit()
+            flash('message successfully removed!', category='success')
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not remove message, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not remove message, unknown reason', category='error')
+        print(f'Failed to remove message: {e}', file=sys.stderr)
+
+    return redirect(url_for('admin.view_messages'))
 
 def create_pseudo_super_user(email: str, permission: Permission):
     """

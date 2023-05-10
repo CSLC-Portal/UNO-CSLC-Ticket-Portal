@@ -5,7 +5,7 @@
 <h1 class="heading-text">Administration Console</h1>
 
 <div class="sections">Messages</div>
-<a class="sub-section" href="#">Messages</a>
+<a class="sub-section" href="{{ url_for('admin.view_messages') }}">Messages</a>
 <div class="sections">Courses and Sections</div>
 <a class="sub-section" href="{{ url_for('admin.view_courses') }}">Courses</a>
 <a class="sub-section" href="{{ url_for('admin.view_sections') }}">Course Sections</a>
