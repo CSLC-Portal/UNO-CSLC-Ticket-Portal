@@ -575,7 +575,7 @@ def view_sections():
     semesters = Semester.query.all()
     courses = Course.query.all()
     professors = Professor.query.all()
-    return render_template('admin-sections.html', sections=sections, semesters=semesters, courses=courses, professors=professors)
+    return render_template('admin-sections.html', sections=sections, semesters=semesters, courses=courses, professors=professors, SectionMode=SectionMode)
 
 @admin.route('/sections/add', methods=["POST"])
 @permission_required(Permission.Admin)
@@ -634,8 +634,10 @@ def add_section():
                 print("Start and end dates are empy strings because it is totaly online course.")
                 print("START TIME: " + str(secStartTime))
                 print("END TIME: " + str(secEndTime))
-                secStartTime = datetime.strptime("00:00", '%H:%M').time()
-                secEndTime = datetime.strptime("00:00", '%H:%M').time()
+                # secStartTime = datetime.strptime("00:00:00", '%H:%M:%S').time()
+                # secEndTime = datetime.strptime("00:00:00", '%H:%M:%S').time()
+                secStartTime = None
+                secEndTime = None
                 print("START TIME: " + str(secStartTime))
                 print("END TIME: " + str(secEndTime))
 
@@ -673,6 +675,97 @@ def remove_section():
     except Exception as e:
         flash('Could not remove section, unknown reason', category='error')
         print(f'Failed to remove section: {e}', file=sys.stderr)
+
+    return redirect(url_for('admin.view_sections'))
+
+@admin.route('/sections/edit', methods=['POST'])
+@permission_required(Permission.Admin)
+# flake8: noqa: C901
+def edit_section():
+    section_id = strip_or_none(request.form.get("sectionID"))
+    newSemester = strip_or_none(request.form.get("semesterUpdate"))
+    newCourse = strip_or_none(request.form.get("updateCourse"))
+    newSectionNum = strip_or_none(request.form.get("updateSectionNum"))
+    updateMode = strip_or_none(request.form.get("updateMode"))
+    updateMon = strip_or_none(request.form.get("updateMon"))
+    updateTue = strip_or_none(request.form.get("updateTue"))
+    updateWed = strip_or_none(request.form.get("updateWed"))
+    updateThu = strip_or_none(request.form.get("updateThu"))
+    updateFri = strip_or_none(request.form.get("updateFri"))
+    updateProf = strip_or_none(request.form.get("updateProf"))
+
+    print("SECTION ID: " + str(section_id))
+    print("NEW SEMESTER: " + str(newSemester))
+    print("NEW COURSE: " + str(newCourse))
+    print("NEW SEC NUM: " + str(newSectionNum))
+    print("NEW MODE: " + updateMode)
+    print("NEW MON: " + str(updateMon))
+    print("NEW TUE: " + str(updateTue))
+    print("NEW WED: " + str(updateWed))
+    print("NEW THU: " + str(updateThu))
+    print("NEW FRI: " + str(updateFri))
+    # print("NEW START: " + str(start))
+    # print("NEW END: " + str(end))
+    print("NEW PROF: " + str(updateProf))
+
+    try:
+        section: Section = Section.query.get(section_id)
+
+        start = strip_or_none(request.form.get("updateStart"))
+        if start is not None and not str_empty(start):
+            try:
+                start = datetime.strptime(start, '%H:%M:%S').time()
+            except ValueError:
+                # incoming time change
+                start = datetime.strptime(start, '%H:%M').time()
+        else:
+            # empty string came back, set to None
+            start = None
+        end = strip_or_none(request.form.get("updateEnd"))
+        if end is not None and not str_empty(end):
+            try:
+                end = datetime.strptime(end, '%H:%M:%S').time()
+            except ValueError:
+                # incoming time change
+                end = datetime.strptime(end, '%H:%M').time()
+        else:
+            # empty string came back, set to None
+            end = None
+
+        if _any_change_in_data(section, newSemester, newCourse, newSectionNum, updateMode, updateMon, updateTue, updateWed, updateThu,
+           updateFri, updateProf, start, end):
+            flash('No updates to section, attributes remain the same.', category='message')
+        elif (section.start_time != start or section.end_time != end) and updateMode == "TotallyOnline":
+            flash('Could not update section, cannot have start/end times with online class!', category='error')
+        elif not _no_days_of_week(updateMon, updateTue, updateWed, updateThu, updateFri) and updateMode == "TotallyOnline":
+            flash('Could not update section, cannot have days of week with online class!', category='error')
+        elif (updateMode == "Remote" or updateMode == "InPerson") and _no_days_of_week(updateMon, updateTue, updateWed, updateThu, updateFri):
+            flash('Could not update section, atleast one day of the week is required if modes are In Person or Remote!', category='error')
+        elif (updateMode == "Remote" or updateMode == "InPerson") and (start == "" or start is None or end == "" or end is None):
+            flash('Could not update section, start/end times required if modes are In Person or Remote!', category='error')
+        elif not _any_change_in_data(section, newSemester, newCourse, newSectionNum, updateMode, updateMon, updateTue, updateWed, updateThu,
+                                     updateFri, updateProf, start, end) and (section.course_id == int(newCourse) and section.section_number == int(newSectionNum)):
+            # update everything else
+            _attempt_update_section(section, newSemester, newCourse, newSectionNum, updateMode, updateMon, updateTue, updateWed, updateThu,
+                                    updateFri, updateProf, start, end)
+            flash("Section updated successfully!", category='success')
+        else:
+            tmpSection = Section.query.filter_by(section_number=newSectionNum, course_id=newCourse).first()
+            if tmpSection is None:
+                # update everything
+                _attempt_update_section(section, newSemester, newCourse, newSectionNum, updateMode, updateMon, updateTue, updateWed, updateThu,
+                                        updateFri, updateProf, start, end)
+                # db.session.commit()
+                flash("Section updated successfully!", category='success')
+            else:
+                flash('Could not update section, would cause duplicate sections in DB!', category='error')
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not update section, invalid data!', category='error')
+
+    # except Exception as e:
+    #     flash('Could not update section, unknown reason', category='error')
+    #     print(f'Failed to update section: {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_sections'))
 
@@ -719,3 +812,72 @@ def _attempt_edit_user(user: User, active, permission=None):
     except IntegrityError as e:
         db.session.rollback()
         raise e
+
+def _any_change_in_data(sec, semester, course, sectionNum, sectionMode, mon, tue, wed, thu, fri, professor, start, end):
+    # calc days of week
+    days = build_days_of_week_string(mon, tue, wed, thu, fri)
+
+    if (sec.section_number == int(sectionNum) and sec.days_of_week == days and sec.section_mode == SectionMode[sectionMode] and sec.course_id == int(course) and
+       sec.semester_id == int(semester) and sec.professor_id == int(professor) and sec.start_time == start and sec.end_time == end):
+        # everything is the same
+        print("no data has changed")
+        return True
+    else:
+        print("some data has changed")
+        if sec.section_number != int(sectionNum):
+            print("section num DIFF: " + str(sec.section_number) + " - " + str(sectionNum))
+        if sec.days_of_week != days:
+            print("days of week DIFF")
+        if sec.section_mode != SectionMode[sectionMode]:
+            print("section mode DIFF: " + str(sec.section_mode) + " - " + str(sectionMode))
+        if sec.course_id != int(course):
+            print("course id DIFF")
+        if sec.semester_id != int(semester):
+            print("semester id DIFF")
+        if sec.professor_id != int(professor):
+            print("professor id DIFF")
+        if sec.start_time != start:
+            print("start time DIFF: " + str(sec.start_time) + " - " + str(start))
+        if sec.end_time != end:
+            print("end time DIFF: " + str(sec.end_time) + " - " + str(end))
+        if str_empty(start):
+            print("start is empty")
+        return False
+
+def _no_days_of_week(m, t, w, th, f):
+    if m is None and t is None and w is None and th is None and f is None:
+        return True
+    return False
+
+def _attempt_update_section(sec, semester, course, sectionNum, sectionMode, mon, tue, wed, thu, fri, professor, start, end):
+    days = build_days_of_week_string(mon, tue, wed, thu, fri)
+
+    # update everything that needs updating
+    if sec.section_number != int(sectionNum):
+        sec.section_number = int(sectionNum)
+    if sec.days_of_week != days:
+        sec.days_of_week = days
+    if sec.section_mode != SectionMode[sectionMode]:
+        sec.section_mode = sectionMode
+    if sec.course_id != int(course):
+        sec.course_id = course
+    if sec.semester_id != int(semester):
+        sec.semester_id = semester
+    if sec.professor != int(professor):
+        sec.professor_id = professor
+    if sec.start_time != start:
+        sec.start_time = start
+    if sec.end_time != end:
+        sec.end_time = end
+    db.session.commit()
+
+def _get_start_time(start):
+    if start is not None and not str_empty(start):
+        try:
+            start = datetime.strptime(start, '%H:%M:%S').time()
+        except ValueError:
+            # incoming time change
+            start = datetime.strptime(start, '%H:%M').time()
+    else:
+        # empty string came back, set to None
+        start = None
