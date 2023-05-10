@@ -32,7 +32,6 @@ from app.util import permission_required
 from app.util import build_days_of_week_string
 
 import sys
-import datetime
 import io
 
 # https://owasp.org/www-community/attacks/CSV_Injection
@@ -874,8 +873,8 @@ def view_messages():
 def add_message():
 
     message = strip_or_none(request.form.get("message"))
-    startDate = datetime.datetime.strptime(request.form.get("startDate"), "%Y-%m-%d")
-    endDate = datetime.datetime.strptime(request.form.get("endDate"), "%Y-%m-%d")
+    startDate = datetime.strptime(request.form.get("startDate"), "%Y-%m-%d")
+    endDate = datetime.strptime(request.form.get("endDate"), "%Y-%m-%d")
     print("MESSAGE: " + str(message))
     print("START DATE: " + str(startDate))
     print("END DATE: " + str(endDate))
