@@ -4,7 +4,7 @@
 
 <h1>Tickets</h1>
 
-<form action="{{ url_for('admin.download_report') }}" method="POST">
+<form action="{{ url_for('admin.generate_reports') }}" method="POST">
     <div class="form-group">
         <label for="creationDate"><strong>Start Date</strong></label>
         <input type="date" class="form-control" id="creationDate" placeholder="yyyy-mm-dd" name="creationDate" required>
@@ -13,22 +13,10 @@
         <label for="course"><strong>Course</strong></label>
         <input type="text" class="form-control" id="course" placeholder="CSCI 1400" name="course">
     </div>
-
-
-    <button type="submit" class="btn btn-primary" name="SaveChanges">Filter</button>
-
+    <button type="submit" class="btn btn-primary" name="SaveChanges">Download</button>
 </form>
 
-<br>
-<form action="{{ url_for('admin.download_csv') }}" method="POST">
-
-
-    <button type="submit" class="btn btn-primary" name="downloadReport">Download report</button>
-
-</form>
-
-
-<h1>All tickets from Query:</h1>
+<!-- <h1>All tickets from Query:</h1>
 <li class="list-group-item" style="width: 60rem; left: 30%">Tickets: {{ lengthTickets}}</li>
 {% for ticket in sub %}
 <div class="card" style="width: 60rem; left: 30%">
@@ -46,8 +34,6 @@
         </li>
     </ul>
   </div>
-
-{% endfor %}
-
+{% endfor %} -->
 
 {% endblock %}

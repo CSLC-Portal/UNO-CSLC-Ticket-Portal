@@ -63,10 +63,8 @@
                     Admin
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <!-- TODO: REPORTS
-                            <li><a class="dropdown-item" href="reports.html">Reports</a></li>
-                        -->
                         <li><a class="dropdown-item" href="{{ url_for('admin.console') }}">Administration Console</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('admin.reports_form') }}">Reports</a></li>
                     </ul>
                 </div>
             </li>
