@@ -3,7 +3,7 @@
 
 {% block content %}
     <h1>WELCOME TO THE UNO CSLC</h1>
-    <h2>PKI 391 | [zoom link]</h2>
+    <h2> {{ ConfigData['misc_config']['room_number'] }} | <a href="{{ ConfigData['misc_config']['zoom_link'] }}">Zoom Link</a></h2>
     <br>
     <hr class="solid" />
 
@@ -41,22 +41,22 @@
         </tr>
         <tr>
             <td>
-                {{ config.mon_start }} - {{ config.mon_end }}
+                {{ ConfigData['hours']['monday_start'] }} - {{ ConfigData['hours']['monday_end'] }}
             </td>
             <td class="center">
-                {{ config.tue_start }} - {{ config.tue_end }}
+                {{ ConfigData['hours']['tuesday_start'] }} - {{ ConfigData['hours']['tuesday_end'] }}
             </td>
             <td class="center">
-                {{ config.wed_start }} - {{ config.wed_end }}
+                {{ ConfigData['hours']['wednesday_start'] }} - {{ ConfigData['hours']['wednesday_end'] }}
             </td>
             <td class="center">
-                {{ config.thur_start }} - {{ config.thur_end }}
+                {{ ConfigData['hours']['thursday_start'] }} - {{ ConfigData['hours']['thursday_end'] }}
             </td>
             <td class="center">
-                {{ config.fri_start }} - {{ config.fri_end }}
+                {{ ConfigData['hours']['friday_start'] }} - {{ ConfigData['hours']['friday_end'] }}
             </td>
             <td>
-                {{ config.sat_start }} - {{ config.sat_end }}
+                {{ ConfigData['hours']['saturday_start'] }} - {{ ConfigData['hours']['saturday_end'] }}
             </td>
         </tr>
         <!-- table row for create ticket button -->
