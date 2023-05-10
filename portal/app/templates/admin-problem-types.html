@@ -2,19 +2,58 @@
 {% block title %}Admin Console{% endblock %}
 {% block content %}
 
-<h1>Problem Types</h1>
-
-<form action="{{ url_for('admin.add_problem_type') }}" method="POST">
-    <div class="form-group">
-        <label for="problemType"><strong>Problem Type</strong></label>
-        <input type="text" class="form-control" id="problemType" placeholder="E.g. I don't know what to do" name="problemType" required>
+<div class="container p-3 gy-3">
+    <div class="row">
+        <div class="col">
+            <h1>Manage Problem Types</h1>
+            <hr />
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary" name="SaveChanges">Submit</button>
-</form>
 
-<h1>All added problemTypes:</h1>
-{% for problem in problemTypes %}
-    {{ problem.problem_type }}<br>
-{% endfor %}
+    <div class="row p-3">
+        <form action="{{ url_for('admin.add_problem_type') }}" method="POST">
+            <div class="row g-2">
+                <div class="col-lg-10 col-12">
+                    <label class="form-label visually-hidden" for="problemType"><strong>Problem Type</strong></label>
+                    <input type="text" class="form-control" id="problemType" placeholder="Problem type description..."
+                        name="problemType" required>
+                </div>
+                <div class="col-lg col-12 d-grid">
+                    <input type="submit" class="btn btn-primary" value="Add" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table align-middle caption-top">
+                    <caption>
+                        <h5 class="text-center">Problem Types</h5>
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Description</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for problem in problemTypes %}
+                        <tr style="height:4em" scope="row">
+                            <td>{{ problem }}</td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
