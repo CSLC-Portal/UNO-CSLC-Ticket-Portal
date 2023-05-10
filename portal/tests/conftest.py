@@ -99,13 +99,13 @@ def auth_client(create_auth_client):
 
 @pytest.fixture
 def create_super_user(create_auth_client, app: Flask):
-    def _factor(name = None, email = None, oid = None, permission = Permission.Admin):
+    def _factory(name = None, email = None, oid = None, permission = Permission.Admin):
         with app.app_context():
             create_pseudo_super_user(email, permission)
 
         return create_auth_client(name, email, oid)
 
-    return _factor
+    return _factory
 
 @pytest.fixture
 def tutor_client(create_super_user):

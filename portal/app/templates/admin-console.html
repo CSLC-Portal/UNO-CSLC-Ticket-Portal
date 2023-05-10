@@ -8,9 +8,9 @@
 <a class="sub-section" href="#">Messages</a>
 <div class="sections">Courses and Sections</div>
 <a class="sub-section" href="{{ url_for('admin.view_courses') }}">Courses</a>
-<a class="sub-section" href="#">Course Sections</a>
-<a class="sub-section" href="#">Semesters</a>
-<a class="sub-section" href="#">Professors</a>
+<a class="sub-section" href="{{ url_for('admin.view_sections') }}">Course Sections</a>
+<a class="sub-section" href="{{ url_for('admin.view_semesters') }}">Semesters</a>
+<a class="sub-section" href="{{ url_for('admin.view_professors') }}">Professors</a>
 <div class="sections">Student Problem Types</div>
 <a class="sub-section" href="{{ url_for('admin.view_problem_types') }}">Problem Types</a>
 <div class="sections">Tutor Info</div>

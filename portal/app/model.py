@@ -5,6 +5,8 @@ from sqlalchemy import DateTime
 from sqlalchemy import Enum
 from sqlalchemy import Boolean
 from sqlalchemy import Text
+from sqlalchemy import Time
+from sqlalchemy import Date
 
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
@@ -71,6 +73,16 @@ class Season(ToStrEnum):
     Spring = 2
     Summer = 3
     Fall = 4
+
+class SectionMode(ToStrEnum):
+    """
+    The SectionMode class is designed to mimic an enum for different types of modes that a aprticular section of a course could have.
+    For example, one course section number 850 might be totally online, while another section number 001 might be in person.
+    This leaves room for other possible additions of different modes that sections of courses may have.
+    """
+    InPerson = 1
+    Remote = 2
+    TotallyOnline = 3
 
 class User(db.Model, UserMixin):
     """
@@ -253,7 +265,7 @@ class Course(db.Model):
     number = Column(String(25), nullable=False, doc='The course number for a class. E.g., 4970')
     course_name = Column(String(50), nullable=False, doc='The name of the course itself. E.g., Operating Systems, Java II, etc.')
     on_display = Column(Boolean, doc="T/F if course should be displayed in available courses. This way admin does not need to keep adding/deleting a course.")
-    sections = db.relationship('Section', backref='course')
+    sections = db.relationship('Section', backref='course', cascade="all, delete")
     # TODO: add in tutors relationship and tickets relationship
 
     def __init__(self, depIn, numIn, nameIn, displayIn):
@@ -265,6 +277,9 @@ class Course(db.Model):
     def __repr__(self):
         return f'{self.department} {self.number}, {self.course_name}, {self.on_display}, Sections: {self.sections}'
 
+    def __str__(self):
+        return f'{self.department} {self.number}: {self.course_name}'
+
 class Section(db.Model):
     """
     The Sections class is the model for storing the different sections of courses that are available for assistence within the tutoring center.
@@ -275,15 +290,31 @@ class Section(db.Model):
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Sections table.')
     section_number = Column(Integer, doc='The section numebr associated with a course number. E.g., 001, 850, etc.')
-    time = Column(String(50), doc='The course meeting time. E.g. MW 1:00PM')
+    days_of_week = Column(String(25), doc='The days of the week for a particular course section. E.g. M, T, W, T, F.')
+    start_time = Column(Time(True), doc='The start time for the course section.')
+    end_time = Column(Time(True), doc='The end time for the course section.')
+    section_mode = Column(Enum(SectionMode), doc='The method of teaching that this section will be taught in. E.g., Remote, In person, etc.')
     course_id = Column(Integer, db.ForeignKey('Courses.id'), doc='The corresponding course a section is associated with.')
     semester_id = Column(Integer, db.ForeignKey('Semesters.id'), doc='The semester in which a section is offered during.')
     professor_id = Column(Integer, db.ForeignKey('Professors.id'), doc='Specific professor that teaches a particular session.')
     # TODO: potentially add relationship to semesters, professors, and tickets
 
-    def __init__(self, secIn, timeIn):
-        self.section_number = secIn
-        self.time = timeIn
+    def __init__(self, secNumIn, daysIn, startIn, endIn, modeIn, courseIn, semesterIn, profIn):
+        self.section_number = secNumIn
+        self.days_of_week = daysIn
+        self.start_time = startIn
+        self.end_time = endIn
+        self.section_mode = modeIn
+        self.course_id = courseIn
+        self.semester_id = semesterIn
+        self.professor_id = profIn
+
+    def __repr__(self):
+        return f'COURSE: {self.course_id}, SECTION: {self.section_number} - {self.section_mode} - {self.semester_id} - ({self.days_of_week} {self.start_time} \
+            to {self.end_time}) - PROF: {self.professor_id}'
+
+    def __str__(self):
+        return f'{self.section_number} - {self.section_mode}'
 
 class Professor(db.Model):
     """
@@ -294,11 +325,14 @@ class Professor(db.Model):
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Professors table.')
     first_name = Column(String(50), nullable=False, doc='First name of professor.')
     last_name = Column(String(50), nullable=False, doc='Last name of professor.')
-    sections = db.relationship('Section', backref='professor')
+    sections = db.relationship('Section', backref='professor', cascade="all, delete")
 
     def __init__(self, firstIn, lastIn):
         self.first_name = firstIn
         self.last_name = lastIn
+
+    def __repr__(self):
+        return f'{self.first_name} {self.last_name}, Sections: {self.sections}'
 
 class Semester(db.Model):
     """
@@ -312,8 +346,8 @@ class Semester(db.Model):
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the Semesters table.')
     year = Column(Integer, nullable=False, doc='The year of the semester. E.g., 2023.')
     season = Column(Enum(Season), nullable=False, doc='The season of the semester. E.g., Fall')
-    start_date = Column(DateTime(True), nullable=False, doc='The start date, or first day, of a semester.')
-    end_date = Column(DateTime(True), nullable=False, doc='The end date, or last day, of a semester.')
+    start_date = Column(Date, nullable=False, doc='The start date, or first day, of a semester.')
+    end_date = Column(Date, nullable=False, doc='The end date, or last day, of a semester.')
     sections = db.relationship('Section', backref='semester')
 
     def __init__(self, yearIn, seasonIn, startIn, endIn):
@@ -321,6 +355,9 @@ class Semester(db.Model):
         self.season = seasonIn
         self.start_date = startIn
         self.end_date = endIn
+
+    def __repr__(self):
+        return f'{self.season} {self.year}, ({self.start_date} - {self.end_date})'
 
 class CanTutor(db.Model):
     """
