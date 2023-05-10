@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Admin Console{% endblock %}
+{% block content %}
+
+<h1>Ticket Reports</h1>
+
+<div class="container p-3">
+    <div class="row">
+        <form action="{{ url_for('admin.generate_reports') }}" method="POST">
+            <div class="col">
+                <label for="creationDate"><strong>Start Date</strong></label>
+                <input type="date" class="form-control" id="creationDate" placeholder="yyyy-mm-dd" name="creationDate" required />
+                <br>
+
+                <!-- TODO: Make this a dropdown to integrate courses -->
+                <label for="course"><strong>Course</strong></label>
+                <input type="text" class="form-control" id="course" placeholder="e.g. CSCI 1400" name="course" />
+
+                <br>
+                <input type="submit" class="btn btn-primary" name="SaveChanges" value="Download" />
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

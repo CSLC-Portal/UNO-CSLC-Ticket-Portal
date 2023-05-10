@@ -40,7 +40,7 @@ def test_index_with_auth(create_auth_client):
 def test_create_ticket_get_with_auth(auth_client: FlaskClient):
     response = auth_client.get('/create-ticket')
 
-    assert b'<h1>Create Ticket Form</h1>' in response.data
+    assert b'<h1>Create Ticket</h1>' in response.data
 
 def test_logout_with_auth(auth_client: FlaskClient):
     response = auth_client.get('/logout')

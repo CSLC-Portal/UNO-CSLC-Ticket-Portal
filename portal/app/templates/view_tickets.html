@@ -15,27 +15,31 @@
                 {% for ticket in tickets %}
                 {% if ticket.status == Status.Open %}
                 <div class="card text-white bg-secondary mb-3 centered" style="max-width: 18rem;">
-                <div class="card-header" style="text-align:left;">
-                    <h3>{{ ticket.student_name }}</h3>
-                    {{ ticket.student_email }} <br>
-                    {{ ticket.course }}:{{ticket.section}}
-                </div>
-                <div class="card-body">
-                    <p class="card-text" style="text-align:left;">
-                        Created: {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}<br>
-                        Assignment: {{ ticket.assignment_name }} <br>
-                        Problem: {{ ticket.problem_type }}
-                    </p>
-                    <form action="{{ url_for('views.update_ticket') }}", method="POST">
-                        <input type="hidden" name="ticketID" value="{{ ticket.id }}">
-                        <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Claim">Claim</button>
-                        <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Close">Close</button>
-                        <!-- Button trigger edit ticket modal -->
-                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false">
-                            <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
-                        </button>
-                    </form>
-                </div>
+                    <div class="card-header" style="text-align:left;">
+                        <h3>{{ ticket.student_name }}</h3>
+                        {{ ticket.student_email }} <br>
+                        {{ ticket.course }}:{{ticket.section}}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text" style="text-align:left;">
+                            Created: {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}<br>
+                            Assignment: {{ ticket.assignment_name }} <br>
+                            Problem: {{ ticket.get_problem() }}
+                        </p>
+                        <form action="{{ url_for('views.update_ticket') }}" , method="POST">
+                            <input type="hidden" name="ticketID" value="{{ ticket.id }}">
+                            <button type="submit" class="btn btn-danger btn-tickets" name="action"
+                                value="Claim">Claim</button>
+                            <button type="submit" class="btn btn-danger btn-tickets" name="action"
+                                value="Close">Close</button>
+                            <!-- Button trigger edit ticket modal -->
+                            <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal"
+                                data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static"
+                                data-bs-keyboard="false">
+                                <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 {% endif %}
                 {% endfor %}
@@ -49,26 +53,29 @@
                 {% for ticket in tickets %}
                 {% if ticket.status == Status.Claimed %}
                 <div class="card text-white bg-secondary mb-3 centered" style="max-width: 18rem;">
-                <div class="card-header" style="text-align:left;">
-                    <h3>{{ ticket.student_name }}</h3>
-                    {{ ticket.student_email }} <br>
-                    {{ ticket.course }}:{{ticket.section}}
-                </div>
-                <div class="card-body">
-                    <p class="card-text" style="text-align:left;">
-                        Created: {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}<br>
-                        Assignment: {{ ticket.assignment_name }} <br>
-                        Problem: {{ ticket.problem_type }}
-                    </p>
-                    <form action="{{ url_for('views.update_ticket') }}", method="POST">
-                        <input type="hidden" name="ticketID" value="{{ ticket.id }}">
-                        <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Close">Close</button>
-                        <!-- Button trigger edit ticket modal -->
-                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false">
-                            <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
-                        </button>
-                    </form>
-                </div>
+                    <div class="card-header" style="text-align:left;">
+                        <h3>{{ ticket.student_name }}</h3>
+                        {{ ticket.student_email }} <br>
+                        {{ ticket.course }}:{{ticket.section}}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text" style="text-align:left;">
+                            Created: {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}<br>
+                            Assignment: {{ ticket.assignment_name }} <br>
+                            Problem: {{ ticket.get_problem() }}
+                        </p>
+                        <form action="{{ url_for('views.update_ticket') }}" , method="POST">
+                            <input type="hidden" name="ticketID" value="{{ ticket.id }}">
+                            <button type="submit" class="btn btn-danger btn-tickets" name="action"
+                                value="Close">Close</button>
+                            <!-- Button trigger edit ticket modal -->
+                            <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal"
+                                data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static"
+                                data-bs-keyboard="false">
+                                <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 {% endif %}
                 {% endfor %}
@@ -82,26 +89,29 @@
                 {% for ticket in tickets %}
                 {% if ticket.status == Status.Closed %}
                 <div class="card text-white bg-secondary mb-3 centered" style="max-width: 18rem;">
-                <div class="card-header" style="text-align:left;">
-                    <h3>{{ ticket.student_name }}</h3>
-                    {{ ticket.student_email }} <br>
-                    {{ ticket.course }}:{{ticket.section}}
-                </div>
-                <div class="card-body">
-                    <p class="card-text" style="text-align:left;">
-                        Created: {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}<br>
-                        Assignment: {{ ticket.assignment_name }} <br>
-                        Problem: {{ ticket.problem_type }}
-                    </p>
-                    <form action="{{ url_for('views.update_ticket') }}", method="POST">
-                        <input type="hidden" name="ticketID" value="{{ ticket.id }}">
-                        <button type="submit" class="btn btn-danger btn-tickets" name="action" value="Open">Open</button>
-                        <!-- Button trigger edit ticket modal -->
-                        <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal" data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static" data-bs-keyboard="false">
-                            <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
-                        </button>
-                    </form>
-                </div>
+                    <div class="card-header" style="text-align:left;">
+                        <h3>{{ ticket.student_name }}</h3>
+                        {{ ticket.student_email }} <br>
+                        {{ ticket.course }}:{{ticket.section}}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text" style="text-align:left;">
+                            Created: {{ ticket.time_created.strftime('%m/%d/%Y - %H:%M') }}<br>
+                            Assignment: {{ ticket.assignment_name }} <br>
+                            Problem: {{ ticket.get_problem() }}
+                        </p>
+                        <form action="{{ url_for('views.update_ticket') }}" , method="POST">
+                            <input type="hidden" name="ticketID" value="{{ ticket.id }}">
+                            <button type="submit" class="btn btn-danger btn-tickets" name="action"
+                                value="Open">Open</button>
+                            <!-- Button trigger edit ticket modal -->
+                            <button type="button" class="btn btn-danger btn-tickets" data-bs-toggle="modal"
+                                data-bs-target="#edit{{ ticket.id }}" data-bs-backdrop="static"
+                                data-bs-keyboard="false">
+                                <img src="{{ url_for('static', filename='img/pencil.svg') }}" alt="edit" />
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 {% endif %}
                 {% endfor %}
@@ -113,84 +123,88 @@
 
 {% for ticket in tickets %}
 <!-- Modal -->
-<div class="modal fade" id="edit{{ ticket.id }}" tabindex="-1" role="dialog" aria-labelledby="ticketTitle"  aria-hidden="true">
+<div class="modal fade" id="edit{{ ticket.id }}" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="ticketTitle"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="ticketTitle">Ticket ID: {{ ticket.id }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ticketTitle">Ticket ID: {{ ticket.id }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('views.edit_ticket') }}" , method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="ticketIDModal" value="{{ ticket.id }}">
+                    <strong>Email</strong>
+                    <p>{{ ticket.student_email }}</p>
+
+                    <strong>First Name</strong>
+                    <p>{{ ticket.student_name }}</p>
+
+                    <strong>Course</strong>
+                    <select class="form-control" id="courseInput" name="courseField">
+                        <option value="" disabled selected>{{ ticket.course }}</option>
+                        <option>Course 1</option>
+                        <option>Course 2</option>
+                        <option>Course 3</option>
+                        <option>Course 4</option>
+                        <option>Course 5</option>
+                    </select>
+
+                    <strong>Section</strong>
+                    <select class="form-control" id="sectionInput" name="sectionField">
+                        <option value="" disabled selected>{{ ticket.section }}</option>
+                        <option>Section 1</option>
+                        <option>Section 2</option>
+                        <option>Section 3</option>
+                        <option>Section 4</option>
+                        <option>Section 5</option>
+                    </select>
+
+                    <strong>Assignment Name</strong>
+                    <input type="text" class="form-control" id="assignmentNameInput"
+                        placeholder="Assignment Placeholder" value="{{ ticket.assignment_name }}"
+                        name="assignmentNameField">
+
+                    <strong>Specific Question</strong>
+                    <textarea class="form-control" id="specificQuestionInput" rows="3"
+                        placeholder="Question Placeholder"
+                        name="specificQuestionField">{{ ticket.specific_question }}</textarea>
+
+                    <strong>Problem Type</strong>
+                    <select class="form-control" id="problemTypeInput" name="problemTypeField">
+                        <option value="" disabled selected>{{ ticket.get_problem() }}</option>
+                        {% for type in ProblemType.query.filter(ProblemType.id != ticket.problem_type) %}
+                            <option value="{{ type.id }}">{{ type }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <strong>Primary Tutor</strong>
+                    <select class="form-control" id="primaryTutorInput" name="primaryTutorInput">
+                        {% for tutor in model.User.get_tutors() %}
+                        <option value="{{ tutor.id }}">{{ tutor.name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <strong>Tutor Notes</strong>
+                    <textarea class="form-control" id="tutorNotes" rows="3"
+                        name="tutorNotes">{{ ticket.tutor_notes }}</textarea><br>
+
+                    {% if ticket.successful_session %}
+                    <input type="checkbox" id="successfulSession" name="successfulSession" value="success" checked>
+                    {% else %}
+                    <input type="checkbox" id="successfulSession" name="successfulSession" value="success">
+                    {% endif %}
+                    <label for="successfulSession"><strong>Was Successful</strong></label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="SaveChanges">Save changes</button>
+                </div>
+            </form>
+
         </div>
-        <form action="{{ url_for('views.edit_ticket') }}", method="POST">
-        <div class="modal-body">
-            <input type="hidden" name="ticketIDModal" value="{{ ticket.id }}">
-            <strong>Email</strong>
-            <p>{{ ticket.student_email }}</p>
-
-            <strong>First Name</strong>
-            <p>{{ ticket.student_name }}</p>
-
-            <strong>Course</strong>
-            <select class="form-control" id="courseInput" name="courseField">
-              <option value="" disabled selected>{{ ticket.course }}</option>
-              <option>Course 1</option>
-              <option>Course 2</option>
-              <option>Course 3</option>
-              <option>Course 4</option>
-              <option>Course 5</option>
-            </select>
-
-            <strong>Section</strong>
-            <select class="form-control" id="sectionInput" name="sectionField">
-              <option value="" disabled selected>{{ ticket.section }}</option>
-              <option>Section 1</option>
-              <option>Section 2</option>
-              <option>Section 3</option>
-              <option>Section 4</option>
-              <option>Section 5</option>
-            </select>
-
-            <strong>Assignment Name</strong>
-            <input type="text" class="form-control" id="assignmentNameInput" placeholder="Assignment Placeholder" value="{{ ticket.assignment_name }}" name="assignmentNameField">
-
-            <strong>Specific Question</strong>
-            <textarea class="form-control" id="specificQuestionInput" rows="3" placeholder="Question Placeholder" name="specificQuestionField">{{ ticket.specific_question }}</textarea>
-
-            <strong>Problem Type</strong>
-            <select class="form-control" id="problemTypeInput" name="problemTypeField">
-              <option value="" disabled selected>{{ ticket.problem_type }}</option>
-              <option>Problem Type 1</option>
-              <option>Problem Type 2</option>
-              <option>Problem Type 3</option>
-              <option>Problem Type 4</option>
-              <option>Problem Type 5</option>
-            </select>
-
-            <strong>Primary Tutor</strong>
-            <select class="form-control" id="primaryTutorInput" name="primaryTutorInput">
-              {% for tutor in model.User.get_tutors() %}
-                  <option value="{{ tutor.id }}">{{ tutor.name }}</option>
-              {% endfor %}
-            </select>
-
-            <strong>Tutor Notes</strong>
-            <textarea class="form-control" id="tutorNotes" rows="3" name="tutorNotes">{{ ticket.tutor_notes }}</textarea><br>
-
-            {% if ticket.successful_session %}
-            <input type="checkbox" id="successfulSession" name="successfulSession" value="success" checked>
-            {% else %}
-            <input type="checkbox" id="successfulSession" name="successfulSession" value="success">
-            {% endif %}
-            <label for="successfulSession"><strong>Was Successful</strong></label>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" name="SaveChanges">Save changes</button>
-        </div>
-      </form>
-
-      </div>
     </div>
-  </div>
+</div>
 {% endfor %}
 
 {% endblock %}

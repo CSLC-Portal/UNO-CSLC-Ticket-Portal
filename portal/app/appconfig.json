@@ -1,0 +1,31 @@
+{
+    "misc_config":{
+        "room_number" : "PKI 391",
+        "zoom_link" : "https://unomaha.zoom.us/j/94531042940?pwd=UGlWL09URFF3Vk9jR3ZiSStyTDBHdz09"
+    },
+
+    "hours":{
+        "monday_start" : "9:00am",
+        "monday_end" : "8:00pm",
+        "tuesday_start" : "9:00am",
+        "tuesday_end" : "8:00pm",
+        "wednesday_start" : "9:00am",
+        "wednesday_end" : "8:00pm",
+        "thursday_start" : "9:00am",
+        "thursday_end" : "8:00pm",
+        "friday_start" : "9:00am",
+        "friday_end" : "5:00pm",
+        "saturday_start" : "10:30am",
+        "saturday_end" : "2:30pm"
+    },
+
+    "default_prblm_types":{
+        "prblm1" : "I don’t know what I want the computer to do...",
+        "prblm2" : "I think I know what I want the computer to do, but I don’t know what to use...",
+        "prblm3" : "I think I know what things to use, but I don't know how to make them work together...",
+        "prblm4" : "I think I know what to use, but I don't know how to use it...",
+        "prblm5" : "I thought I knew how to use this, but it didn’t do what I expected...",
+        "prblm6" : "I think I know why it didn’t do what I expected, but I don’t know how to check..."
+    }
+
+}
