@@ -16,7 +16,7 @@ from app.model import Ticket
 from app.model import Mode
 from app.model import Permission
 from app.model import Message
-from app.model import Config
+from app.model import ProblemType
 
 from datetime import datetime
 
@@ -24,7 +24,6 @@ from app.extensions import db
 from werkzeug.datastructures import ImmutableMultiDict
 
 import sys
-import re
 
 views = Blueprint('views', __name__)
 
@@ -34,7 +33,6 @@ def index():
     return render_template('index.html', messages=messages)
 
 @views.route('/create-ticket', methods=['POST', 'GET'])
-@permission_required(Permission.Student)
 def create_ticket():
     """
     Serves the HTTP route /create-ticket. Shows a ticket create form on GET request.
@@ -92,14 +90,7 @@ def view_tickets():
 
     Student login is required to access this page.
     """
-    tickets = Ticket.query.all()  # .filter(_now() - Ticket.time_created).total_seconds()/(60*60) < 24)
-
-    # Get the user permission level here BEFORE attempting to load view-tickets page
-    user_level = current_user.permission
-    if (user_level < Permission.Tutor):
-        flash('Insufficient permission level to view tickets', category='error')
-        return redirect(url_for('views.index'))
-
+    tickets = Ticket.query.all()
     return render_template('view_tickets.html', tickets=tickets)
 
 @views.route('/update-ticket', methods=["POST"])
@@ -165,13 +156,23 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
 
         returns a Ticket object if values are valid, None otherwise.
     """
-    email = strip_or_none(form.get("email"))
-    name = strip_or_none(form.get("fullname"))
+
+    # If the user is logged in, use their name and email
+    if current_user.is_authenticated:
+        email = current_user.email
+        name = current_user.name
+
+    # Otherwise get it from the form
+    else:
+        email = strip_or_none(form.get("email"))
+        name = strip_or_none(form.get("fullname"))
+
     course = strip_or_none(form.get("course"))
     section = strip_or_none(form.get("section"))
     assignment = strip_or_none(form.get("assignment"))
     question = strip_or_none(form.get("question"))
-    problem = strip_or_none(form.get("problem"))
+    problem_id = strip_or_none(form.get("problem"))
+    problem: ProblemType = ProblemType.query.get(problem_id)
 
     if str_empty(email):
         flash('Could not submit ticket, email must not be empty!', category='error')
@@ -185,9 +186,11 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
     elif str_empty(question):
         flash('Could not submit ticket, question must not be empty!', category='error')
 
+    elif problem_id is not None and not problem:
+        flash('Could not submit ticket, problem type is not valid!', category='error')
+
     # TODO: Check if course is a valid from a list of options
     # TODO: Check if section is valid from a list of options
-    # TODO: Check if problem type is valid from a list of options
 
     else:
         mode_val = strip_or_none(form.get("mode"))
@@ -201,25 +204,26 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
             flash('Could not submit ticket, must select a valid mode!', category='error')
 
         else:
-            return Ticket(email, name, course, section, assignment, question, problem, mode)
+            return Ticket(email, name, course, section, assignment, question, problem_id, mode)
 
 def _attempt_edit_ticket(ticket: Ticket):
     # get info back from popup modal form
-    course = request.form.get("courseField")
-    section = request.form.get("sectionField")
-    assignment = request.form.get("assignmentNameField")
-    question = request.form.get("specificQuestionField")
-    problem = request.form.get("problemTypeField")
-    primaryTutor = request.form.get("primaryTutorInput")
-    tutorNotes = request.form.get("tutorNotes")
-    wasSuccessful = request.form.get("successfulSession")
+    course = strip_or_none(request.form.get("courseField"))
+    section = strip_or_none(request.form.get("sectionField"))
+    assignment = strip_or_none(request.form.get("assignmentNameField"))
+    question = strip_or_none(request.form.get("specificQuestionField"))
+    primaryTutor = strip_or_none(request.form.get("primaryTutorInput"))
+    tutorNotes = strip_or_none(request.form.get("tutorNotes"))
+    wasSuccessful = strip_or_none(request.form.get("successfulSession"))
+    problem_id = strip_or_none(request.form.get("problemTypeField"))
+    problem: ProblemType = ProblemType.query.get(problem_id)
 
     # check for change in values from edit
-    if course is not None:
+    if course:
         # new info for course came back, update it for current ticket
         ticket.course = course
 
-    if section is not None:
+    if section:
         # new info for section came back, update it for current ticket
         ticket.section = section
 
@@ -231,19 +235,18 @@ def _attempt_edit_ticket(ticket: Ticket):
         # new info for question came back, update it for current ticket
         ticket.specific_question = question
 
-    if problem is not None:
+    if problem:
         # new info for problem came back, update it for current ticket
-        ticket.problem_type = problem
+        ticket.problem_type = problem_id
 
-    if primaryTutor is not None:
+    if primaryTutor:
         # new info for primary tutor came back, update it for current ticket
         ticket.tutor_id = primaryTutor
 
-    if tutorNotes is not None:
+    if tutorNotes:
         # new info for tutor notes came back, update it for current ticket
         ticket.tutor_notes = tutorNotes
 
     # new info for tutor notes came back, update it for current ticket
     ticket.successful_session = wasSuccessful is not None
-
     db.session.commit()

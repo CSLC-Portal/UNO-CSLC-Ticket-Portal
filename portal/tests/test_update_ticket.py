@@ -14,7 +14,7 @@ def test_claim_open_ticket(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     tutor_client.post('/create-ticket', data=ticket1)
@@ -49,7 +49,7 @@ def test_close_claimed_ticket(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     tutor_client.post('/create-ticket', data=ticket1)
@@ -99,7 +99,7 @@ def test_reopen_closed_ticket(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     tutor_client.post('/create-ticket', data=ticket1)
@@ -165,7 +165,7 @@ def test_close_open_ticket(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     tutor_client.post('/create-ticket', data=ticket1)
