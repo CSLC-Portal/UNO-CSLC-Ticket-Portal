@@ -12,11 +12,9 @@
     <button type="submit" class="btn btn-primary" name="SaveChanges">Submit</button>
 </form>
 
-
 <h1>All added problemTypes:</h1>
 {% for problem in problemTypes %}
     {{ problem.problem_type }}<br>
 {% endfor %}
-
 
 {% endblock %}

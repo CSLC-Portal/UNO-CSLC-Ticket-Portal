@@ -2,8 +2,10 @@ from app import create_app
 from app import extensions
 from flask import Flask
 
-from flask.testing import FlaskClient
+from app.model import db
 from app.model import Permission
+from app.model import ProblemType
+
 from app.blueprints.admin import create_pseudo_super_user
 
 import pytest
@@ -37,6 +39,12 @@ def app():
     extensions.auth_app_type = MockConfidentialClientApplication
 
     app = create_app()
+
+    # NOTE: Here we add some default configs
+    with app.app_context():
+        db.session.add(ProblemType('This is the first problem type!'))
+        db.session.add(ProblemType('This is the second problem type!'))
+        db.session.commit()
 
     # We yield the app in case we later need to tear-down after each test
     yield app

@@ -63,16 +63,14 @@ def reports_form():
 @permission_required(Permission.Admin)
 def generate_reports():
 
-    # createDate = request.form.get("creationDate")
-    # closeDate = request.form.get("closedDate")
-    # courseName = strip_or_none(request.form.get("course"))
+    createDate = request.form.get("creationDate")
+    courseName = strip_or_none(request.form.get("course"))
 
-    # if courseName:
-    #     tickets = Ticket.query.filter(Ticket.time_created >= createDate, Ticket.time_closed <= closeDate, Ticket.course == courseName).all()
-    # else:
-    #     tickets = Ticket.query.filter(Ticket.time_created >= createDate, Ticket.time_closed <= closeDate).all()
+    if courseName:
+        tickets = Ticket.query.filter(Ticket.time_created >= createDate, Ticket.course == courseName).all()
 
-    tickets = Ticket.query.all()
+    else:
+        tickets = Ticket.query.filter(Ticket.time_created >= createDate).all()
 
     header = [
         'Student Email', 'Student Name', 'Course', 'Section', 'Assignment Name', 'Specific Question', 'Problem Type', 'Time Created', 'Time Claimed',
@@ -84,8 +82,10 @@ def generate_reports():
         csv_writer.writerow(header)
 
         for ticket in tickets:
+            # TODO: Will need to query course and section too!
+
             row = [ ticket.student_email, ticket.student_name, ticket.course, ticket.section, ticket.assignment_name,
-                    ticket.specific_question, ticket.problem_type, ticket.time_created, ticket.time_claimed, ticket.status,
+                    ticket.specific_question, ticket.get_problem(), ticket.time_created, ticket.time_claimed, ticket.status,
                     ticket.time_closed, ticket.mode, ticket.tutor_notes, ticket.tutor_id, ticket.successful_session ]
 
             map(_bleach, row)
@@ -93,7 +93,7 @@ def generate_reports():
 
         payload = out.getvalue()
 
-    return Response(payload, content_type='text/csv', headers={'Content-Disposition': 'attachment;filename=cslc_report.csv'})
+    return Response(payload, content_type='text/csv', headers={'Content-Disposition': 'attachment;filename=reports.csv'})
 
 @admin.route('/tutors')
 @permission_required(Permission.Admin)
@@ -286,7 +286,7 @@ def create_pseudo_super_user(email: str, permission: Permission):
     db.session.commit()
 
 def _bleach(cell):
-    """Will remove characters that might be used to inject formula attacks"""
+    """Remove potential formula injection attacks"""
     if cell is not None:
         cell = str(cell)
         if cell.startswith(('=', '+', '-', '@')):

@@ -5,8 +5,8 @@
 <br>
 <form action="/create-ticket" method="POST">
     <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email" required>
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email" required>
     </div>
     <div class="form-group">
         <label for="fullname">Full Name</label>
@@ -14,60 +14,62 @@
     </div>
 
     <div class="form-group">
-      <label for="course">Course</label>
-      <select class="form-control" id="course" name="course">
-        <option>Course 1</option>
-        <option>Course 2</option>
-        <option>Course 3</option>
-        <option>Course 4</option>
-        <option>Course 5</option>
-      </select>
+        <label for="course">Course</label>
+        <select class="form-control" id="course" name="course">
+            <option>Course 1</option>
+            <option>Course 2</option>
+            <option>Course 3</option>
+            <option>Course 4</option>
+            <option>Course 5</option>
+        </select>
     </div>
 
     <div class="form-group">
         <label for="section">Section</label>
         <select class="form-control" id="section" name="section">
-          <option>Section 1</option>
-          <option>Section 2</option>
-          <option>Section 3</option>
-          <option>Section 4</option>
-          <option>Section 5</option>
+            <option>Section 1</option>
+            <option>Section 2</option>
+            <option>Section 3</option>
+            <option>Section 4</option>
+            <option>Section 5</option>
         </select>
     </div>
 
     <div class="form-group">
         <label for="assignment">Assignment Name</label>
-        <input type="text" class="form-control" id="assignment" placeholder="eg. 'Assignment 1 - String input'" name="assignment" required>
+        <input type="text" class="form-control" id="assignment" placeholder="eg. 'Assignment 1 - String input'"
+            name="assignment" required>
     </div>
 
     <div class="form-group">
-      <label for="question">Specific Question</label>
-      <textarea class="form-control" id="question" rows="3" placeholder="eg. Idk how to ______ , I am having issues with ____" name="question" required></textarea>
+        <label for="question">Specific Question</label>
+        <textarea class="form-control" id="question" rows="3"
+            placeholder="eg. Idk how to ______ , I am having issues with ____" name="question" required></textarea>
     </div>
 
     <div class="form-group">
         <label for="problem">Problem Type</label>
         <select class="form-control" id="problem" name="problem">
-          <option>Problem Type 1</option>
-          <option>Problem Type 2</option>
-          <option>Problem Type 3</option>
-          <option>Problem Type 4</option>
-          <option>Problem Type 5</option>
+            {% for type in ProblemType.query.all() %}
+                <option value="{{ type.id }}">{{ type }}</option>
+            {% endfor %}
         </select>
     </div>
 
     <p>Please select in person or online mode of help</p>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="inPersonRadio" name="mode" class="custom-control-input" value="{{ Mode.InPerson.value }}" required>
+        <input type="radio" id="inPersonRadio" name="mode" class="custom-control-input"
+            value="{{ Mode.InPerson.value }}" required>
         <label class="custom-control-label" for="inPersonRadio">In Person</label>
-      </div>
+    </div>
     <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" id="onlineRadio" name="mode" class="custom-control-input" value="{{ Mode.Online.value }}" required>
+        <input type="radio" id="onlineRadio" name="mode" class="custom-control-input" value="{{ Mode.Online.value }}"
+            required>
         <label class="custom-control-label" for="onlineRadio">Online</label>
     </div><br><br>
 
     <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-  <br>
+</form>
+<br>
 
 {% endblock %}

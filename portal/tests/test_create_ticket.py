@@ -1,7 +1,8 @@
 from flask import Flask
+from flask.testing import FlaskClient
+
 from app.model import Ticket
 from app.model import Mode
-from flask.testing import FlaskClient
 
 import pytest
 
@@ -28,7 +29,7 @@ def test_create_ticket_post_with_auth(auth_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
 
@@ -44,7 +45,7 @@ def test_create_ticket_post_with_auth(auth_client: FlaskClient, app: Flask):
         assert ticket.section == 'section1'
         assert ticket.assignment_name == 'assignment1'
         assert ticket.specific_question == 'This is my question?'
-        assert ticket.problem_type == 'type1'
+        assert ticket.problem_type == 1
         assert ticket.mode == Mode.InPerson
 
     with auth_client.session_transaction() as session:
@@ -86,7 +87,7 @@ def create_ticket_with_invalid_data(auth_client: FlaskClient, app: Flask):
             'section':'section1',
             'assignment':'assignment1',
             'question':'This is my question?',
-            'problem':'type1',
+            'problem':'1',
             'mode': Mode.InPerson.value
         }
 

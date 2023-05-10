@@ -148,7 +148,7 @@ class Ticket(db.Model):
 
     assignment_name = Column(String(120), doc='Assignment the student needs help with.')
     specific_question = Column(Text, doc='Student question about the assignment.')
-    problem_type = Column(String(120), doc='Type of problem the student is having.')
+    problem_type = Column(Integer, db.ForeignKey('ProblemTypes.id'), doc='Type of problem the student is having.')
     time_created = Column(DateTime(True), nullable=False, doc='Time the ticket was created.', default=func.now())
     time_claimed = Column(DateTime(True), doc='Time the ticket was claimed by tutor.')
     time_closed = Column(DateTime(True), doc='Time the tutor marked the ticket as closed.')
@@ -196,6 +196,9 @@ class Ticket(db.Model):
 
         return self.time_closed - self.time_claimed
 
+    def get_problem(self):
+        return ProblemType.query.filter_by(id=self.problem_type).one()
+
     def __repr__(self):
         return f'Ticket: {self.specific_question} ({self.student_name})'
 
@@ -231,11 +234,12 @@ class ProblemType(db.Model):
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the ProblemTypes table.')
     problem_type = Column(Text, doc='The description of the problem type - defined by admin or tutor.')
-    # TODO: might want to add relationship to tickets value 'problem_type', something like this:
-    # tickets = db.relationship('Ticket', backref='prblm_type')
 
     def __init__(self, prblmIn):
         self.problem_type = prblmIn
+
+    def __str__(self):
+        return self.problem_type
 
 class Course(db.Model):
     """

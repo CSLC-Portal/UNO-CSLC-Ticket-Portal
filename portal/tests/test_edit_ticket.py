@@ -43,7 +43,7 @@ def test_edit_course(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     response1 = tutor_client.post('/create-ticket', data=ticket1)
@@ -76,7 +76,7 @@ def test_edit_section(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     response1 = tutor_client.post('/create-ticket', data=ticket1)
@@ -109,7 +109,7 @@ def test_edit_assignment(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     response1 = tutor_client.post('/create-ticket', data=ticket1)
@@ -142,7 +142,7 @@ def test_edit_specific_question(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     response1 = tutor_client.post('/create-ticket', data=ticket1)
@@ -175,7 +175,7 @@ def test_edit_problem_type(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     response1 = tutor_client.post('/create-ticket', data=ticket1)
@@ -185,11 +185,11 @@ def test_edit_problem_type(tutor_client: FlaskClient, app: Flask):
         assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
-        assert testTicket.problem_type == "type1"
+        assert testTicket.problem_type == 1
 
     editData = {
         'ticketIDModal': '1',
-        'problemTypeField': 'NeW problem TYpe!!'
+        'problemTypeField': '2'
     }
     response2 = tutor_client.post('/edit-ticket', data=editData)
 
@@ -197,7 +197,7 @@ def test_edit_problem_type(tutor_client: FlaskClient, app: Flask):
     with app.app_context():
         assert '302' in response2.status
         testTicket = Ticket.query.filter_by(student_email="test@test.email").first()
-        assert testTicket.problem_type == "NeW problem TYpe!!"
+        assert testTicket.problem_type == 2
 
 def test_edit_tutor(tutor_client: FlaskClient, app: Flask):
     # make a ticket
@@ -208,7 +208,7 @@ def test_edit_tutor(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     response1 = tutor_client.post('/create-ticket', data=ticket1)
@@ -273,7 +273,7 @@ def test_edit_tutor_notes(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     response1 = tutor_client.post('/create-ticket', data=ticket1)
@@ -306,7 +306,7 @@ def test_edit_was_successful(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     response1 = tutor_client.post('/create-ticket', data=ticket1)
@@ -350,7 +350,7 @@ def test_edit_multiple_attributes(tutor_client: FlaskClient, app: Flask):
         'section':'section1',
         'assignment':'assignment1',
         'question':'This is my question?',
-        'problem':'type1',
+        'problem':'1',
         'mode': Mode.InPerson.value
     }
     response1 = tutor_client.post('/create-ticket', data=ticket1)

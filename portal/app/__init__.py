@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from .model import Mode
 from .model import Status
 from .model import Permission
-from .model import Config
+from .model import ProblemType
 
 from . import default_config
 
@@ -118,6 +118,7 @@ def _setup_jinja_globals(app: Flask):
     app.jinja_env.globals['Mode'] = Mode
     app.jinja_env.globals['Status'] = Status
     app.jinja_env.globals['Permission'] = Permission
+    app.jinja_env.globals['ProblemType'] = ProblemType
 
     from .blueprints.auth import build_auth_url
     app.jinja_env.globals['build_auth_url'] = build_auth_url
