@@ -82,7 +82,6 @@ def _create_db_models(app: Flask):
                 db.create_all()
 
             # We succeeded! Break out of this loop
-            print('Successfully connected to database server!')
             return
 
         except Exception as e:
@@ -98,7 +97,7 @@ def _add_default_admin(app: Flask):
     admin_email = os.getenv('FLASK_DEFAULT_OWNER_EMAIL')
 
     if admin_email is None:
-        print('FLASK_DEFAULT_OWNER_EMAIL not set. Considering setting this to add a default administrator')
+        print('FLASK_DEFAULT_OWNER_EMAIL not set. Considering setting this to add a default administrator', file=stderr)
         return
 
     with app.app_context():

@@ -110,11 +110,9 @@ def _user_from_claims(token_claims: str):
         if user:
             user.oid = oid
             user.name = name
-            print(f'User was completed: {user}')
 
         # If User still not found, then they don't exist in database, create new entry
         else:
-            print(f'Creating new entry in database for user {oid}...')
             user = User(oid, Permission.Student, preferred_name, name, False, False)
 
         try:
