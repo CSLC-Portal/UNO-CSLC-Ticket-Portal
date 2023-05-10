@@ -25,6 +25,7 @@
         </form>
     </div>
 
+    {% if problemTypeCount > 0 %}
     <div class="row">
         <div class="col">
             <div class="table-responsive">
@@ -33,16 +34,21 @@
                         <h5 class="text-center">Problem Types</h5>
                     </caption>
                     <thead>
-                        <tr>
-                            <th scope="col">Description</th>
-                            <th scope="col"></th>
+                        <tr class="d-flex">
+                            <th class="col" scope="col"></th>
+                            <th class="col" scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for problem in problemTypes %}
-                        <tr style="height:4em" scope="row">
-                            <td>{{ problem }}</td>
-                            <td class="text-end">
+                        <tr class="d-flex" style="height:4em" scope="row">
+                            <td class="col-11">
+                                {{ problem }}
+                                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#prompt-edit-{{ problem.id }}">
+                                    <img src="{{ url_for('static', filename='img/pencil-square.svg') }}" alt="edit" />
+                                </button>
+                            </td>
+                            <td class="col">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prompt-remove-{{ problem.id }}">
                                     Delete
                                 </button>
@@ -54,6 +60,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
     {% for problem in problemTypes %}
         <div class="modal fade " id="prompt-remove-{{ problem.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -72,6 +79,28 @@
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                             <input type="hidden" name="problemTypeID" value="{{ problem.id }}">
                             <input type="submit" class="btn btn-primary" value="Yes" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal modal-lg fade " id="prompt-edit-{{ problem.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="title-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="border-0 modal-header">
+                        <h5 class="modal-title fs-5" id="title-label">Edit Problem Type</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ url_for('admin.edit_problem_type') }}" method="post">
+                        <div class="modal-body">
+                            <textarea class="form-control" name="description" id="description" placeholder="Description..." rows="10">{{ problem }}</textarea>
+                            <label class="visually-hidden" for="description"></label>
+                        </div>
+                        <div class="border-0 modal-footer">
+                            <input type="hidden" name="problemTypeID" value="{{ problem.id }}">
+                            <input type="submit" class="btn btn-primary" value="Save" />
                         </div>
                     </form>
                 </div>

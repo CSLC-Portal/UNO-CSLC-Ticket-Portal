@@ -47,7 +47,7 @@ def console():
 @permission_required(Permission.Admin)
 def view_problem_types():
     problemTypes = ProblemType.query.all()
-    return render_template('admin-problem-types.html', problemTypes=problemTypes)
+    return render_template('admin-problem-types.html', problemTypes=problemTypes, problemTypeCount=len(problemTypes))
 
 @admin.route('/problems/add', methods=["POST"])
 @permission_required(Permission.Admin)
@@ -97,6 +97,36 @@ def remove_problem_type():
     except Exception as e:
         flash('Could not remove problem type, unknown reason', category='error')
         print(f'Could not remove problem type: {e}', file=sys.stderr)
+
+    return redirect(url_for('admin.view_problem_types'))
+
+@admin.route('/problems/edit', methods=["POST"])
+@permission_required(Permission.Admin)
+def edit_problem_type():
+    problemTypeID = strip_or_none(request.form.get("problemTypeID"))
+    description = strip_or_none(request.form.get("description"))
+
+    try:
+        problemType: ProblemType = ProblemType.query.get(problemTypeID)
+
+        if not problemType:
+            flash('Could not update problem type, problem type does not exist!', category='error')
+
+        elif str_empty(description):
+            flash('Could not update problem type, description must not be empty!', category='error')
+
+        else:
+            problemType.problem_type = description
+            db.session.commit()
+            flash('Problem type successfully updated!', category='success')
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not update problem type, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not update problem type, unknown reason', category='error')
+        print(f'Could not update problem type: {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_problem_types'))
 
