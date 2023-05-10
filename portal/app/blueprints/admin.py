@@ -54,15 +54,23 @@ def view_problem_types():
 def add_problem_type():
     problemType = strip_or_none(request.form.get("problemType"))
 
-    # validate the input coming in. store everything in DB the same
-    if str_empty(problemType):
-        flash('Could not create problem Type, problem type must not be empty!', category='error')
+    try:
+        if str_empty(problemType):
+            flash('Could not create problem type, description must not be empty!', category='error')
 
-    else:
-        newCourse = ProblemType(problemType)
-        db.session.add(newCourse)
-        db.session.commit()
-        flash('Problem type created successfully!', category='success')
+        else:
+            newCourse = ProblemType(problemType)
+            db.session.add(newCourse)
+            db.session.commit()
+            flash('Problem type created successfully!', category='success')
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not create problem type, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not create problem type, unknown reason!', category='error')
+        print(f'Could not create problem type, {e}', file=sys.stderr)
 
     return redirect(url_for('admin.view_problem_types'))
 

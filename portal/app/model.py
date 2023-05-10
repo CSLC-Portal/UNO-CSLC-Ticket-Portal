@@ -245,7 +245,7 @@ class ProblemType(db.Model):
     __tablename__ = 'ProblemTypes'
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the ProblemTypes table.')
-    problem_type = Column(Text, doc='The description of the problem type - defined by admin or tutor.')
+    problem_type = Column(Text, nullable=False, doc='The description of the problem type - defined by admin or tutor.')
 
     def __init__(self, prblmIn):
         self.problem_type = prblmIn

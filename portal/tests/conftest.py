@@ -41,6 +41,9 @@ def app():
     app = create_app()
 
     # NOTE: Here we add some default configs
+    # TODO: This will be replaced by some default config for the app
+    #       We should make the config available to the tests!
+    #
     with app.app_context():
         db.session.add(ProblemType('This is the first problem type!'))
         db.session.add(ProblemType('This is the second problem type!'))
