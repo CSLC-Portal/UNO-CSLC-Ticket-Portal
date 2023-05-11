@@ -17,6 +17,7 @@ from app.model import Mode
 from app.model import Permission
 from app.model import Message
 from app.model import ProblemType
+from app.model import Course
 
 from datetime import datetime
 
@@ -29,8 +30,11 @@ views = Blueprint('views', __name__)
 
 @views.route("/")
 def index():
+    toDisplay = Course.query.filter_by(on_display=True)
+    print("Courses to display: " + str(toDisplay))
+
     messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
-    return render_template('index.html', messages=messages)
+    return render_template('index.html', messages=messages, OnDisplay=toDisplay)
 
 @views.route('/create-ticket', methods=['POST', 'GET'])
 def create_ticket():
