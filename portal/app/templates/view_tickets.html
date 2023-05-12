@@ -18,7 +18,7 @@
                     <div class="card-header" style="text-align:left;">
                         <h3>{{ ticket.student_name }}</h3>
                         {{ ticket.student_email }} <br>
-                        {{ ticket.course }}:{{ticket.section}}
+                        {{ ticket.get_course().course_name }}:{{ticket.get_section().section_number}}
                     </div>
                     <div class="card-body">
                         <p class="card-text" style="text-align:left;">
@@ -56,7 +56,7 @@
                     <div class="card-header" style="text-align:left;">
                         <h3>{{ ticket.student_name }}</h3>
                         {{ ticket.student_email }} <br>
-                        {{ ticket.course }}:{{ticket.section}}
+                        {{ ticket.get_course().course_name }}:{{ticket.get_section().section_number}}
                     </div>
                     <div class="card-body">
                         <p class="card-text" style="text-align:left;">
@@ -92,7 +92,7 @@
                     <div class="card-header" style="text-align:left;">
                         <h3>{{ ticket.student_name }}</h3>
                         {{ ticket.student_email }} <br>
-                        {{ ticket.course }}:{{ticket.section}}
+                        {{ ticket.get_course().course_name }}:{{ticket.get_section().section_number}}
                     </div>
                     <div class="card-body">
                         <p class="card-text" style="text-align:left;">
@@ -142,7 +142,7 @@
 
                     <strong>Course</strong>
                     <select class="form-select" id="course_select" name="courseField">
-                        <option value="{{ ticket.course }}" selected>{{ Course.query.get(ticket.course).course_name }}</option>
+                        <option value="{{ ticket.course }}" selected>{{ ticket.get_course().course_name }}</option>
                         {% for course in Course.query.filter(Course.id != ticket.course) %}
                             <option value="{{ course.id }}" value="{{ course.id }}">{{ course.course_name }}</option>
                         {% endfor %}
@@ -151,7 +151,7 @@
                     <strong>Section</strong>
                     <select class="form-select" id="section_select" name="sectionField" required>
                         <option value disabled hidden>Select Section</option>
-                        <option id="{{ ticket.course }}" value="{{ ticket.section }}" selected disabled>{{ Section.query.get(ticket.section).section_number }}</option>
+                        <option id="{{ ticket.course }}" value="{{ ticket.section }}" selected disabled>{{ ticket.get_section().section_number }}</option>
                         {% for section in Section.query.filter(Section.id != ticket.section) %}
                             <option id="{{ section.course_id }}" value="{{ section.id }}">{{ section.section_number }}</option>
                         {% endfor %}

@@ -212,7 +212,13 @@ class Ticket(db.Model):
         return self.time_closed - self.time_claimed
 
     def get_problem(self):
-        return ProblemType.query.filter_by(id=self.problem_type).one_or_none()
+        return ProblemType.query.get(self.problem_type)
+
+    def get_course(self):
+        return Course.query.get(self.course)
+
+    def get_section(self):
+        return Section.query.get(self.section)
 
     def __repr__(self):
         return f'Ticket: {self.specific_question} ({self.student_name})'
