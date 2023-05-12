@@ -161,10 +161,11 @@ def toggle_working():
     try:
         user: User = User.query.get(user_id)
         # reverse whatever value it currently has for display
-        if user.tutor_is_working:
+        if user.tutor_is_working is True:
             user.tutor_is_working = False
         else:
             user.tutor_is_working = True
+        print("Working: " + str(user.tutor_is_working))
         db.session.commit()
 
     except ValueError:
