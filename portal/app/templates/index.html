@@ -65,7 +65,7 @@
         {% for course in OnDisplay %}
         <tr class="middle">
             <td>{{ course.department }} {{ course.number }}: {{ course.course_name }}</td>
-            <td>00</td>
+            <td>{{ course.canTutors|length }}</td>
         </tr>
         {% endfor %}
 
