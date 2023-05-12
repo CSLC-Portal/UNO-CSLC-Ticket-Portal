@@ -17,6 +17,8 @@ from app.model import Mode
 from app.model import Permission
 from app.model import Message
 from app.model import ProblemType
+from app.model import Course
+from app.model import User
 
 from datetime import datetime
 
@@ -29,8 +31,9 @@ views = Blueprint('views', __name__)
 
 @views.route("/")
 def index():
+    toDisplay = Course.query.filter_by(on_display=True)
     messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
-    return render_template('index.html', messages=messages)
+    return render_template('index.html', messages=messages, OnDisplay=toDisplay)
 
 @views.route('/create-ticket', methods=['POST', 'GET'])
 def create_ticket():
@@ -143,6 +146,58 @@ def edit_ticket():
         flash('Could not edit ticket. Ticket not found in database.', category='error')
 
     return redirect(url_for('views.view_tickets'))
+
+@views.route('/view-tutor-info', methods=["GET"])
+@permission_required(Permission.Tutor)
+def view_info():
+    # edit tutor activity status, and classes they can help with
+    courses = Course.query.all()
+    return render_template('edit-tutor-info.html', courses=courses)
+
+@views.route('/toggle-working', methods=['POST'])
+@permission_required(Permission.Tutor)
+def toggle_working():
+    user_id = request.form.get("toggleWorkingID")
+    try:
+        user: User = User.query.get(user_id)
+        # reverse whatever value it currently has for display
+        if user.tutor_is_working is True:
+            user.tutor_is_working = False
+        else:
+            user.tutor_is_working = True
+        print("Working: " + str(user.tutor_is_working))
+        db.session.commit()
+
+    except ValueError:
+        flash('Could not toggle working status, input values invalid!', category='error')
+
+    except IntegrityError:
+        flash('Could not toggle working status, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not toggle working status, unknown reason!', category='error')
+        print(f'Could not toggle working status, {e}', file=sys.stderr)
+    return redirect(url_for('views.view_info'))
+
+@views.route('/toggle-can-tutor', methods=["POST"])
+@permission_required(Permission.Tutor)
+def toggle_can_tutor():
+    course_id = request.form.get("toggleCanTutorID")
+    user_id = current_user.id
+    print("User ID: " + str(user_id))
+    course = Course.query.filter_by(id=course_id).one_or_none()
+    print("Course tutor says they can tutor: " + str(course))
+
+    tutor = User.query.filter_by(id=user_id).one_or_none()
+    print("Tutor: " + str(tutor))
+    if course not in tutor.courses:
+        tutor.courses.append(course)
+    else:
+        print("COURSE ALREADY IN LIST FOR TUTOR - REMOVING")
+        tutor.courses.remove(course)
+    print("Tutor Courses: " + str(tutor.courses))
+
+    return redirect(url_for('views.view_info'))
 
 # TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):
