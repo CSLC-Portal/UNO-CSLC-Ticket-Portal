@@ -105,7 +105,6 @@
         <tr>
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
-            <th scope="col">Sections</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -114,7 +113,6 @@
         <tr scope="row">
             <td>{{ professor.first_name.capitalize() }}</td>
             <td>{{ professor.last_name.capitalize() }}</td>
-            <td>{{ professor.sections }}</td>
             <td>{{ remove_professor_button(professor) }} {{ edit_professor_button(professor) }}</td>
 
             {{ edit_professor_modal(professor) }}

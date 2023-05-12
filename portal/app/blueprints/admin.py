@@ -601,11 +601,11 @@ def add_professor():
     elif str_empty(lastName):
         flash('Could not add professor, last name must not be empty!', category='error')
     else:
-        # check if professor already exists in DB, store all lower so checks against caps doesn't happen
-        tmpProfessor = Professor.query.filter_by(first_name=firstName.lower(), last_name=lastName.lower()).first()
+        # check if professor already exists in DB, store all capitalized so checks against caps doesn't happen
+        tmpProfessor = Professor.query.filter_by(first_name=firstName.capitalize(), last_name=lastName.capitalize()).first()
         if tmpProfessor is None:
-            # create professor and add it to DB, store as lower
-            newProfessor = Professor(firstName.lower(), lastName.lower())
+            # create professor and add it to DB, store as capitalized
+            newProfessor = Professor(firstName.capitalize(), lastName.capitalize())
             db.session.add(newProfessor)
             db.session.commit()
             flash('Professor added successfully!', category='success')
@@ -645,8 +645,8 @@ def remove_professor():
 @permission_required(Permission.Admin)
 def edit_professor():
     professor_id = strip_or_none(request.form.get("professorID"))
-    newFName = strip_or_none(request.form.get("fnameUpdate")).lower()
-    newLName = strip_or_none(request.form.get("lnameUpdate")).lower()
+    newFName = strip_or_none(request.form.get("fnameUpdate")).capitalize()
+    newLName = strip_or_none(request.form.get("lnameUpdate")).capitalize()
 
     try:
         professor: Professor = Professor.query.get(professor_id)
@@ -664,12 +664,12 @@ def edit_professor():
             flash('Could not update professor, last name cannot be empty!', category='error')
 
         else:
-            tmpProfessor = Professor.query.filter_by(first_name=newFName.lower(), last_name=newLName.lower()).first()
+            tmpProfessor = Professor.query.filter_by(first_name=newFName.capitalize(), last_name=newLName.capitalize()).first()
             if tmpProfessor is None:
                 if newFName != professor.first_name:
-                    professor.first_name = newFName.lower()
+                    professor.first_name = newFName.capitalize()
                 if newLName != professor.last_name:
-                    professor.last_name = newLName.lower()
+                    professor.last_name = newLName.capitalize()
                 db.session.commit()
                 flash("Professor updated successfully!", category='success')
             else:

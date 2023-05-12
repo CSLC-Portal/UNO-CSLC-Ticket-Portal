@@ -251,12 +251,12 @@
         <tr scope="row">
             <td>{{ section.section_number }}</td>
             <td>{{ section.course }}</td>
-            <td>{{ section.professor }}</td>
+            <td>{{ section.professor.first_name }} {{ section.professor.last_name }}</td>
             <td>
                 {% if section.section_mode == SectionMode.TotallyOnline %}
-                N / A
+                Online
                 {% else %}
-                {{ section.days_of_week }}<br>{{ section.start_time }} {{ section.end_time }}
+                {{ section.days_of_week }}<br>{{ section.start_time }}-{{ section.end_time }}
                 {% endif %}
             </td>
             <td>{{ section.semester_id }}</td>
