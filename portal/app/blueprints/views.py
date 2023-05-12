@@ -18,6 +18,7 @@ from app.model import Permission
 from app.model import Message
 from app.model import ProblemType
 from app.model import Course
+from app.model import Section
 from app.model import User
 
 from datetime import datetime
@@ -222,12 +223,15 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
         email = strip_or_none(form.get("email"))
         name = strip_or_none(form.get("fullname"))
 
-    course = strip_or_none(form.get("course"))
-    section = strip_or_none(form.get("section"))
+    course_id = strip_or_none(form.get("course"))
+    section_id = strip_or_none(form.get("section"))
     assignment = strip_or_none(form.get("assignment"))
     question = strip_or_none(form.get("question"))
     problem_id = strip_or_none(form.get("problem"))
+
     problem: ProblemType = ProblemType.query.get(problem_id)
+    course: Course = Course.query.get(course_id)
+    section: Section = Section.query.get(section_id)
 
     if str_empty(email):
         flash('Could not submit ticket, email must not be empty!', category='error')
@@ -244,8 +248,11 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
     elif problem_id is not None and not problem:
         flash('Could not submit ticket, problem type is not valid!', category='error')
 
-    # TODO: Check if course is a valid from a list of options
-    # TODO: Check if section is valid from a list of options
+    elif course_id is not None and not course:
+        flash('Could not submit ticket, course is not valid!', category='error')
+
+    elif (section_id is not None and not section) or section not in course.sections:
+        flash('Could not submit ticket, section is not valid!', category='error')
 
     else:
         mode_val = strip_or_none(form.get("mode"))
