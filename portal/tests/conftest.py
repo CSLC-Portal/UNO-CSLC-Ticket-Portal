@@ -4,6 +4,9 @@ from flask import Flask
 
 from app.model import db
 from app.model import Permission
+from app.model import Course
+from app.model import Section
+from app.model import SectionMode
 from app.model import ProblemType
 
 from app.blueprints.admin import create_pseudo_super_user
@@ -41,7 +44,7 @@ def app():
     app = create_app()
 
     # NOTE: Here we add some default configs
-    # TODO: This will be replaced by some default config for the app
+    # TODO: This will need to be replaced by some default config or fixture for the app
     #       We should make the config available to the tests!
     #
     with app.app_context():
@@ -53,13 +56,13 @@ def app():
     yield app
 
 @pytest.fixture
-def client(app : Flask):
+def client(app: Flask):
     """Provides a test flask client for sending http requests to the application."""
 
     return app.test_client()
 
 @pytest.fixture
-def create_auth_client(app : Flask):
+def create_auth_client(app: Flask):
     """Provides an factory function for creating an authenticated client."""
 
     # This factory function sets some parameters we can choose in the test
@@ -121,6 +124,28 @@ def admin_client(create_super_user):
 @pytest.fixture
 def owner_client(create_super_user):
     return create_super_user(email='owner@email.com', permission=Permission.Owner)
+
+@pytest.fixture
+def mock_courses(app: Flask):
+    def _factory(*courses: list[Course]):
+        with app.app_context():
+            for course in courses:
+                db.session.add(course)
+
+            db.session.commit()
+
+    return _factory
+
+@pytest.fixture
+def mock_sections(app: Flask):
+    def _factory(*sections: list[Section]):
+        with app.app_context():
+            for section in sections:
+                db.session.add(section)
+
+            db.session.commit()
+
+    return _factory
 
 @pytest.fixture(scope="session", autouse=True)
 def cleanup(request):

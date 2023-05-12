@@ -7,7 +7,9 @@ from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
 from .model import Mode
+from .model import Course
 from .model import Status
+from .model import Section
 from .model import Permission
 from .model import ProblemType
 
@@ -125,10 +127,12 @@ def _read_in_config_data():
 def _setup_jinja_globals(app: Flask):
     app.jinja_env.globals['current_user'] = current_user
     app.jinja_env.globals['Mode'] = Mode
+    app.jinja_env.globals['Course'] = Course
     app.jinja_env.globals['Status'] = Status
+    app.jinja_env.globals['Section'] = Section
     app.jinja_env.globals['Permission'] = Permission
-    app.jinja_env.globals['ConfigData'] = _read_in_config_data()
     app.jinja_env.globals['ProblemType'] = ProblemType
+    app.jinja_env.globals['ConfigData'] = _read_in_config_data()
 
     from .blueprints.auth import build_auth_url
     app.jinja_env.globals['build_auth_url'] = build_auth_url

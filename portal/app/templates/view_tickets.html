@@ -18,7 +18,7 @@
                     <div class="card-header" style="text-align:left;">
                         <h3>{{ ticket.student_name }}</h3>
                         {{ ticket.student_email }} <br>
-                        {{ ticket.course }}:{{ticket.section}}
+                        {{ ticket.get_course().course_name }}:{{ticket.get_section().section_number}}
                     </div>
                     <div class="card-body">
                         <p class="card-text" style="text-align:left;">
@@ -56,7 +56,7 @@
                     <div class="card-header" style="text-align:left;">
                         <h3>{{ ticket.student_name }}</h3>
                         {{ ticket.student_email }} <br>
-                        {{ ticket.course }}:{{ticket.section}}
+                        {{ ticket.get_course().course_name }}:{{ticket.get_section().section_number}}
                     </div>
                     <div class="card-body">
                         <p class="card-text" style="text-align:left;">
@@ -92,7 +92,7 @@
                     <div class="card-header" style="text-align:left;">
                         <h3>{{ ticket.student_name }}</h3>
                         {{ ticket.student_email }} <br>
-                        {{ ticket.course }}:{{ticket.section}}
+                        {{ ticket.get_course().course_name }}:{{ticket.get_section().section_number}}
                     </div>
                     <div class="card-body">
                         <p class="card-text" style="text-align:left;">
@@ -141,23 +141,20 @@
                     <p>{{ ticket.student_name }}</p>
 
                     <strong>Course</strong>
-                    <select class="form-control" id="courseInput" name="courseField">
-                        <option value="" disabled selected>{{ ticket.course }}</option>
-                        <option>Course 1</option>
-                        <option>Course 2</option>
-                        <option>Course 3</option>
-                        <option>Course 4</option>
-                        <option>Course 5</option>
+                    <select class="form-select" id="course_select" name="courseField">
+                        <option value="{{ ticket.course }}" selected>{{ ticket.get_course().course_name }}</option>
+                        {% for course in Course.query.filter(Course.id != ticket.course) %}
+                            <option value="{{ course.id }}" value="{{ course.id }}">{{ course.course_name }}</option>
+                        {% endfor %}
                     </select>
 
                     <strong>Section</strong>
-                    <select class="form-control" id="sectionInput" name="sectionField">
-                        <option value="" disabled selected>{{ ticket.section }}</option>
-                        <option>Section 1</option>
-                        <option>Section 2</option>
-                        <option>Section 3</option>
-                        <option>Section 4</option>
-                        <option>Section 5</option>
+                    <select class="form-select" id="section_select" name="sectionField" required>
+                        <option value disabled hidden>Select Section</option>
+                        <option id="{{ ticket.course }}" value="{{ ticket.section }}" selected disabled>{{ ticket.get_section().section_number }}</option>
+                        {% for section in Section.query.filter(Section.id != ticket.section) %}
+                            <option id="{{ section.course_id }}" value="{{ section.id }}">{{ section.section_number }}</option>
+                        {% endfor %}
                     </select>
 
                     <strong>Assignment Name</strong>
@@ -207,4 +204,8 @@
 </div>
 {% endfor %}
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/course_selector.js') }}"></script>
 {% endblock %}

@@ -33,20 +33,18 @@
                 <div class="col">
                     <h6>Course Information</h6>
                     <div class="input-group">
-                        <select class="form-select" style="line-height: 3.0;" id="course" name="course">
-                            <option>Course 1</option>
-                            <option>Course 2</option>
-                            <option>Course 3</option>
-                            <option>Course 4</option>
-                            <option>Course 5</option>
+                        <select class="form-select" style="line-height: 3.0;" id="course_select" name="course" required>
+                            <option value disabled selected hidden>Select Course</option>
+                            {% for course in Course.query.all() %}
+                                <option value="{{ course.id }}">{{ course.course_name }}</option>
+                            {% endfor %}
                         </select>
 
-                        <select class="form-select" id="section" name="section">
-                            <option>Section 1</option>
-                            <option>Section 2</option>
-                            <option>Section 3</option>
-                            <option>Section 4</option>
-                            <option>Section 5</option>
+                        <select class="form-select" id="section_select" name="section" required hidden>
+                            <option value disabled selected hidden>Select Section</option>
+                            {% for section in Section.query.all() %}
+                                <option id="{{ section.course_id }}" value="{{ section.id }}">{{ section.section_number }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
@@ -96,4 +94,9 @@
     </div>
 </div>
 
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/course_selector.js') }}"></script>
 {% endblock %}

@@ -1,17 +1,24 @@
 from flask import Flask
+
 from app.model import Ticket
 from app.model import Status
+from app.model import Course
+from app.model import Section
+from app.model import SectionMode
 from app.model import Mode
 
 from flask.testing import FlaskClient
 
-def test_claim_open_ticket(tutor_client: FlaskClient, app: Flask):
+def test_claim_open_ticket(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
         'email':'test@test.email',
         'fullname':'John Doe',
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -40,13 +47,16 @@ def test_claim_open_ticket(tutor_client: FlaskClient, app: Flask):
         assert Ticket.query.filter_by(status = Status.Open).count() != 1
         assert Ticket.query.filter_by(status = Status.Closed).count() != 1
 
-def test_close_claimed_ticket(tutor_client: FlaskClient, app: Flask):
+def test_close_claimed_ticket(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
         'email':'test@test.email',
         'fullname':'John Doe',
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -90,13 +100,16 @@ def test_close_claimed_ticket(tutor_client: FlaskClient, app: Flask):
         assert Ticket.query.filter_by(status = Status.Open).count() != 1
         assert Ticket.query.filter_by(status = Status.Claimed).count() != 1
 
-def test_reopen_closed_ticket(tutor_client: FlaskClient, app: Flask):
+def test_reopen_closed_ticket(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
         'email':'test@test.email',
         'fullname':'John Doe',
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -156,13 +169,16 @@ def test_reopen_closed_ticket(tutor_client: FlaskClient, app: Flask):
         assert Ticket.query.filter_by(status = Status.Claimed).count() != 1
         assert Ticket.query.filter_by(status = Status.Closed).count() != 1
 
-def test_close_open_ticket(tutor_client: FlaskClient, app: Flask):
+def test_close_open_ticket(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
         'email':'test@test.email',
         'fullname':'John Doe',
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
