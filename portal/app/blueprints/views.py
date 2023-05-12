@@ -18,6 +18,7 @@ from app.model import Permission
 from app.model import Message
 from app.model import ProblemType
 from app.model import Course
+from app.model import User
 
 from datetime import datetime
 
@@ -31,8 +32,6 @@ views = Blueprint('views', __name__)
 @views.route("/")
 def index():
     toDisplay = Course.query.filter_by(on_display=True)
-    print("Courses to display: " + str(toDisplay))
-
     messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
     return render_template('index.html', messages=messages, OnDisplay=toDisplay)
 
@@ -147,6 +146,36 @@ def edit_ticket():
         flash('Could not edit ticket. Ticket not found in database.', category='error')
 
     return redirect(url_for('views.view_tickets'))
+
+@views.route('/view-tutor-info', methods=["GET"])
+@permission_required(Permission.Tutor)
+def view_info():
+    # edit tutor activity status, and classes they can help with
+    return render_template('edit-tutor-info.html')
+
+@views.route('/toggle-working', methods=['POST'])
+@permission_required(Permission.Tutor)
+def toggle_working():
+    user_id = request.form.get("toggleWorkingID")
+    try:
+        user: User = User.query.get(user_id)
+        # reverse whatever value it currently has for display
+        if user.tutor_is_working:
+            user.tutor_is_working = False
+        else:
+            user.tutor_is_working = True
+        db.session.commit()
+
+    except ValueError:
+        flash('Could not toggle working status, input values invalid!', category='error')
+
+    except IntegrityError:
+        flash('Could not toggle working status, invalid data!', category='error')
+
+    except Exception as e:
+        flash('Could not toggle working status, unknown reason!', category='error')
+        print(f'Could not toggle working status, {e}', file=sys.stderr)
+    return redirect(url_for('views.view_info'))
 
 # TODO: Use flask-wtf for form handling and validation
 def _attempt_create_ticket(form: ImmutableMultiDict):

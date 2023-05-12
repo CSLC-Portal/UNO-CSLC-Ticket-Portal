@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Future Site of CSLC Tutoring Portal{% endblock %}
+
+{% block content %}
+
+{% macro toggle_working_button(user) -%}
+    <form action="{{ url_for('views.toggle_working') }}" method="post">
+    {% if current_user.tutor_is_working %}
+        <button style="border:none; background: none;" name="toggleWorkingID" value="{{ current_user.id }}"><span class="badge rounded-pill bg-success">Yes</span></button>
+    {% else %}
+        <button style="border:none; background: none;" name="toggleWorkingID" value="{{ current_user.id }}"><span class="badge rounded-pill bg-secondary">No</span></button>
+    {% endif %}
+</form>
+{%- endmacro %}
+
+<h1>Edit Tutor Information</h1>
+
+<h2>Tutor Name: {{ current_user.name }}</h2>
+<h2>Tutor Email: {{ current_user.email }}</h2>
+<h2>Currently Working: {{ toggle_working_button(current_user) }}</h2>
+
+
+
+{% endblock %}
+
