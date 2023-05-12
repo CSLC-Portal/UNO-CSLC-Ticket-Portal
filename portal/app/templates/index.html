@@ -62,22 +62,13 @@
             <th><h2>Course</h2></th>
             <th><h2>Tutors</h2></th>
         </tr>
+        {% for course in OnDisplay %}
         <tr class="middle">
-            <td>IST0000</td>
-            <td>00</td>
+            <td>{{ course.department }} {{ course.number }}: {{ course.course_name }}</td>
+            <td>{{ course.canTutors|length }}</td>
         </tr>
-        <tr class="middle">
-            <td>IST0000</td>
-            <td>00</td>
-        </tr>
-        <tr class="middle">
-            <td>IST0000</td>
-            <td>00</td>
-        </tr>
-        <tr>
-            <td>IST0000</td>
-            <td>00</td>
-        </tr>
+        {% endfor %}
+
     </table>
 {% endblock %}
 

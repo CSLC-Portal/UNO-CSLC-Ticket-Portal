@@ -67,9 +67,7 @@
                         Tutor
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <!-- TODO: EDIT TUTOR
-                        <li><a class="dropdown-item" href="tutor.html">Edit Tutor Information</a></li>
-                    -->
+                        <li><a class="dropdown-item" href="{{ url_for('views.view_info') }}">Edit Tutor Information</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('views.view_tickets') }}">View Tickets</a></li>
                     </ul>
                 </div>
