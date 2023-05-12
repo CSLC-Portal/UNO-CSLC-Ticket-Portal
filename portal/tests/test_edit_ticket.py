@@ -1,5 +1,13 @@
 from flask import Flask
-from app.model import Ticket, Status, Mode, User
+
+from app.model import Mode
+from app.model import User
+from app.model import Ticket
+from app.model import Status
+from app.model import Course
+from app.model import Section
+from app.model import SectionMode
+
 from flask.testing import FlaskClient
 from app.extensions import db
 from app.model import Permission
@@ -34,11 +42,15 @@ def test_edit_no_data(tutor_client: FlaskClient):
     assert '302' in response.status
     assert b'href="/view-tickets"' in response.data
 
-def test_edit_course(tutor_client: FlaskClient, app: Flask):
+def test_edit_course(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False), Course('CSCI', '1620', 'Intro to CS 2', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None),\
+                  Section('851', 'Mon', None, None, SectionMode.TotallyOnline, '2', None, None))
+
     # make a ticket
     ticket1 = {
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -51,11 +63,11 @@ def test_edit_course(tutor_client: FlaskClient, app: Flask):
         assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.one()
-        assert testTicket.course == "course1"
+        assert testTicket.course == '1'
 
     editData = {
         'ticketIDModal': '1',
-        'courseField': 'This is the updated course'
+        'courseField': '2'
     }
     response2 = tutor_client.post('/edit-ticket', data=editData)
 
@@ -63,13 +75,17 @@ def test_edit_course(tutor_client: FlaskClient, app: Flask):
     with app.app_context():
         assert '302' in response2.status
         testTicket = Ticket.query.one()
-        assert testTicket.course == "This is the updated course"
+        assert testTicket.course == '2'
 
-def test_edit_section(tutor_client: FlaskClient, app: Flask):
+def test_edit_section(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None),\
+                  Section('851', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -82,11 +98,11 @@ def test_edit_section(tutor_client: FlaskClient, app: Flask):
         assert '302' in response1.status
         assert Ticket.query.count() == 1
         testTicket = Ticket.query.one()
-        assert testTicket.section == "section1"
+        assert testTicket.section == '1'
 
     editData = {
         'ticketIDModal': '1',
-        'sectionField': 'NeW SeCtIoNNNNN'
+        'sectionField': '2'
     }
     response2 = tutor_client.post('/edit-ticket', data=editData)
 
@@ -94,13 +110,16 @@ def test_edit_section(tutor_client: FlaskClient, app: Flask):
     with app.app_context():
         assert '302' in response2.status
         testTicket = Ticket.query.one()
-        assert testTicket.section == "NeW SeCtIoNNNNN"
+        assert testTicket.section == '2'
 
-def test_edit_assignment(tutor_client: FlaskClient, app: Flask):
+def test_edit_assignment(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -127,11 +146,14 @@ def test_edit_assignment(tutor_client: FlaskClient, app: Flask):
         testTicket = Ticket.query.one()
         assert testTicket.assignment_name == "NeW Co0L Assignment"
 
-def test_edit_specific_question(tutor_client: FlaskClient, app: Flask):
+def test_edit_specific_question(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -158,11 +180,14 @@ def test_edit_specific_question(tutor_client: FlaskClient, app: Flask):
         testTicket = Ticket.query.one()
         assert testTicket.specific_question == "ThiS is ACCCtualy my QueStiIon...?"
 
-def test_edit_problem_type(tutor_client: FlaskClient, app: Flask):
+def test_edit_problem_type(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -189,11 +214,14 @@ def test_edit_problem_type(tutor_client: FlaskClient, app: Flask):
         testTicket = Ticket.query.one()
         assert testTicket.problem_type == 2
 
-def test_edit_tutor(tutor_client: FlaskClient, app: Flask):
+def test_edit_tutor(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -252,11 +280,14 @@ def test_edit_tutor(tutor_client: FlaskClient, app: Flask):
         assert testTicket.tutor_id == 2 # this is tutor2
         assert testTicket.user.name == "Timothy Smith"
 
-def test_edit_tutor_notes(tutor_client: FlaskClient, app: Flask):
+def test_edit_tutor_notes(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -283,11 +314,14 @@ def test_edit_tutor_notes(tutor_client: FlaskClient, app: Flask):
         testTicket = Ticket.query.one()
         assert testTicket.tutor_notes == "TTEESSTT Tutor N0T3s!!"
 
-def test_edit_was_successful(tutor_client: FlaskClient, app: Flask):
+def test_edit_was_successful(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None))
+
     # make a ticket
     ticket1 = {
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -325,11 +359,15 @@ def test_edit_was_successful(tutor_client: FlaskClient, app: Flask):
         testTicket = Ticket.query.one()
         assert testTicket.successful_session == False
 
-def test_edit_multiple_attributes(tutor_client: FlaskClient, app: Flask):
+def test_edit_multiple_attributes(tutor_client: FlaskClient, mock_courses, mock_sections, app: Flask):
+    mock_courses(Course('CSCI', '1400', 'Intro to CS 1', False), Course('CSCI', '1620', 'Intro to CS 2', False))
+    mock_sections(Section('850', 'Mon', None, None, SectionMode.TotallyOnline, '1', None, None),\
+                  Section('851', 'Mon', None, None, SectionMode.TotallyOnline, '2', None, None))
+
     # make a ticket
     ticket1 = {
-        'course':'course1',
-        'section':'section1',
+        'course':'1',
+        'section':'1',
         'assignment':'assignment1',
         'question':'This is my question?',
         'problem':'1',
@@ -413,7 +451,7 @@ def test_edit_multiple_attributes(tutor_client: FlaskClient, app: Flask):
 
     editData = {
         'ticketIDModal': '1',
-        'courseField': 'This is the updated course'
+        'courseField': '2'
     }
     response2 = tutor_client.post('/edit-ticket', data=editData)
 
@@ -421,4 +459,4 @@ def test_edit_multiple_attributes(tutor_client: FlaskClient, app: Flask):
     with app.app_context():
         assert '302' in response2.status
         testTicket = Ticket.query.one()
-        assert testTicket.course == "This is the updated course"
+        assert testTicket.course == '2'

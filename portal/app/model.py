@@ -158,21 +158,17 @@ class Ticket(db.Model):
 
     id = Column(Integer, primary_key=True, doc='Autonumber primary key for the ticket table.')
     student_email = Column(String(120), nullable=False, doc='Email of the student making the ticket.')
-    student_name = Column(String(120), doc='The name of student making the ticket.')
-
-    # TODO: Need to update these columns to be foreign keys the respective tabels
-    course = Column(String(120), doc='The specific course this ticket issue is related to.')
-    section = Column(String(120), doc='Course section ticket issue is relating to.')
-    #
-
-    assignment_name = Column(String(120), doc='Assignment the student needs help with.')
-    specific_question = Column(Text, doc='Student question about the assignment.')
+    student_name = Column(String(120), nullable=False, doc='The name of student making the ticket.')
+    course = Column(String(120), nullable=False, doc='The specific course this ticket issue is related to.')
+    section = Column(String(120), nullable=False, doc='Course section ticket issue is relating to.')
+    assignment_name = Column(String(120), nullable=False, doc='Assignment the student needs help with.')
+    specific_question = Column(Text, nullable=False, doc='Student question about the assignment.')
     problem_type = Column(Integer, db.ForeignKey('ProblemTypes.id'), doc='Type of problem the student is having.')
     time_created = Column(DateTime(True), nullable=False, doc='Time the ticket was created.', default=func.now())
     time_claimed = Column(DateTime(True), doc='Time the ticket was claimed by tutor.')
     time_closed = Column(DateTime(True), doc='Time the tutor marked the ticket as closed.')
-    status = Column(Enum(Status), doc='Status of the ticket. 1=open, 2=claimed, 3=closed.', default=Status.Open)
-    mode = Column(Enum(Mode), doc='Specifies whether the ticket was made for online or in-person help.')
+    status = Column(Enum(Status), nullable=False, doc='Status of the ticket. 1=open, 2=claimed, 3=closed.', default=Status.Open)
+    mode = Column(Enum(Mode), nullable=False, doc='Specifies whether the ticket was made for online or in-person help.')
     tutor_notes = Column(Text, doc='Space for tutors to write notes about student/ticket session.', default="")
     tutor_id = Column(Integer, db.ForeignKey('Users.id'), doc='Foreign key to the tutor who claimed this ticket.')
     successful_session = Column(Boolean, doc='T/F if the tutor was able to help the student with issue on ticket')

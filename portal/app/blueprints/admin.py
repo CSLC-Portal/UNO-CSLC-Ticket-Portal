@@ -747,7 +747,7 @@ def add_section():
             db.session.commit()
             flash('Section added successfully!', category='success')
         else:
-            flash("Section " + sectionNum + " for the course '" + course.course_name + "' already exists in DB!", category='error')
+            flash(f'The section already exists in this course!', category='error')
 
     return redirect(url_for('admin.view_sections'))
 

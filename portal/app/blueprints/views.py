@@ -140,11 +140,23 @@ def edit_ticket():
     ticketID = request.form.get("ticketIDModal")
     ticket = Ticket.query.get(ticketID)
 
-    if ticket is not None:
-        _attempt_edit_ticket(ticket)
+    try:
+        if ticket is not None:
+            _attempt_edit_ticket(ticket)
+
+        else:
+            flash('Could not edit ticket. Ticket not found in database.', category='error')
+
+    except IntegrityError:
+        db.session.rollback()
+        flash('Could not updated ticket, invalid data', category='error')
+
+    except Exception as e:
+        flash('Could not updated ticket, unknown reason', category='error')
+        print(f'Failed to updated ticket: {e}', file=sys.stderr)
 
     else:
-        flash('Could not edit ticket. Ticket not found in database.', category='error')
+        flash('Ticket updated successfully!', category='success')
 
     return redirect(url_for('views.view_tickets'))
 
@@ -251,7 +263,7 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
     elif course_id is not None and not course:
         flash('Could not submit ticket, course is not valid!', category='error')
 
-    elif (section_id is not None and not section) or section not in course.sections:
+    elif (section_id is not None and not section) or (course and section not in course.sections):
         flash('Could not submit ticket, section is not valid!', category='error')
 
     else:
@@ -266,34 +278,43 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
             flash('Could not submit ticket, must select a valid mode!', category='error')
 
         else:
-            return Ticket(email, name, course, section, assignment, question, problem_id, mode)
+            return Ticket(email, name, course_id, section_id, assignment, question, problem_id, mode)
 
 def _attempt_edit_ticket(ticket: Ticket):
-    # get info back from popup modal form
-    course = strip_or_none(request.form.get("courseField"))
-    section = strip_or_none(request.form.get("sectionField"))
+    # TODO: Need to produce error messages!!
+
+    course_id = strip_or_none(request.form.get("courseField"))
+    section_id = strip_or_none(request.form.get("sectionField"))
     assignment = strip_or_none(request.form.get("assignmentNameField"))
     question = strip_or_none(request.form.get("specificQuestionField"))
     primaryTutor = strip_or_none(request.form.get("primaryTutorInput"))
     tutorNotes = strip_or_none(request.form.get("tutorNotes"))
     wasSuccessful = strip_or_none(request.form.get("successfulSession"))
     problem_id = strip_or_none(request.form.get("problemTypeField"))
+
     problem: ProblemType = ProblemType.query.get(problem_id)
+    new_course: Course = Course.query.get(course_id)
+    section: Section = Section.query.get(section_id)
+
+    # Get the course of the current section
+    current_course: Course = Course.query.get(ticket.course)
 
     # check for change in values from edit
-    if course:
+    if course_id and new_course:
         # new info for course came back, update it for current ticket
-        ticket.course = course
+        ticket.course = new_course.id
+        ticket.section = new_course.sections[0].id if len(new_course.sections) > 0 else None
+        current_course = new_course
 
-    if section:
+    if section_id and section and section in current_course.sections:
         # new info for section came back, update it for current ticket
-        ticket.section = section
+        ticket.section = section.id
 
-    if assignment != ticket.assignment_name:
+    if assignment and assignment != ticket.assignment_name:
         # new info for assignment came back, update it for current ticket
         ticket.assignment_name = assignment
 
-    if question != ticket.specific_question:
+    if question and question != ticket.specific_question:
         # new info for question came back, update it for current ticket
         ticket.specific_question = question
 
