@@ -84,6 +84,12 @@ class SectionMode(ToStrEnum):
     Remote = 2
     TotallyOnline = 3
 
+
+can_tutor = db.Table('can_tutor',
+                     db.Column('user_id', db.Integer, db.ForeignKey('Users.id')),
+                     db.Column('course_id', db.Integer, db.ForeignKey('Courses.id')))
+
+
 class User(db.Model, UserMixin):
     """
     The User class is the main model for every user that interacts with the CSLC Portal. In general there are only
@@ -102,6 +108,7 @@ class User(db.Model, UserMixin):
     tutor_is_active = Column(Boolean, doc='T/F if the tutor is currently employed')
     tutor_is_working = Column(Boolean, doc='T/F if the tutor is currently working')
     tickets = db.relationship('Ticket', backref='user')
+    courses = db.relationship('Course', secondary=can_tutor, backref='canTutors')
 
     def __init__(self, oidIn, permLevelIn, emailIn, nameIn, isActiveIn, isWorkingIn):
         self.oid = oidIn
@@ -266,7 +273,6 @@ class Course(db.Model):
     course_name = Column(String(50), nullable=False, doc='The name of the course itself. E.g., Operating Systems, Java II, etc.')
     on_display = Column(Boolean, doc="T/F if course should be displayed in available courses. This way admin does not need to keep adding/deleting a course.")
     sections = db.relationship('Section', backref='course', cascade="all, delete")
-    # TODO: add in tutors relationship and tickets relationship
 
     def __init__(self, depIn, numIn, nameIn, displayIn):
         self.department = depIn
@@ -358,18 +364,6 @@ class Semester(db.Model):
 
     def __repr__(self):
         return f'{self.season} {self.year}, ({self.start_date} - {self.end_date})'
-
-class CanTutor(db.Model):
-    """
-    The CanTutor table is a join table that matches tutors and the available courses that they are able to tutor.
-    For example, say John is a tutor with ID one, and he can tutor courses: A, B, and C. This table will join the
-    tutor John and the list of courses that he can tutor.
-    """
-    __tablename__ = 'CanTutor'
-
-    # id = Column(Integer, doc='Autonumber primary key for the CanTutor table.')
-    tutor = Column(Integer, db.ForeignKey('Users.id'), primary_key=True, doc='The tutor that is able to tutor a course.')
-    courses = Column(Integer, db.ForeignKey('Courses.id'), doc='Possible courses that a tutor can tutor.')
 
 class Config(db.Model):
     """

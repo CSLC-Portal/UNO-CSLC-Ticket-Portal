@@ -151,7 +151,8 @@ def edit_ticket():
 @permission_required(Permission.Tutor)
 def view_info():
     # edit tutor activity status, and classes they can help with
-    return render_template('edit-tutor-info.html')
+    courses = Course.query.all()
+    return render_template('edit-tutor-info.html', courses=courses)
 
 @views.route('/toggle-working', methods=['POST'])
 @permission_required(Permission.Tutor)
@@ -175,6 +176,26 @@ def toggle_working():
     except Exception as e:
         flash('Could not toggle working status, unknown reason!', category='error')
         print(f'Could not toggle working status, {e}', file=sys.stderr)
+    return redirect(url_for('views.view_info'))
+
+@views.route('/toggle-can-tutor', methods=["POST"])
+@permission_required(Permission.Tutor)
+def toggle_can_tutor():
+    course_id = request.form.get("toggleCanTutorID")
+    user_id = current_user.id
+    print("User ID: " + str(user_id))
+    course = Course.query.filter_by(id=course_id).one_or_none()
+    print("Course tutor says they can tutor: " + str(course))
+
+    tutor = User.query.filter_by(id=user_id).one_or_none()
+    print("Tutor: " + str(tutor))
+    if course not in tutor.courses:
+        tutor.courses.append(course)
+    else:
+        print("COURSE ALREADY IN LIST FOR TUTOR - REMOVING")
+        tutor.courses.remove(course)
+    print("Tutor Courses: " + str(tutor.courses))
+
     return redirect(url_for('views.view_info'))
 
 # TODO: Use flask-wtf for form handling and validation
