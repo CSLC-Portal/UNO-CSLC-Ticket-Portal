@@ -45,7 +45,20 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">CSLC Portal</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="app.html">Model for Portal Assets</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Tests for Portal Functionality</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#configuration-for-tests">Configuration for Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tests.conftest">Configuration for Tests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.admin_client"><code class="docutils literal notranslate"><span class="pre">admin_client()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.app"><code class="docutils literal notranslate"><span class="pre">app()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.auth_client"><code class="docutils literal notranslate"><span class="pre">auth_client()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.cleanup"><code class="docutils literal notranslate"><span class="pre">cleanup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.client"><code class="docutils literal notranslate"><span class="pre">client()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.create_auth_client"><code class="docutils literal notranslate"><span class="pre">create_auth_client()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.create_super_user"><code class="docutils literal notranslate"><span class="pre">create_super_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.mock_courses"><code class="docutils literal notranslate"><span class="pre">mock_courses()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.mock_sections"><code class="docutils literal notranslate"><span class="pre">mock_sections()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.owner_client"><code class="docutils literal notranslate"><span class="pre">owner_client()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.tutor_client"><code class="docutils literal notranslate"><span class="pre">tutor_client()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-tests.test_create_ticket">Create Ticket Tests</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.create_ticket_with_invalid_data"><code class="docutils literal notranslate"><span class="pre">create_ticket_with_invalid_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#tests.test_create_ticket.test_create_ticket_empty_assignment"><code class="docutils literal notranslate"><span class="pre">test_create_ticket_empty_assignment()</span></code></a></li>
@@ -100,8 +113,68 @@
 <p>The unit tests that we have in place for testing all of the CSLC portal functionality utilize the PyTest module.
 PyTest is a framework for writing varius tytpes of tests that we have in place such as unit tests, integration tests,
 and end-to-end tests that involve every aspect of the CSLC portal. Below we will outline the framework and what the indivudal tests do.</p>
-<section id="configuration-for-tests">
-<h2>Configuration for Tests<a class="headerlink" href="#configuration-for-tests" title="Permalink to this heading"></a></h2>
+<section id="module-tests.conftest">
+<span id="configuration-for-tests"></span><h2>Configuration for Tests<a class="headerlink" href="#module-tests.conftest" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.admin_client">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">admin_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_super_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.admin_client" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.app">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">app</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.app" title="Permalink to this definition"></a></dt>
+<dd><p>Creates and configures a debug flask app.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.auth_client">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">auth_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_auth_client</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.auth_client" title="Permalink to this definition"></a></dt>
+<dd><p>Provides a default authenticated client.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.cleanup">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.cleanup" title="Permalink to this definition"></a></dt>
+<dd><p>Clean up sessions directory once all the tests are done.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.client">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.client" title="Permalink to this definition"></a></dt>
+<dd><p>Provides a test flask client for sending http requests to the application.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.create_auth_client">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">create_auth_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.create_auth_client" title="Permalink to this definition"></a></dt>
+<dd><p>Provides an factory function for creating an authenticated client.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.create_super_user">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">create_super_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_auth_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.create_super_user" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.mock_courses">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">mock_courses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.mock_courses" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.mock_sections">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">mock_sections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.mock_sections" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.owner_client">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">owner_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_super_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.owner_client" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.tutor_client">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">tutor_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_super_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.tutor_client" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-tests.test_create_ticket">
 <span id="create-ticket-tests"></span><h2>Create Ticket Tests<a class="headerlink" href="#module-tests.test_create_ticket" title="Permalink to this heading"></a></h2>
