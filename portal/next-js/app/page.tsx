@@ -1,8 +1,17 @@
-import Alert from '@components/Alert/alert';
-import { AlertClasses } from 'types/enum';
+import IndexPage, { IndexProps } from './index';
 
-const Index = () => {
-  return <></>;
-};
+export default async function Page() {
+  let props = { error: true } as IndexProps;
 
-export default Index;
+  try {
+    const data = await fetch(process.env.NEXT_PUBLIC_API_URL, { cache: 'no-store' });
+    if (data.status === 200) {
+      const json = await data.json();
+      console.log(json);
+
+      props = { ...json, error: false };
+    }
+  } catch (err) {}
+
+  return <IndexPage {...props} />;
+}

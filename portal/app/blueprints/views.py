@@ -4,6 +4,10 @@ from flask import flash
 from flask import url_for
 from flask import redirect
 from flask import render_template
+from flask import jsonify
+
+import json
+
 
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
@@ -20,7 +24,7 @@ from app.model import ProblemType
 from app.model import Course
 from app.model import Section
 from app.model import User
-
+from app import _read_in_config_data
 from datetime import datetime
 
 from app.extensions import db
@@ -34,7 +38,21 @@ views = Blueprint('views', __name__)
 def index():
     toDisplay = Course.query.filter_by(on_display=True)
     messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
-    return render_template('index.html', messages=messages, OnDisplay=toDisplay)
+    
+    config_data = _read_in_config_data()
+    response = config_data
+    
+    response['updates'] = [{'id': row[0], 'message': row[1], 'start_date': row[2], 'end_date': row[3]} for row in messages]
+    response['availability'] = [{
+        'id': row[0],
+        'department': row[1],
+        'number': row[2],
+        'course_name': row[3],
+        'on_display': row[4],
+        'sections': row[5]
+    } for row in toDisplay]
+
+    return json.dumps(response)
 
 @views.route('/create-ticket', methods=['POST', 'GET'])
 def create_ticket():
