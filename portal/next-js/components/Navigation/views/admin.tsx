@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const AdminView = () => (
   <li className="nav-link">
     <div>
@@ -17,9 +19,9 @@ const AdminView = () => (
           </a>
         </li>
         <li>
-          <a className="dropdown-item" href="{{ url_for('admin.reports_form') }}">
+          <Link className="dropdown-item" href="{{ url_for('admin.reports_form') }}">
             Reports
-          </a>
+          </Link>
         </li>
       </ul>
     </div>
