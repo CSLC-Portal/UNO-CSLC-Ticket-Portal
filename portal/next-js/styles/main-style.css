@@ -1,0 +1,257 @@
+#content {
+    min-height: 100%;
+    padding-bottom: 50px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+footer {
+    height: 4em;
+    background-color: #292929;
+    text-align: right;
+}
+
+
+.logo-section {
+    right: 0px;
+    height: 100px;
+    width: 100%;
+    padding-top: 10px;
+    text-align: center;
+    background-color: black;
+    list-style-type: none;
+    /*min-width: 360px; */
+}
+
+.nav-section {
+    position: sticky;
+    right: 0px;
+    height: 50px;
+    background-color: #292929;
+    text-align: right;
+    min-width: 360px;
+    vertical-align: baseline;
+    padding-right: 10px;
+}
+
+ul.nav {
+    height: 45px;
+    vertical-align: baseline;
+}
+
+.nav-link {
+    display: block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    float: right;
+}
+
+.Admin {
+    color: white;
+    left: 900px;
+    top: 5px;
+    position: absolute;
+    text-decoration: none;
+}
+
+.Tutor {
+    color: white;
+    left: 950px;
+    top: 5px;
+    position: absolute;
+    text-decoration: none;
+}
+
+.Login {
+    color: white;
+    text-decoration: none;
+    padding-right: 5px;
+    top: 5px;
+    position: relative;
+}
+
+.uno-logo {
+    position: relative;
+    height: 70px;
+    width: 70px;
+    right: 20px;
+}
+
+a.logo-text:visited {
+    color: white;
+    text-decoration: none;
+}
+
+a.logo-text:hover {
+    color: white;
+    text-decoration: none;
+}
+
+a.logo-text:active {
+    color: white;
+    text-decoration: none;
+}
+
+a.logo-text:link {
+    color: white;
+    text-decoration: none;
+}
+
+
+@media all and (min-width: 800px) {
+    .logo-text {
+        font-size: 35px;
+        color: white;
+        text-decoration: none;
+        position: relative;
+        left: 20px;
+    }
+}
+
+@media all and (max-width: 800px) {
+    .logo-text {
+        font-size: 4vw;
+        color: white;
+        text-decoration: none;
+        position: relative;
+        left: 20px;
+    }
+}
+
+button.create-ticket-button {
+    background-color: #c5c4c4;
+    border: none;
+    border-radius: 4px;
+    width: 230px;
+    height: 50px;
+    font-size: 18px;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+}
+
+h1 {
+    margin-top: 60px;
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+h2 {
+    margin-top: 20px;
+    text-align: center;
+    color: grey;
+    font-size: 25px;
+}
+
+h3 {
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+h4 {
+    text-align: center;
+    color: white;
+    font-size: 18px;
+}
+
+h5 {
+    text-align: center;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.solid {
+    border-top: 1px solid #bbb;
+    width: 70%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.buttons {
+    text-align: center;
+}
+
+.Status {
+    position: static;
+    margin-top: 9px;
+    color: white;
+    margin-right: 500px;
+    text-decoration: none;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    table-layout: fixed;
+    width: 80%;
+    min-width: 360px;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+table.logo {
+    border-collapse: collapse;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    table-layout: auto;
+    width: auto;
+    min-width: 360px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    font-weight: bold;
+}
+
+tr.middle {
+    border-top: 1px solid #c5c4c4;
+    border-bottom: 1px solid #c5c4c4;
+}
+
+td.center,
+th.center {
+    border-left: 1px solid #c5c4c4;
+    border-right: 1px solid #c5c4c4;
+}
+
+td.right-end,
+th.right-end {
+    border-left: 1px solid #c5c4c4;
+    vertical-align: middle;
+}
+
+form {
+    width: 90%;
+    margin: auto;
+}
+
+.centered {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.btn-tickets {
+    color: white;
+    margin: 1px;
+}
