@@ -22,6 +22,14 @@ Views Component
    :undoc-members:
    :show-inheritance:
 
+Admin Component
+---------------------------
+
+.. automodule:: app.blueprints.admin
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
