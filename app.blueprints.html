@@ -115,22 +115,26 @@ require authentication can check if this user exists.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.auth.build_auth_url">
 <span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">build_auth_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.build_auth_url" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Function to build the authorization url used to authenticat a user using MS Authentication.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.auth.logout">
 <span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.logout" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This funciton is used to logout a user. If the HTTP route /logout is hit the current_user will be logged out via msal library</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.auth.unauthorized">
 <span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">unauthorized</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.unauthorized" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Function to handle when a user is currently unauthorized.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.auth.user_loader">
 <span class="sig-prename descclassname"><span class="pre">app.blueprints.auth.</span></span><span class="sig-name descname"><span class="pre">user_loader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.auth.user_loader" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Function to quickly return the current user by the ID of that entry.</p>
+</dd></dl>
 
 </section>
 <section id="module-app.blueprints.views">
@@ -157,22 +161,32 @@ the passed in create-ticket.html template which is the form that students use to
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.views.edit_ticket">
 <span class="sig-prename descclassname"><span class="pre">app.blueprints.views.</span></span><span class="sig-name descname"><span class="pre">edit_ticket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.views.edit_ticket" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The funciton edit_ticket() houses all of the logic for a tutor to edit a seticketction in the database. When the HTTP
+route /edit-ticket is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+to edit a ticket in the database.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.views.index">
 <span class="sig-prename descclassname"><span class="pre">app.blueprints.views.</span></span><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.views.index" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This index() funciton returns the main home page of the CSLC! It returns the render template for index.html. It also does
+a couple small queries for courses and messages to display on the home page.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.views.toggle_can_tutor">
 <span class="sig-prename descclassname"><span class="pre">app.blueprints.views.</span></span><span class="sig-name descname"><span class="pre">toggle_can_tutor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.views.toggle_can_tutor" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The toggle_can_tutor() funciton houses all the logic for tutors to specify what courses they are able to tutor or not.
+If a tutor is able to tutor a course they will toggle the button for each course and that will add it to their list of courses
+they are able to study. The join table can_tutor is utlizied in this funciton</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.views.toggle_working">
 <span class="sig-prename descclassname"><span class="pre">app.blueprints.views.</span></span><span class="sig-name descname"><span class="pre">toggle_working</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.views.toggle_working" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The toggle_working() function houses all of the logic for a tutor to toggle whether or not they are currently working in the CSLC.
+This is different form currently employed, this is basically a tutor “clocking in” or saying that they are available to tutor students.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.views.update_ticket">
@@ -184,7 +198,10 @@ the passed in create-ticket.html template which is the form that students use to
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.views.view_info">
 <span class="sig-prename descclassname"><span class="pre">app.blueprints.views.</span></span><span class="sig-name descname"><span class="pre">view_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.blueprints.views.view_info" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The view_into() function is the main funciton that displays the info page for a tutor to edit tthier working status and
+also the different courses that they are able to tutor in. The HTTP route /view-tutor-info will render the template HTML
+“edit-tutor-info.html” on a GET request</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.blueprints.views.view_tickets">
