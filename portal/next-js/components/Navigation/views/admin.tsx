@@ -14,12 +14,12 @@ const AdminView = () => (
       </button>
       <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         <li>
-          <a className="dropdown-item" href="{{ url_for('admin.console') }}">
+          <Link className="dropdown-item" href="/view/admin/console">
             Administration Console
-          </a>
+          </Link>
         </li>
         <li>
-          <Link className="dropdown-item" href="{{ url_for('admin.reports_form') }}">
+          <Link className="dropdown-item" href="/view/admin/reports-form">
             Reports
           </Link>
         </li>

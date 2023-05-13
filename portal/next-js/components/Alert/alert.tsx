@@ -1,5 +1,6 @@
 import { AlertClasses } from 'types/enum';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState } from 'react';
 
 interface AlertProps {
   state: AlertClasses;
@@ -7,12 +8,16 @@ interface AlertProps {
 }
 
 const Alert = ({ state, message }: AlertProps) => {
+  const [hideAlert, setHideAlert] = useState(false);
+
   return (
     <>
-      <div className={`alert alert-${state} alert-dismissible fade show fixed-top`} role="alert">
-        {message}
-        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" />
-      </div>
+      {!hideAlert && (
+        <div className={`alert alert-${state} alert-dismissible fade show fixed-top`} role="alert">
+          {message}
+          <button type="button" className="btn-close" aria-label="Close" onClick={() => setHideAlert(true)} />
+        </div>
+      )}
     </>
   );
 };

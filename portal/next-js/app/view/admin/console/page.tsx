@@ -1,7 +1,5 @@
-interface AdminConsoleProps {}
+import AdminConsole from './console';
 
-const AdminConsole = () => {
-  return <>Admin console!</>;
-};
-
-export default AdminConsole;
+export default function Page() {
+  return <AdminConsole />;
+}

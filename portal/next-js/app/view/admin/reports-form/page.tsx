@@ -1,7 +1,5 @@
-interface ReportsFormProps {}
+import ReportsForm from './reports-form';
 
-const ReportsForm = () => {
-  return <>Reports form!</>;
-};
-
-export default ReportsForm;
+export default function Page() {
+  return <ReportsForm />;
+}
