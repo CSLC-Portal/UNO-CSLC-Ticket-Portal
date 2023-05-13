@@ -27,7 +27,7 @@ Next Milestone [Milestone 6](https://github.com/claytonmsafranek/UNO-CSLC-Ticket
 ## Configuration
 
 ### Flask
-The program can be run locally for testing and development. The main file is `portal/app/__init__.py` which contains a definition for the `create_app()` factory function (flasks expect this and automatically calls the function). The following commands are one way to locally run the program:
+The program can be run locally for testing and development. The main file is `portal/app/__init__.py` which contains a definition for the `create_app()` factory function (flasks expect this and automatically calls the function). Before you can run the app, you need to install the dependencies via `pip install -r portal/requirements.txt` (assuming your current working directory is in the root folder of this project). This installs the core dependencies for the project, you can also install the development dependencies located in `portal/requirements/dev.txt` if you intend on running tests and linting. The following commands are one way to locally run the program:
 
 ```
 export FLASK_APP=portal/app
