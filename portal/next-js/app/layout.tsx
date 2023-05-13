@@ -10,7 +10,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <link rel="shortcut icon" href="img/favicon.ico" />
-        <title>Title</title>
+        <title>Future Site of CSLC Tutoring Portal</title>
 
         {/* Globally expose bootstrap-js on client components */}
         <Script
