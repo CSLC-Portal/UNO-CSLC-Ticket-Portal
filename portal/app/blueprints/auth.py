@@ -87,7 +87,7 @@ def user_loader(id: str):
 
 def build_auth_url():
     """
-    Function to build the authorization url used to authenticat a user using MS Authentication. 
+    Function to build the authorization url used to authenticat a user using MS Authentication.
     """
     session["flow"] = _build_auth_code_flow()
     return session["flow"]["auth_uri"]

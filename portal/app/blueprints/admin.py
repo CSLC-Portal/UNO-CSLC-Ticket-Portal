@@ -44,8 +44,8 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 def console():
     """
     This admin function returns the main page of the admin console. When the HTTP route /admin is hit,
-    the render template function will render the html page "admin-console.html"
-    """"
+    the render template function will render the html page admin-console.html
+    """
     return render_template('admin-console.html')
 
 @admin.route('/problems')
@@ -168,7 +168,7 @@ def reports_form():
 def generate_reports():
     """
     The admin function generate_reports() houses the logic that will actually download the ticket data and generate a csv file.
-    When the HTTP route /admin/reports/download with a POST request, the csv data will be generated and the file will be 
+    When the HTTP route /admin/reports/download with a POST request, the csv data will be generated and the file will be
     created for the admin to view specific ticket data.
     """
 
@@ -499,7 +499,7 @@ def edit_course():
 def toggle_display():
     """
     The admin funciton toggle_display() houses all of the logic for the admin to toggle whether or not a course should be displayed
-    on the homepage of the CSLC portal. When the HTTP route /admin/courses/toggle-display is hit with a POST request, the data will be 
+    on the homepage of the CSLC portal. When the HTTP route /admin/courses/toggle-display is hit with a POST request, the data will be
     sent back from the form and the value course.on_display will be toggled depending on what its current value is.
     """
     course_id = request.form.get("toggleID")
@@ -1123,7 +1123,7 @@ def _any_change_in_data(sec, semester, course, sectionNum, sectionMode, mon, tue
 
 def _no_days_of_week(m, t, w, th, f):
     """
-    Tests if there are no days of the week for a section to be taught. Most likely means that the class is online. 
+    Tests if there are no days of the week for a section to be taught. Most likely means that the class is online.
     This function is also used in error checking.
     """
     if m is None and t is None and w is None and th is None and f is None:
