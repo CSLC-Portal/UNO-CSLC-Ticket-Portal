@@ -32,6 +32,10 @@ views = Blueprint('views', __name__)
 
 @views.route("/")
 def index():
+    """
+    This index() funciton returns the main home page of the CSLC! It returns the render template for index.html. It also does
+    a couple small queries for courses and messages to display on the home page.
+    """
     toDisplay = Course.query.filter_by(on_display=True)
     messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
     return render_template('index.html', messages=messages, OnDisplay=toDisplay)
@@ -136,6 +140,11 @@ def update_ticket():
 @views.route('/edit-ticket', methods=["POST"])
 @permission_required(Permission.Tutor)
 def edit_ticket():
+    """
+    The funciton edit_ticket() houses all of the logic for a tutor to edit a seticketction in the database. When the HTTP
+    route /edit-ticket is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to edit a ticket in the database.
+    """
     # get ticket id back + current ticket
     ticketID = request.form.get("ticketIDModal")
     ticket = Ticket.query.get(ticketID)
@@ -163,6 +172,11 @@ def edit_ticket():
 @views.route('/view-tutor-info', methods=["GET"])
 @permission_required(Permission.Tutor)
 def view_info():
+    """
+    The view_into() function is the main funciton that displays the info page for a tutor to edit tthier working status and
+    also the different courses that they are able to tutor in. The HTTP route /view-tutor-info will render the template HTML
+    "edit-tutor-info.html" on a GET request
+    """
     # edit tutor activity status, and classes they can help with
     courses = Course.query.all()
     return render_template('edit-tutor-info.html', courses=courses)
@@ -170,6 +184,10 @@ def view_info():
 @views.route('/toggle-working', methods=['POST'])
 @permission_required(Permission.Tutor)
 def toggle_working():
+    """
+    The toggle_working() function houses all of the logic for a tutor to toggle whether or not they are currently working in the CSLC.
+    This is different form currently employed, this is basically a tutor "clocking in" or saying that they are available to tutor students.
+    """
     user_id = request.form.get("toggleWorkingID")
     try:
         user: User = User.query.get(user_id)
@@ -195,6 +213,11 @@ def toggle_working():
 @views.route('/toggle-can-tutor', methods=["POST"])
 @permission_required(Permission.Tutor)
 def toggle_can_tutor():
+    """
+    The toggle_can_tutor() funciton houses all the logic for tutors to specify what courses they are able to tutor or not.
+    If a tutor is able to tutor a course they will toggle the button for each course and that will add it to their list of courses
+    they are able to study. The join table can_tutor is utlizied in this funciton
+    """
     course_id = request.form.get("toggleCanTutorID")
     user_id = current_user.id
     print("User ID: " + str(user_id))
@@ -281,6 +304,10 @@ def _attempt_create_ticket(form: ImmutableMultiDict):
             return Ticket(email, name, course_id, section_id, assignment, question, problem_id, mode)
 
 def _attempt_edit_ticket(ticket: Ticket):
+    """
+    This funciton takes in all of the data from the edit ticket form and sanitizes it and makes sure that it is valid data
+    before editing the ticket
+    """
     # TODO: Need to produce error messages!!
 
     course_id = strip_or_none(request.form.get("courseField"))
