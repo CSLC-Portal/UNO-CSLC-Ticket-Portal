@@ -1,14 +1,19 @@
 import { AlertClasses } from 'types/enum';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface AlertProps {
   state: AlertClasses;
   message: string;
+  onClose?: Function;
 }
 
-const Alert = ({ state, message }: AlertProps) => {
+const Alert = ({ state, message, onClose }: AlertProps) => {
   const [hideAlert, setHideAlert] = useState(false);
+
+  useEffect(() => {
+    if (hideAlert) onClose?.();
+  }, [onClose, hideAlert]);
 
   return (
     <>

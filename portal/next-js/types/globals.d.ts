@@ -3,3 +3,23 @@ declare namespace NodeJS {
     NEXT_PUBLIC_API_URL: string;
   }
 }
+
+interface User {
+  isAuthenticated: boolean;
+}
+
+interface Course {
+  id: number;
+  courseName: string;
+}
+
+interface Section {
+  id: number;
+  courseId: number;
+  sectionNumber: number;
+}
+
+interface ProblemType {
+  id: number;
+  type: string;
+}
