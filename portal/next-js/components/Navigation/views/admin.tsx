@@ -14,12 +14,12 @@ const AdminView = () => (
       </button>
       <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         <li>
-          <Link className="dropdown-item" href="/view/admin/console">
+          <Link className="dropdown-item" href={`${process.env.NEXT_PUBLIC_FLASK_APP_URL}/admin`}>
             Administration Console
           </Link>
         </li>
         <li>
-          <Link className="dropdown-item" href="/view/admin/reports-form">
+          <Link className="dropdown-item" href={`${process.env.NEXT_PUBLIC_FLASK_APP_URL}/admin/reports`}>
             Reports
           </Link>
         </li>

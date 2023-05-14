@@ -76,6 +76,10 @@ def user_loader(id: str):
     #
     return User.query.get(int(id))
 
+@auth.route("/sign-in")
+def sign_in():
+    return redirect(build_auth_url())
+
 def build_auth_url():
     session["flow"] = _build_auth_code_flow()
     return session["flow"]["auth_uri"]

@@ -4,7 +4,7 @@ const UnauthenticatedView = () => (
   <div className="nav-section">
     <ul>
       <li>
-        <Link className="Login" href="{{ build_auth_url() }}">
+        <Link className="Login" href={`${process.env.NEXT_PUBLIC_FLASK_APP_URL}/sign-in`}>
           Sign In
         </Link>
       </li>

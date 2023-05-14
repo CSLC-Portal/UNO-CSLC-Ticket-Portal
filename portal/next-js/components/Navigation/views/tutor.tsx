@@ -12,12 +12,12 @@ const TutorView = () => (
       </button>
       <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         <li>
-          <a className="dropdown-item" href="{{ url_for('views.view_info') }}">
+          <a className="dropdown-item" href={`${process.env.NEXT_PUBLIC_FLASK_APP_URL}/view-tutor-info`}>
             Edit Tutor Information
           </a>
         </li>
         <li>
-          <a className="dropdown-item" href="{{ url_for('views.view_tickets') }}">
+          <a className="dropdown-item" href={`${process.env.NEXT_PUBLIC_FLASK_APP_URL}/view-tickets`}>
             View Tickets
           </a>
         </li>

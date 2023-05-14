@@ -2,10 +2,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'styles/main-style.css';
 import StickyHeader from '@components/Header/sticky-header';
 import React, { ReactNode } from 'react';
-import NavBar from '@components/Navigation/NavBar';
+import NavBar, { NavBarProps } from '@components/Navigation/NavBar';
 import Script from 'next/script';
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/current_user`);
+  const userData = await response.json();
+
   return (
     <html lang="en">
       <head>
@@ -22,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
       <body className="d-flex flex-column min-vh-100">
         <StickyHeader />
-        <NavBar />
+        <NavBar {...userData} />
 
         <div id="content" className="container-fluid">
           {children}

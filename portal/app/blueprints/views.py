@@ -34,6 +34,9 @@ import sys
 
 views = Blueprint('views', __name__)
 
+# Temporary route to make a GET request to http://127.0.0.1:5000/ to create a new user
+# It has already been migrated to next js and should not be used for anything other than local development
+#
 @views.route("/")
 def index():
     toDisplay = Course.query.filter_by(on_display=True)
@@ -68,6 +71,25 @@ def api_home():
     } for course in toDisplay]
 
     return json.dumps(response)
+
+@views.route("/api/current_user")
+def get_current_user():    
+    from flask_login import login_user
+    user = User.query.filter_by(email='email@email.com').first()
+    login_user(user)
+
+    if current_user.is_authenticated:
+        user_dict = {
+            'id': current_user.id,
+            'name': current_user.name,
+            'email': current_user.email,
+            'isAuthenticated': current_user.is_authenticated,
+            'permission': str(current_user.permission)
+        }
+
+        return jsonify(user_dict)
+    else:
+        return jsonify({ 'isAuthenticated': False })
 
 @views.route('/create-ticket', methods=['POST', 'GET'])
 def create_ticket():

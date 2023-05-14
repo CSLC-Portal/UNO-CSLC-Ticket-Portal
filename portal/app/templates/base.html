@@ -42,7 +42,12 @@
                         alt="University of Nebraska at Omaha Logo" class="uno-logo" />
                 </td>
                 <td class="right-end">
-                    <a class="logo-text" href="{{ url_for('views.index') }}">Computer Science Learning Center</a>
+                    <!-- Should probably use an env variable but whatever -->
+                    <!-- Local -->
+                    <!-- <a class="logo-text" href="http://localhost:3000/">Computer Science Learning Center</a> -->
+
+                    <!-- Prod -->
+                    <a class="logo-text" href="https://uno-cslc-ticket-portal.vercel.app/">Computer Science Learning Center</a>
                 </td>
             </tr>
         </table>
