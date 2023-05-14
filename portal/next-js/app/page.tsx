@@ -1,17 +1,14 @@
 import IndexPage, { IndexProps } from './index';
 
 export default async function Page() {
-  let props = { error: true } as IndexProps;
+  let props = {} as IndexProps;
 
-  try {
-    const data = await fetch(process.env.NEXT_PUBLIC_API_URL, { cache: 'no-store' });
-    if (data.status === 200) {
-      const json = await data.json();
-      console.log(json);
+  const data = await fetch(process.env.NEXT_PUBLIC_API_URL, { cache: 'no-store' });
 
-      props = { ...json, error: false };
-    }
-  } catch (err) {}
+  if (data.status === 200) {
+    const json = await data.json();
+    props = json;
+  }
 
   return <IndexPage {...props} />;
 }

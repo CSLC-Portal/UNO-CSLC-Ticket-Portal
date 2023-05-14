@@ -34,23 +34,10 @@ export interface IndexProps {
   zoom: ZoomRoom;
   hours: OfficeHours[];
   availability: Availability[];
-  error: boolean;
 }
 
-const IndexPage = ({ updates, zoom, hours, availability, error }: IndexProps) => {
+const IndexPage = ({ updates, zoom, hours, availability }: IndexProps) => {
   const router = useRouter();
-
-  if (error) {
-    return (
-      <div style={{ textAlign: 'center' }}>
-        <h1 style={{ fontSize: '20px' }}>Oops..</h1>
-        <br />
-        Sorry, we are having some technical difficulties.
-        <br />
-        Try refreshing the page or contacting support if the problem persists
-      </div>
-    );
-  }
 
   return (
     <>
