@@ -34,8 +34,8 @@ import sys
 
 views = Blueprint('views', __name__)
 
-@views.route("/ye")
-def ye():
+@views.route("/")
+def index():
     toDisplay = Course.query.filter_by(on_display=True)
     messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
 
@@ -49,8 +49,8 @@ def ye():
 
     return render_template('index.html', messages=messages, OnDisplay=toDisplay)
 
-@views.route("/")
-def index():
+@views.route("/api/home")
+def api_home():
     toDisplay = Course.query.filter_by(on_display=True)
     messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
     
