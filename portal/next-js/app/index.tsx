@@ -69,13 +69,7 @@ const IndexPage = ({ updates, zoom, hours, availability }: IndexProps) => {
         <br />
         <div className="row">
           <div className="col-12">
-            <button
-              className="create-ticket-button"
-              onClick={() => router.push('/create-ticket')}
-              data-toggle="tooltip"
-              data-placement="top"
-              title="hii"
-            >
+            <button className="create-ticket-button" onClick={() => router.push('/create-ticket')}>
               Open Ticket
             </button>
           </div>
