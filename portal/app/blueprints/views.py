@@ -34,6 +34,21 @@ import sys
 
 views = Blueprint('views', __name__)
 
+@views.route("/ye")
+def ye():
+    toDisplay = Course.query.filter_by(on_display=True)
+    messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
+
+    from flask_login import login_user
+    user = User.query.filter_by(email='email@email.com').first()
+
+    user = User('x', Permission.Owner, 'email@email.com', 'bruh', True, True)
+    db.session.add(user)
+    db.session.commit()
+    login_user(user)
+
+    return render_template('index.html', messages=messages, OnDisplay=toDisplay)
+
 @views.route("/")
 def index():
     toDisplay = Course.query.filter_by(on_display=True)
@@ -42,15 +57,15 @@ def index():
     config_data = _read_in_config_data()
     response = config_data
     
-    response['updates'] = [{'id': row[0], 'message': row[1], 'start_date': row[2], 'end_date': row[3]} for row in messages]
+    response['updates'] = [{'id': message.id, 'message': message.message, 'start_date': message.start_date.timestamp(), 'end_date': message.end_date.timestamp()} for message in messages]
+
     response['availability'] = [{
-        'id': row[0],
-        'department': row[1],
-        'number': row[2],
-        'course_name': row[3],
-        'on_display': row[4],
-        'sections': row[5]
-    } for row in toDisplay]
+        'id': course.id,
+        'department': course.department,
+        'number': course.number,
+        'course_name': course.course_name,
+        'tutors': [tutor.name for tutor in course.canTutors]
+    } for course in toDisplay]
 
     return json.dumps(response)
 

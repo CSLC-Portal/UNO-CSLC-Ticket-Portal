@@ -19,8 +19,7 @@ interface Availability {
   department: string;
   course_name: string;
   number: number;
-  on_display: boolean;
-  sections: unknown;
+  tutors: string[];
 }
 
 interface OfficeHours {
@@ -70,7 +69,13 @@ const IndexPage = ({ updates, zoom, hours, availability }: IndexProps) => {
         <br />
         <div className="row">
           <div className="col-12">
-            <button className="create-ticket-button" onClick={() => router.push('/create-ticket')}>
+            <button
+              className="create-ticket-button"
+              onClick={() => router.push('/create-ticket')}
+              data-toggle="tooltip"
+              data-placement="top"
+              title="hii"
+            >
               Open Ticket
             </button>
           </div>
@@ -90,11 +95,11 @@ const IndexPage = ({ updates, zoom, hours, availability }: IndexProps) => {
             </tr>
           </thead>
           <tbody>
-            {availability.map(({ id, department, number, course_name: courseName }) => {
+            {availability.map(({ id, department, number, course_name: courseName, tutors }) => {
               return (
-                <tr key={id} className="middle">
+                <tr key={id} className="middle" data-toggle="tooltip" data-placement="top" title={tutors.join(', ')}>
                   <td>{`${department} ${number}: ${courseName}`}</td>
-                  <td>0</td>
+                  <td>{tutors?.length}</td>
                 </tr>
               );
             })}
