@@ -967,9 +967,7 @@ def _any_change_in_data(sec, semester, course, sectionNum, sectionMode, mon, tue
            sec.end_time == end
 
 def _no_days_of_week(m, t, w, th, f):
-    if m is None and t is None and w is None and th is None and f is None:
-        return True
-    return False
+    return m is None and t is None and w is None and th is None and f is None
 
 def _attempt_update_section(sec, semester, course, sectionNum, sectionMode, mon, tue, wed, thu, fri, professor, start, end):
     days = build_days_of_week_string(mon, tue, wed, thu, fri)
