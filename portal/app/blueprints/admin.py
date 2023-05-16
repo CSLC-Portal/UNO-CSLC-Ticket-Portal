@@ -42,17 +42,30 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 @admin.route('/')
 @permission_required(Permission.Admin)
 def console():
+    """
+    This admin function returns the main page of the admin console. When the HTTP route /admin is hit,
+    the render template function will render the html page admin-console.html
+    """
     return render_template('admin-console.html')
 
 @admin.route('/problems')
 @permission_required(Permission.Admin)
 def view_problem_types():
+    """
+    This admin function view_problem_types() returns all of the problem types that an admin has previously set up.
+    When the HTTP route /admin/problems is hit, the render template function will render the html page "admin-problem-types.html"
+    """
     problemTypes = ProblemType.query.all()
     return render_template('admin-problem-types.html', problemTypes=problemTypes, problemTypeCount=len(problemTypes))
 
 @admin.route('/problems/add', methods=["POST"])
 @permission_required(Permission.Admin)
 def add_problem_type():
+    """
+    This admin function add_problem_type() houses all of the logic for admins to add specific problem types.
+    When the HTTP route /admin/problems/add is hit with a POST request, the problem type input from the form is sanitized
+    and then the problem type is added to the database for use in tickets.
+    """
     problemType = strip_or_none(request.form.get("problemType"))
 
     try:
@@ -78,6 +91,11 @@ def add_problem_type():
 @admin.route('/problems/remove', methods=["POST"])
 @permission_required(Permission.Admin)
 def remove_problem_type():
+    """
+    The admin function remove_problem_type() houses all of the logic for admins to remove problem types.
+    When the HTTP route /admin/problems/remove is hit with a POST request, the data from the form will be sanitized and
+    then the logic will complete to remove the specific problem type from the database.
+    """
     problemTypeID = strip_or_none(request.form.get("problemTypeID"))
 
     try:
@@ -104,6 +122,11 @@ def remove_problem_type():
 @admin.route('/problems/edit', methods=["POST"])
 @permission_required(Permission.Admin)
 def edit_problem_type():
+    """
+    The admin function edit_problem_type() houses all of the logic for editing a secific problem type.
+    When the HTTP route /admin/problems/edit is hit with a POST request, the data from the form is sent back and sanitized
+    and then the appropriate logic is run to edit the problem type and description.
+    """
     problemTypeID = strip_or_none(request.form.get("problemTypeID"))
     description = strip_or_none(request.form.get("description"))
 
@@ -134,11 +157,20 @@ def edit_problem_type():
 @admin.route('/reports')
 @permission_required(Permission.Admin)
 def reports_form():
+    """
+    The admin function reports_form() is the main view for the reports download page for the administrator.
+    When the HTTP route /admin/reports is hit, the redner template funciton will render hte HTML file "download-report.html"
+    """
     return render_template('download-report.html')
 
 @admin.route('/reports/download', methods=["POST"])
 @permission_required(Permission.Admin)
 def generate_reports():
+    """
+    The admin function generate_reports() houses the logic that will actually download the ticket data and generate a csv file.
+    When the HTTP route /admin/reports/download with a POST request, the csv data will be generated and the file will be
+    created for the admin to view specific ticket data.
+    """
 
     createDate = request.form.get("creationDate")
     courseName = strip_or_none(request.form.get("course"))
@@ -172,6 +204,10 @@ def generate_reports():
 @admin.route('/tutors')
 @permission_required(Permission.Admin)
 def view_tutors():
+    """
+    The admin function view_tutors() is the main function to display the manage tutors view in the admin console.
+    When the route /admin/tutors is hit with a GET request, the render template function will return the HTML file "admin-tutors.html"
+    """
 
     # NOTE: Cannot use inequality operators < > <= >= on enum from database as only
     #       the enum name is actually persisted.
@@ -181,6 +217,11 @@ def view_tutors():
 @admin.route('/tutors/add', methods=['POST'])
 @permission_required(Permission.Admin)
 def add_tutor():
+    """
+    The admin function add_tutor() houses all of the logic to add tutors or even other admins. When the HTTP route
+    /admin/tutors/add is hit with a POST request, all of the data from the form will be sent back and the appropriate tutor
+    or admin will be generated and inserted into the DB.
+    """
     email = strip_or_none(request.form.get("email"))
     permission_val = strip_or_none(request.form.get("permission"))
     permission = None
@@ -226,6 +267,11 @@ def add_tutor():
 @admin.route('/tutors/remove', methods=['POST'])
 @permission_required(Permission.Admin)
 def remove_tutor():
+    """
+    The admin funciton remove_tutor() houses all of the logic for the admin to remove tutors or other admins. When the HTTP
+    route /admin/tutors/remove is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to remove a tutor or admin from the database.
+    """
     user_id = strip_or_none(request.form.get("userID"))
 
     try:
@@ -257,6 +303,11 @@ def remove_tutor():
 @admin.route('/tutors/edit', methods=['POST'])
 @permission_required(Permission.Admin)
 def edit_tutor():
+    """
+    The admin funciton edit_tutor() houses all of the logic for the admin to edit tutors or other admins. When the HTTP
+    route /admin/tutors/edit is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to edit a tutor or admin that already exists in the database.
+    """
     user_id = strip_or_none(request.form.get("userID"))
     permission_val = strip_or_none(request.form.get("permission"))
     active = request.form.get("active") is not None
@@ -299,6 +350,10 @@ def edit_tutor():
 @admin.route('/courses')
 @permission_required(Permission.Admin)
 def view_courses():
+    """
+    The admin function view_courses() is the main funciton that displays the courses page in the admin console.
+    When the HTTP route /admin/courses is hit, the render template function will return the HTML file "admin-course.html"
+    """
     # get all courses, just for validation in html
     courses = Course.query.all()
     return render_template('admin-course.html', courses=courses)
@@ -306,6 +361,11 @@ def view_courses():
 @admin.route('/courses/add', methods=["POST"])
 @permission_required(Permission.Admin)
 def add_course():
+    """
+    The admin funciton add_course() houses all of the logic for the admin to add a new course to the database. When the HTTP
+    route /admin/coourses/add is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to add a course to the database if it doesn't exist already.
+    """
 
     courseDepartment = strip_or_none(request.form.get("courseDepartment"))
     courseNumber = strip_or_none(request.form.get("courseNumber"))
@@ -342,6 +402,11 @@ def add_course():
 @admin.route('/courses/remove', methods=['POST'])
 @permission_required(Permission.Admin)
 def remove_course():
+    """
+    The admin funciton remove_course() houses all of the logic for the admin to remove a course from the database. When the HTTP
+    route /admin/coourses/remove is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to remove a course to the database.
+    """
 
     course_id = strip_or_none(request.form.get("courseID"))
 
@@ -368,6 +433,11 @@ def remove_course():
 @admin.route('/courses/edit', methods=['POST'])
 @permission_required(Permission.Admin)
 def edit_course():
+    """
+    The admin funciton edit_course() houses all of the logic for the admin to edit a course in the database. When the HTTP
+    route /admin/coourses/edit is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to edit a course in the database.
+    """
     course_id = strip_or_none(request.form.get("courseID"))
     newDept = strip_or_none(request.form.get("updateCourseDept"))
     newNum = strip_or_none(request.form.get("updateCourseNum"))
@@ -427,6 +497,11 @@ def edit_course():
 @admin.route('/courses/toggle-display', methods=['POST'])
 @permission_required(Permission.Admin)
 def toggle_display():
+    """
+    The admin funciton toggle_display() houses all of the logic for the admin to toggle whether or not a course should be displayed
+    on the homepage of the CSLC portal. When the HTTP route /admin/courses/toggle-display is hit with a POST request, the data will be
+    sent back from the form and the value course.on_display will be toggled depending on what its current value is.
+    """
     course_id = request.form.get("toggleID")
     try:
         course: Course = Course.query.get(course_id)
@@ -451,6 +526,10 @@ def toggle_display():
 @admin.route('/semesters')
 @permission_required(Permission.Admin)
 def view_semesters():
+    """
+    The admin function view_semesters() is the main funciton that displays the semesters page in the admin console.
+    When the HTTP route /admin/semesters is hit, the render template function will return the HTML file "admin-semester.html"
+    """
     # get all courses, just for validation in html
     semesters = Semester.query.all()
     return render_template('admin-semester.html', semesters=semesters)
@@ -458,7 +537,11 @@ def view_semesters():
 @admin.route('/semesters/add', methods=["POST"])
 @permission_required(Permission.Admin)
 def add_semester():
-
+    """
+    The admin funciton add_semester() houses all of the logic for the admin to add a semster to the database. When the HTTP
+    route /admin/semesters/add is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to add a semester to the database.
+    """
     year = strip_or_none(request.form.get("yearInput"))
     season = strip_or_none(request.form.get("seasonInput"))
     startDate = strip_or_none(request.form.get("startDate"))
@@ -500,6 +583,11 @@ def add_semester():
 @admin.route('/semesters/remove', methods=['POST'])
 @permission_required(Permission.Admin)
 def remove_semester():
+    """
+    The admin funciton remove_semester() houses all of the logic for the admin to remove a semester from the database. When the HTTP
+    route /admin/semesters/remove is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to remove a semester from the database.
+    """
 
     semester_id = strip_or_none(request.form.get("semesterID"))
 
@@ -527,6 +615,11 @@ def remove_semester():
 @admin.route('/semesters/edit', methods=['POST'])
 @permission_required(Permission.Admin)
 def edit_semester():
+    """
+    The admin funciton edit_semester() houses all of the logic for the admin to edit a semester in the database. When the HTTP
+    route /admin/semesters/edit is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to edit a semester in the database.
+    """
     semester_id = strip_or_none(request.form.get("semesterID"))
     newYear = strip_or_none(request.form.get("yearUpdate"))
     newSeason = strip_or_none(request.form.get("seasonUpdate"))
@@ -584,6 +677,10 @@ def edit_semester():
 @admin.route('/professors')
 @permission_required(Permission.Admin)
 def view_professors():
+    """
+    The admin function view_professors() is the main funciton that displays the professors page in the admin console.
+    When the HTTP route /admin/professors is hit, the render template function will return the HTML file "admin-professor.html"
+    """
     # get all courses, just for validation in html
     professors = Professor.query.all()
     return render_template('admin-professor.html', professors=professors)
@@ -591,6 +688,11 @@ def view_professors():
 @admin.route('/professors/add', methods=["POST"])
 @permission_required(Permission.Admin)
 def add_professor():
+    """
+    The admin funciton add_professor() houses all of the logic for the admin to add a semester to the database. When the HTTP
+    route /admin/professors/add is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to add a professor to the database.
+    """
 
     firstName = strip_or_none(request.form.get("firstNameInput"))
     lastName = strip_or_none(request.form.get("lastNameInput"))
@@ -617,6 +719,11 @@ def add_professor():
 @admin.route('/professors/remove', methods=['POST'])
 @permission_required(Permission.Admin)
 def remove_professor():
+    """
+    The admin funciton remove_professor() houses all of the logic for the admin to remove a professor from the database. When the HTTP
+    route /admin/professors/remove is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to remove a professor from the database.
+    """
 
     professor_id = strip_or_none(request.form.get("professorID"))
 
@@ -644,6 +751,11 @@ def remove_professor():
 @admin.route('/professors/edit', methods=['POST'])
 @permission_required(Permission.Admin)
 def edit_professor():
+    """
+    The admin funciton edit_professor() houses all of the logic for the admin to edit a professor in the database. When the HTTP
+    route /admin/professors/edit is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to edit a professor in the database.
+    """
     professor_id = strip_or_none(request.form.get("professorID"))
     newFName = strip_or_none(request.form.get("fnameUpdate")).capitalize()
     newLName = strip_or_none(request.form.get("lnameUpdate")).capitalize()
@@ -688,6 +800,10 @@ def edit_professor():
 @admin.route('/sections')
 @permission_required(Permission.Admin)
 def view_sections():
+    """
+    The admin function view_sections() is the main funciton that displays the sections page in the admin console.
+    When the HTTP route /admin/sections is hit, the render template function will return the HTML file "admin-sections.html"
+    """
     # get all courses, just for validation in html
     sections = Section.query.all()
     semesters = Semester.query.all()
@@ -698,6 +814,11 @@ def view_sections():
 @admin.route('/sections/add', methods=["POST"])
 @permission_required(Permission.Admin)
 def add_section():
+    """
+    The admin funciton add_section() houses all of the logic for the admin to add a section to the database. When the HTTP
+    route /admin/sections/add is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to add a section to the database.
+    """
 
     semester = strip_or_none(request.form.get("semesterInput"))
     course = strip_or_none(request.form.get("courseInput"))
@@ -754,6 +875,11 @@ def add_section():
 @admin.route('/sections/remove', methods=['POST'])
 @permission_required(Permission.Admin)
 def remove_section():
+    """
+    The admin funciton remove_section() houses all of the logic for the admin to remove a section from the database. When the HTTP
+    route /admin/sections/remove is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to remove a section from the database.
+    """
 
     section_id = strip_or_none(request.form.get("sectionID"))
 
@@ -782,6 +908,11 @@ def remove_section():
 @permission_required(Permission.Admin)
 # flake8: noqa: C901
 def edit_section():
+    """
+    The admin funciton edit_section() houses all of the logic for the admin to edit a section in the database. When the HTTP
+    route /admin/sections/edit is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to edit a section in the database.
+    """
     section_id = strip_or_none(request.form.get("sectionID"))
     newSemester = strip_or_none(request.form.get("semesterUpdate"))
     newCourse = strip_or_none(request.form.get("updateCourse"))
@@ -864,6 +995,10 @@ def edit_section():
 @admin.route('/messages')
 @permission_required(Permission.Admin)
 def view_messages():
+    """
+    The admin function view_messages() is the main funciton that displays the messages page in the admin console.
+    When the HTTP route /admin/messages is hit, the render template function will return the HTML file "admin-messages.html"
+    """
     # get all courses, just for validation in html
     messages = Message.query.all()
     return render_template('admin-messages.html', messages=messages)
@@ -871,6 +1006,11 @@ def view_messages():
 @admin.route('/messages/add', methods=["POST"])
 @permission_required(Permission.Admin)
 def add_message():
+    """
+    The admin funciton add_message() houses all of the logic for the admin to add a message to the database. When the HTTP
+    route /admin/messages/add is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to add a message to the database.
+    """
 
     message = strip_or_none(request.form.get("message"))
     startDate = datetime.strptime(request.form.get("startDate"), "%Y-%m-%d")
@@ -889,6 +1029,12 @@ def add_message():
 @admin.route('/messages/remove', methods=["POST"])
 @permission_required(Permission.Admin)
 def remove_message():
+    """
+    The admin funciton remove_message() houses all of the logic for the admin to remove a message from the database. When the HTTP
+    route /admin/messages/remove is hit with a POST request, the data from the form is sent back and the appropriate logic is run
+    to remove a message from the database.
+    """
+
     message_id = strip_or_none(request.form.get("messageID"))
     try:
         message: Message = Message.query.get(message_id)
@@ -942,6 +1088,11 @@ def _attempt_delete_super_user(user: User):
     db.session.commit()
 
 def _attempt_edit_user(user: User, active, permission=None):
+    """
+    _attempt_edit_user() function first checkes the permission of the desired edit to the user. If it is not none it will
+    set that users permissions to the desird permisions and then set the tutor is active. This funciton is called to essentially
+    complete the profile of pending users.
+    """
     try:
         if permission:
             user.permission = permission
@@ -954,6 +1105,10 @@ def _attempt_edit_user(user: User, active, permission=None):
         raise e
 
 def _any_change_in_data(sec, semester, course, sectionNum, sectionMode, mon, tue, wed, thu, fri, professor, start, end):
+    """
+    This function is used to calcualte whether or not there is any change in the form data coming back from the edit section
+    form.
+    """
     # calc days of week
     days = build_days_of_week_string(mon, tue, wed, thu, fri)
 
@@ -967,9 +1122,16 @@ def _any_change_in_data(sec, semester, course, sectionNum, sectionMode, mon, tue
            sec.end_time == end
 
 def _no_days_of_week(m, t, w, th, f):
+    """
+    Tests if there are no days of the week for a section to be taught. Most likely means that the class is online.
+    This function is also used in error checking.
+    """
     return m is None and t is None and w is None and th is None and f is None
 
 def _attempt_update_section(sec, semester, course, sectionNum, sectionMode, mon, tue, wed, thu, fri, professor, start, end):
+    """
+    This funciton attempts to update a section with the data from the edit section form.
+    """
     days = build_days_of_week_string(mon, tue, wed, thu, fri)
 
     # update everything that needs updating
@@ -992,6 +1154,9 @@ def _attempt_update_section(sec, semester, course, sectionNum, sectionMode, mon,
     db.session.commit()
 
 def _get_start_time(start):
+    """
+    This function gets the start time of a particular section. Sometimes the time format is H:M:S or H:M, so both cases must be handeled
+    """
     if start is not None and not str_empty(start):
         try:
             start = datetime.strptime(start, '%H:%M:%S').time()

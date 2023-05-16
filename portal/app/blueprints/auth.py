@@ -60,15 +60,24 @@ def authorized():
 @auth.route("/logout")
 @login_required
 def logout():
+    """
+    This funciton is used to logout a user. If the HTTP route /logout is hit the current_user will be logged out via msal library
+    """
     logout_user()
     return redirect(f'{AUTHORITY}/oauth2/v2.0/logout?post_logout_redirect_uri={url_for("views.index", _external=True)}')
 
 @login_manager.unauthorized_handler
 def unauthorized():
+    """
+    Function to handle when a user is currently unauthorized.
+    """
     return redirect(build_auth_url())
 
 @login_manager.user_loader
 def user_loader(id: str):
+    """
+    Function to quickly return the current user by the ID of that entry.
+    """
     # TODO: flask-login provides the primary key of the user object
     #       which is currently just an auto increment integer.
     #       However, we may consider using the OID as a key instead
@@ -77,6 +86,9 @@ def user_loader(id: str):
     return User.query.get(int(id))
 
 def build_auth_url():
+    """
+    Function to build the authorization url used to authenticat a user using MS Authentication.
+    """
     session["flow"] = _build_auth_code_flow()
     return session["flow"]["auth_uri"]
 
@@ -128,6 +140,9 @@ def _user_from_claims(token_claims: str):
     return user
 
 def _load_cache():
+    """
+    This funciton clals the msal.SerializableTokenCache() funciton to get the tocken cache for a user and sets it in the user session.
+    """
     cache = msal.SerializableTokenCache()
     if session.get("token_cache"):
         cache.deserialize(session["token_cache"])
@@ -135,14 +150,23 @@ def _load_cache():
     return cache
 
 def _save_cache(cache):
+    """
+    This funciton saves the token cache in the session if the cache has changed.
+    """
     if cache.has_state_changed:
         session["token_cache"] = cache.serialize()
 
 def _build_auth_app(cache=None):
+    """
+    This function runs a few asserts on env variables to make sure that the app is properly configured before running.
+    """
     assert CLIENT_ID, 'No client ID specified for authentication. Set AAD_CLIENT_ID env variable!'
     assert CLIENT_SECRET, 'No client secret specified for authentication. Set AAD_CLIENT_SECRET env variable!'
     assert REDIRECT_PATH, 'No redirect path specified for authentication. Set AAD_REDIRECT_PATH env variable!'
     return auth_app_type(CLIENT_ID, authority=AUTHORITY, client_credential=CLIENT_SECRET, token_cache=cache)
 
 def _build_auth_code_flow(scopes=None):
+    """
+    This funciton is utilized in the build_auth_url() funciton to set the session "flow" value for the current user.
+    """
     return _build_auth_app().initiate_auth_code_flow(scopes or [], redirect_uri=url_for("auth.authorized", _external=True))
