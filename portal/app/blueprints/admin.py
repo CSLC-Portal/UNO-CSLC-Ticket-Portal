@@ -1126,9 +1126,7 @@ def _no_days_of_week(m, t, w, th, f):
     Tests if there are no days of the week for a section to be taught. Most likely means that the class is online.
     This function is also used in error checking.
     """
-    if m is None and t is None and w is None and th is None and f is None:
-        return True
-    return False
+    return m is None and t is None and w is None and th is None and f is None
 
 def _attempt_update_section(sec, semester, course, sectionNum, sectionMode, mon, tue, wed, thu, fri, professor, start, end):
     """
