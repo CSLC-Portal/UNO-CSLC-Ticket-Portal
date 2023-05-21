@@ -1,6 +1,6 @@
 'use client';
 import Alert from '@components/Alert/alert';
-import { ReactElement, SyntheticEvent, useCallback, useState } from 'react';
+import { FormEvent, ReactElement, useState } from 'react';
 import { AlertClasses } from 'types/enum';
 interface CreateTicketProps {
   user: User;
@@ -14,8 +14,10 @@ const CreateTicket = ({ user, courses, sections, problemTypes }: CreateTicketPro
   const [alert, setAlert] = useState<ReactElement | null>(null);
   const onCloseAlert = () => setAlert(null);
 
-  const onFormSubmit = async (event: SyntheticEvent) => {
+  const onFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
     const errorAlert = (
       <Alert
         state={AlertClasses.ERROR}
@@ -25,14 +27,23 @@ const CreateTicket = ({ user, courses, sections, problemTypes }: CreateTicketPro
     );
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-ticket`, { mode: 'no-cors' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/create-ticket`, {
+        mode: 'no-cors',
+        method: 'POST',
+        body: formData,
+      });
 
-      if (res.status === 200) {
+      const status = await res.json();
+      console.log(status);
+
+      if (status.success) {
         setAlert(<Alert state={AlertClasses.PRIMARY} message="Successfully submitted ticket" onClose={onCloseAlert} />);
       } else {
         setAlert(errorAlert);
       }
     } catch (e) {
+      console.log(e);
+
       setAlert(errorAlert);
     }
   };

@@ -71,7 +71,8 @@ const IndexPage = ({ updates, zoom, hours, availability }: IndexProps) => {
           <div className="col-12">
             <button
               className="create-ticket-button"
-              onClick={() => router.push(`${process.env.NEXT_PUBLIC_FLASK_APP_URL}/create-ticket`)}
+              onClick={() => router.push('/create-ticket')}
+              // onClick={() => router.push(`${process.env.NEXT_PUBLIC_FLASK_APP_URL}/create-ticket`)}
             >
               Open Ticket
             </button>

@@ -42,13 +42,13 @@ def index():
     toDisplay = Course.query.filter_by(on_display=True)
     messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
 
-    from flask_login import login_user
-    user = User.query.filter_by(email='email@email.com').first()
+    # from flask_login import login_user
+    # user = User.query.filter_by(email='email@email.com').first()
 
-    user = User('x', Permission.Owner, 'email@email.com', 'bruh', True, True)
-    db.session.add(user)
-    db.session.commit()
-    login_user(user)
+    # user = User('x', Permission.Owner, 'email@email.com', 'bruh', True, True)
+    # db.session.add(user)
+    # db.session.commit()
+    # login_user(user)
 
     return render_template('index.html', messages=messages, OnDisplay=toDisplay)
 
@@ -91,7 +91,26 @@ def get_current_user():
     else:
         return jsonify({ 'isAuthenticated': False })
 
-@views.route('/create-ticket', methods=['POST', 'GET'])
+@views.route('/api/get-all-sections')
+def get_all_sections():
+    all_sections = Section.query.all()
+    section_results = [{"id": section.id, "courseId": section.course_id, "sectionNumber": section.section_number } for section in all_sections]
+    return json.dumps(section_results)
+
+@views.route('/api/get-all-courses')
+def get_all_courses():
+    all_courses = Course.query.all()
+    course_results = [{"id": course.id, "courseName": course.course_name } for course in all_courses]
+    return json.dumps(course_results)
+
+@views.route('/api/get-all-problem-types')
+def get_all_problem_types():
+    all_problem_types = ProblemType.query.all()
+    problem_types = [{"id": problem_type.id, "type": problem_type.problem_type } for problem_type in all_problem_types]
+    return json.dumps(problem_types)
+
+
+@views.route('/api/create-ticket', methods=['POST', 'GET'])
 def create_ticket():
     """
     Serves the HTTP route /create-ticket. Shows a ticket create form on GET request.
@@ -112,11 +131,9 @@ def create_ticket():
 
     Student login is required to access this page.
     """
-    if request.method == 'GET':
-        # Render create-ticket template if GET request or if there was an error in submission data
-        return render_template('create-ticket.html')
-
+    print(request.form)
     ticket = _attempt_create_ticket(request.form)
+    print(ticket)
 
     if ticket:
         try:
@@ -125,17 +142,20 @@ def create_ticket():
 
         except IntegrityError:
             db.session.rollback()
-            flash('Could not submit ticket, invalid data', category='error')
+            return jsonify({ "success": False })
+            # flash('Could not submit ticket, invalid data', category='error')
 
         except Exception as e:
-            flash('Could not submit ticket, unknown reason', category='error')
-            print(f'Failed to create ticket: {e}', file=sys.stderr)
+            return jsonify({ "success": False })
+            # flash('Could not submit ticket, unknown reason', category='error')
+            # print(f'Failed to create ticket: {e}', file=sys.stderr)
 
         else:
-            flash('Ticket created successfully!', category='success')
-            return redirect(url_for('views.index'))
+            return jsonify({ "success": True })
+            # flash('Ticket created successfully!', category='success')
+            # return redirect(url_for('views.index'))
 
-    return redirect(url_for('views.create_ticket'))
+    return jsonify({ "success": False })#redirect(url_for('views.create_ticket'))
 
 @views.route('/view-tickets')
 @permission_required(Permission.Tutor)
