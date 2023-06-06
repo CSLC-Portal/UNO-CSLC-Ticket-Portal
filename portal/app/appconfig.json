@@ -1,31 +1,52 @@
 {
-    "misc_config":{
-        "room_number" : "PKI 391",
-        "zoom_link" : "https://unomaha.zoom.us/j/94531042940?pwd=UGlWL09URFF3Vk9jR3ZiSStyTDBHdz09"
+    "zoom": {
+        "room_number": "PKI 391",
+        "zoom_link": "https://unomaha.zoom.us/j/94531042940?pwd=UGlWL09URFF3Vk9jR3ZiSStyTDBHdz09"
     },
 
-    "hours":{
-        "monday_start" : "9:00am",
-        "monday_end" : "8:00pm",
-        "tuesday_start" : "9:00am",
-        "tuesday_end" : "8:00pm",
-        "wednesday_start" : "9:00am",
-        "wednesday_end" : "8:00pm",
-        "thursday_start" : "9:00am",
-        "thursday_end" : "8:00pm",
-        "friday_start" : "9:00am",
-        "friday_end" : "5:00pm",
-        "saturday_start" : "10:30am",
-        "saturday_end" : "2:30pm"
-    },
+    "hours": [
+        {
+            "day_of_week": "Monday",
+            "open_at": "9:00am",
+            "close_at": "8:00pm"
+        },
+        {
+            "day_of_week": "Tuesday",
+            "open_at": "9:00am",
+            "close_at": "8:00pm"
+        },
 
-    "default_prblm_types":{
-        "prblm1" : "I don’t know what I want the computer to do...",
-        "prblm2" : "I think I know what I want the computer to do, but I don’t know what to use...",
-        "prblm3" : "I think I know what things to use, but I don't know how to make them work together...",
-        "prblm4" : "I think I know what to use, but I don't know how to use it...",
-        "prblm5" : "I thought I knew how to use this, but it didn’t do what I expected...",
-        "prblm6" : "I think I know why it didn’t do what I expected, but I don’t know how to check..."
-    }
+        {
+            "day_of_week": "Wednesday",
+            "open_at": "9:00am",
+            "close_at": "8:00pm"
+        },
 
+        {
+            "day_of_week": "Thursday",
+            "open_at": "9:00am",
+            "close_at": "8:00pm"
+        },
+
+        {
+            "day_of_week": "Friday",
+            "open_at": "9:00am",
+            "close_at": "5:00pm"
+        },
+
+        {
+            "day_of_week": "Saturday",
+            "open_at": "10:30am",
+            "close_at": "2:30pm"
+        }
+    ],
+
+    "defaultProblemTypes": [
+        "I don't know what I want the computer to do...",
+        "I think I know what I want the computer to do, but I don't know what to use...",
+        "I think I know what things to use, but I don't know how to make them work together...",
+        "I think I know what to use, but I don't know how to use it...",
+        "I thought I knew how to use this, but it didn't do what I expected...",
+        "I think I know why it didn't do what I expected, but I don't know how to check..."
+    ]
 }

@@ -4,6 +4,10 @@ from flask import flash
 from flask import url_for
 from flask import redirect
 from flask import render_template
+from flask import jsonify
+
+import json
+
 
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
@@ -20,7 +24,7 @@ from app.model import ProblemType
 from app.model import Course
 from app.model import Section
 from app.model import User
-
+from app import _read_in_config_data
 from datetime import datetime
 
 from app.extensions import db
@@ -30,6 +34,9 @@ import sys
 
 views = Blueprint('views', __name__)
 
+# Temporary route to make a GET request to http://127.0.0.1:5000/ to create a new user
+# It has already been migrated to next js and should not be used for anything other than local development
+#
 @views.route("/")
 def index():
     """
@@ -38,9 +45,76 @@ def index():
     """
     toDisplay = Course.query.filter_by(on_display=True)
     messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
+
+    # from flask_login import login_user
+    # user = User.query.filter_by(email='email@email.com').first()
+
+    # user = User('x', Permission.Owner, 'email@email.com', 'bruh', True, True)
+    # db.session.add(user)
+    # db.session.commit()
+    # login_user(user)
+
     return render_template('index.html', messages=messages, OnDisplay=toDisplay)
 
-@views.route('/create-ticket', methods=['POST', 'GET'])
+@views.route("/api/home")
+def api_home():
+    toDisplay = Course.query.filter_by(on_display=True)
+    messages = Message.query.filter(Message.start_date < datetime.now(), Message.end_date > datetime.now())
+    
+    config_data = _read_in_config_data()
+    response = config_data
+    
+    response['updates'] = [{'id': message.id, 'message': message.message, 'start_date': message.start_date.timestamp(), 'end_date': message.end_date.timestamp()} for message in messages]
+
+    response['availability'] = [{
+        'id': course.id,
+        'department': course.department,
+        'number': course.number,
+        'course_name': course.course_name,
+        'tutors': [tutor.name for tutor in course.canTutors]
+    } for course in toDisplay]
+
+    return json.dumps(response)
+
+@views.route("/api/current_user")
+def get_current_user():    
+    from flask_login import login_user
+    user = User.query.filter_by(email='email@email.com').first()
+    login_user(user)
+
+    if current_user.is_authenticated:
+        user_dict = {
+            'id': current_user.id,
+            'name': current_user.name,
+            'email': current_user.email,
+            'isAuthenticated': current_user.is_authenticated,
+            'permission': str(current_user.permission)
+        }
+
+        return jsonify(user_dict)
+    else:
+        return jsonify({ 'isAuthenticated': False })
+
+@views.route('/api/get-all-sections')
+def get_all_sections():
+    all_sections = Section.query.all()
+    section_results = [{"id": section.id, "courseId": section.course_id, "sectionNumber": section.section_number } for section in all_sections]
+    return json.dumps(section_results)
+
+@views.route('/api/get-all-courses')
+def get_all_courses():
+    all_courses = Course.query.all()
+    course_results = [{"id": course.id, "courseName": course.course_name } for course in all_courses]
+    return json.dumps(course_results)
+
+@views.route('/api/get-all-problem-types')
+def get_all_problem_types():
+    all_problem_types = ProblemType.query.all()
+    problem_types = [{"id": problem_type.id, "type": problem_type.problem_type } for problem_type in all_problem_types]
+    return json.dumps(problem_types)
+
+
+@views.route('/api/create-ticket', methods=['POST', 'GET'])
 def create_ticket():
     """
     Serves the HTTP route /create-ticket. Shows a ticket create form on GET request.
@@ -61,11 +135,9 @@ def create_ticket():
 
     Student login is required to access this page.
     """
-    if request.method == 'GET':
-        # Render create-ticket template if GET request or if there was an error in submission data
-        return render_template('create-ticket.html')
-
+    print(request.form)
     ticket = _attempt_create_ticket(request.form)
+    print(ticket)
 
     if ticket:
         try:
@@ -74,17 +146,20 @@ def create_ticket():
 
         except IntegrityError:
             db.session.rollback()
-            flash('Could not submit ticket, invalid data', category='error')
+            return jsonify({ "success": False })
+            # flash('Could not submit ticket, invalid data', category='error')
 
         except Exception as e:
-            flash('Could not submit ticket, unknown reason', category='error')
-            print(f'Failed to create ticket: {e}', file=sys.stderr)
+            return jsonify({ "success": False })
+            # flash('Could not submit ticket, unknown reason', category='error')
+            # print(f'Failed to create ticket: {e}', file=sys.stderr)
 
         else:
-            flash('Ticket created successfully!', category='success')
-            return redirect(url_for('views.index'))
+            return jsonify({ "success": True })
+            # flash('Ticket created successfully!', category='success')
+            # return redirect(url_for('views.index'))
 
-    return redirect(url_for('views.create_ticket'))
+    return jsonify({ "success": False })#redirect(url_for('views.create_ticket'))
 
 @views.route('/view-tickets')
 @permission_required(Permission.Tutor)

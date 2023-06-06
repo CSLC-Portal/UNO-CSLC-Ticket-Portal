@@ -85,6 +85,10 @@ def user_loader(id: str):
     #
     return User.query.get(int(id))
 
+@auth.route("/sign-in")
+def sign_in():
+    return redirect(build_auth_url())
+
 def build_auth_url():
     """
     Function to build the authorization url used to authenticat a user using MS Authentication.
